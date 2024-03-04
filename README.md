@@ -1,92 +1,145 @@
-# PPO
+# DevSpark
+
+Аггрегатор постов (статьи, документация, examples, библиотеки, проекты) на it-тематику с социальной составляющей (рейтинг и комментарии).
+
+## Авторы (Командный проект)
+
+Бакалдин Роман, Степаненко Андрей
+
+## Идея
+
+Приложение, позволяющее пользователям публиковать посты в тематических каналах, просматривать каналы или аггрегированные подборки других пользователей и оценивать посты путём голосования и комментариев.
+
+## Стек
+
+### Фронтенд
+* [TypeScript](https://www.typescriptlang.org)
+* [Vue.js](https://ru.vuejs.org)
+
+### Бэкенд
+* [Java 21](https://docs.oracle.com/javase/specs/jls/se21/html/index.html)
+* [MongoDB](https://www.mongodb.com)
+
+## Предметная область
+
+Предметная область является результатом формализации исходной идеи (агрегатор постов) и включает в себя следующие сущности:
+
+1. Пользователь (User) 
+2. Тема (Topic)
+3. Лента (Feed)
+4. Канал (Channel)
+5. Пост (Post)
+6. Комментарий (Comment)
+
+## Аналогичные решения
+
+Решения, полностью подходяшего под озвученные требования, на данный момент не существует, поэтому сравнение будет выполняться среди сервисов, позволяющих частично получить необходимый функционал. Используются следующие критерии:
+
+- Тематика сервиса (Направленность)
+- Формат контента (Контент)
+- Средства катологизации (Катологизация)
+- Возможность организовать и настроить ленту постов (Фильтрация)
+- Социальная составляющая (Оценки)
+
+| Решение   | Направленность | Контент                      | Катологизация    | Фильтрация           | Оценки                |
+|-----------|----------------|------------------------------|------------------|----------------------|-----------------------|
+| Pinterest | Фотохостинг    | Фотографии с описанием       | Коллекции и теги | Только поиск         | Рейтинг и комментарии |
+| Habr      | IT             | Только развернутые статьи    | Только теги      | Поиск, темы и теги   | Рейтинг и комментарии |
+| Github    | IT             | Репозитории с исходным кодом | Только теги      | Поиск и теги         | Рейтинг в виде звёзд  |
+| Dzen      | Хостинг блогов | Статьи и опросы              | Отсутствует      | Только поиск         | Рейтинг и комментарии |
+| Codepen   | IT, Frontend   | Скетчи на HTML + CSS + JS    | Коллекции        | Только поиск         | Рейтинг и комментарии |
+| JSFiddle  | IT, Frontend   | Скетчи на HTML + CSS + JS    | Отсутствует      | Отсутствует          | Отсутствует           |
+| Pastebin  | IT             | Любой текст                  | Отсутствует      | Только поиск         | Отсутствует           |
+| DevSpark  | IT             | Любой формат постов          | Коллекции и теги | Поиск, теги, рейтинг | Рейтинг и комментарии |
+
+## Актуальность
+
+На данный момент фактически не существует сервиса, предоставляющего разработчикам возможность как вести "записную книжку" в удобном свободном формате, так и делиться своими проектами или библиотеками для распространения в комьюнити и получения фидбека. Кроме того, остаётся свободной так востребованная в последние годы ниша бесконечной ленты коротких тематических постов. Таким образом, учитывая отсутствие прямых конкурентов, схожий с уже ставшим успешным сервисом Pinterest формат и обширный набор функционала, позволяющий как вести собственную коллекцию идей, так и публиковать доступный другим пользователям контент, можно считать идею актуальной и рассматривать для реализации.
+
+## Акторы и роли
+
+`Гость` - пользователь, обладающий возможностью просматривать любой публичный контент и имеющий доступ к регистрации. Не требует авторизации.
+
+`Пользователь` - зарегистрированный пользователь, обладающий доступом к профилю. Требует авторизации.
+
+`Пользователь-читатель` - пользователь, обладающий доступом к просмотру любого публичного контента, доступом к созданию, редактированию и удалению лент, доступом к оценке постов и комментариев, а также доступ к созданию, изменению и удалению своих комментариев. Требует авторизации.
+
+`Пользователь-автор` - пользователь, обладающий доступом к созданию, настройке приватности и удалению канала, доступом к созданию, изменению и удалению постов. Требует авторизации.
+
+`Администратор` - пользователь, обладающий доступом к модификации любого контента на сайте. Также способен создавать и удалять темы (topic). Требует авторизации.
+
+`Система` - служебный пользователь, обладающий доступом к созданию контента, а также модификации существующего. Доступ только со стороны сервера.
+
+## UseCase-диаграмма
+
+![](diagrams/use-case.png)
+
+## ER-диаграмма
+
+![](diagrams/er.png)
+
+## Пользовательские сценарии
+
+### Создание поста
+Пользователь: *Пользователь-автор*
+
+1. Авторизоваться в сервисе
+2. Перейти в профиль
+3. Нажать на кнопку "добавить пост"
+4. Заполнить данные поста: заголовок, текст поста, канал и т.д.
+5. Подтвердить создание поста
+6. Получить уведомление об успешности/неуспешности действия
+
+### Создание ленты
+Пользователь: *Пользователь-читатель*
+
+1. Авторизоваться в сервисе
+2. Перейти в профиль
+3. Нажать на кнопку "добавить ленту"
+4. Заполнить название и какие теги, топики(темы), каналы должны содержаться в ленте
+5. Подтвердить создание ленты
+6. Получить уведомление об успешности/неуспешности действия
+
+### Просмотр канала
+Пользователь: *Пользователь-читатель*
+
+1. Авторизоваться в сервисе
+2. Перейти в профиль к любому пользователю
+3. Нажать на любой из его публичных каналов
+4. Просмотреть посты, содержащиеся в канале
+
+### Комментирование поста из свой ленты
+Пользователь: *Пользователь-читатель*
+
+1. Авторизоваться в сервисе
+2. На домашней странице выбрать какую ленту он хочет просматривать
+4. Просмотреть посты, содержащиеся в ленте
+5. Выбрать понравившийся пост
+6. Поставить оценку посту (опционально)
+7. Написать комментарий в поле ввода под постом
+8. Подтвердить отправку комментария
+9. Получить уведомление об успешности/неуспешности действия
+
+### Создание топика (темы)
+Пользователь: *Администратор*
+
+1. Авторизоваться в сервисе
+2. Перейти в профиль
+3. Нажать на кнопку "добавить топик"
+4. Заполнить название и теги топика
+5. Подтвердить создание топика
+6. Получить уведомление об успешности/неуспешности действия
+
+### Удаление поста админом
+Пользователь: *Администратор*
+
+1. Авторизоваться в сервисе
+2. Перейти на страницу нелецеприятного поста каким угодно способом
+3. Нажать на кнопку "удалить пост"
+6. Получить уведомление об успешности/неуспешности действия
 
 
 
-## Getting started
+## Формализация бизнес-процессов (BPMN)
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://git.iu7.bmstu.ru/bra21u128/ppo.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://git.iu7.bmstu.ru/bra21u128/ppo/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+![](diagrams/diagram.svg)
