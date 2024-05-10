@@ -27,7 +27,7 @@ build/
 *.rar
 
 # Exclude gradle wrapper
-!gradle/wrapper/gradle-wrapper.jar
+!devspark/gradle/wrapper/gradle-wrapper.jar
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
