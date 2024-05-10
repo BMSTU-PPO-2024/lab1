@@ -6,6 +6,8 @@ import com.mongodb.client.model.Filters;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
+import java.util.Collection;
+
 import static com.mongodb.client.model.Filters.eq;
 
 final class MongoRepository<V> implements Repository<ObjectId, V, Bson> {
@@ -62,6 +64,16 @@ final class MongoRepository<V> implements Repository<ObjectId, V, Bson> {
     @Override
     public long count(Bson filter) {
         return collection.countDocuments(filter);
+    }
+
+    @Override
+    public boolean exists(ObjectId id) {
+        return count(Filters.eq("_id", id)) == 1;
+    }
+
+    @Override
+    public boolean exists(Collection<ObjectId> ids) {
+        return count(Filters.in("_id", ids)) == ids.size();
     }
 
     @Override

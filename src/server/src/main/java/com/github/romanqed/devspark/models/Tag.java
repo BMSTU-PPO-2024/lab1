@@ -22,11 +22,6 @@ public final class Tag {
         return ret;
     }
 
-    public static boolean exists(Set<ObjectId> ids, Repository<ObjectId, Tag, Bson> repository) {
-        var result = repository.count(Filters.in("_id", ids));
-        return result == ids.size();
-    }
-
     public ObjectId getId() {
         return id;
     }

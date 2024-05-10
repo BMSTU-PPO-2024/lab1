@@ -1,5 +1,9 @@
 package com.github.romanqed.devspark.database;
 
+import org.bson.types.ObjectId;
+
+import java.util.Collection;
+
 public interface Repository<K, V, F> {
 
     long put(V model);
@@ -21,6 +25,10 @@ public interface Repository<K, V, F> {
     V findFirst(F filter);
 
     long count(F filter);
+
+    boolean exists(ObjectId id);
+
+    boolean exists(Collection<ObjectId> ids);
 
     long deleteFirst(F filter);
 
