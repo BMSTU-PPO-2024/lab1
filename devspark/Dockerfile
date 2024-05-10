@@ -2,7 +2,7 @@ FROM openjdk:11
 
 COPY . /usr/src/server
 
-RUN cd /usr/src/server && chmod +x gradlew && ./gradlew shadowJar
+RUN cd /usr/src/server && tr -d '\015' <gradlew >gradlew.tmp && mv gradlew.tmp gradlew && chmod +x gradlew && ./gradlew shadowJar
 
 WORKDIR "/usr/src/server"
 
