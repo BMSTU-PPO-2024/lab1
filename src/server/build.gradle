@@ -59,7 +59,7 @@ shadowJar {
                 'Build-Date': new SimpleDateFormat("yyyy-MM-dd").format(date),
                 'Build-Time': new SimpleDateFormat("HH:mm:ss.SSSZ").format(date),
                 'Built-By': 'Bakaldin Roman, Stepanenko Andrey',
-                'Bundle-Name': 'Java Types',
+                'Bundle-Name': 'Devspark server',
                 'Bundle-Version': archiveVersion,
                 'Bundle-SymbolicName': archivesBaseName,
                 'Implementation-Title': archivesBaseName,
