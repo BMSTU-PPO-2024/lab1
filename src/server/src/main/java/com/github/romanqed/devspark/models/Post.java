@@ -5,10 +5,7 @@ import com.github.romanqed.devspark.database.Repository;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Model("posts")
 public final class Post extends Owned {
@@ -19,6 +16,8 @@ public final class Post extends Owned {
     private Map<ObjectId, Integer> scores;
     // Tag Models
     private transient Set<Tag> tags;
+    private Date created;
+    private Date updated;
 
     public ObjectId getId() {
         return id;
@@ -87,5 +86,21 @@ public final class Post extends Owned {
 
     public Set<Tag> getTags() {
         return Collections.unmodifiableSet(tags);
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 }

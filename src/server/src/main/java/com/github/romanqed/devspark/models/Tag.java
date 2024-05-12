@@ -6,6 +6,7 @@ import com.mongodb.client.model.Filters;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -14,6 +15,8 @@ import java.util.Set;
 public final class Tag {
     private ObjectId id;
     private String name;
+    private Date created;
+    private Date updated;
 
     public static Set<Tag> getTagsByName(Set<String> tags, Repository<ObjectId, Tag, Bson> repository) {
         var found = repository.filter(Filters.in("name", tags));
@@ -36,6 +39,22 @@ public final class Tag {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 
     @Override

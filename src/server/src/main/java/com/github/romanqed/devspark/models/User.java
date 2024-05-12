@@ -3,6 +3,9 @@ package com.github.romanqed.devspark.models;
 import com.github.romanqed.devspark.database.Model;
 import org.bson.types.ObjectId;
 
+import java.net.URL;
+import java.util.Date;
+
 @Model("users")
 public final class User {
     private ObjectId id;
@@ -10,7 +13,11 @@ public final class User {
     private String email;
     private String password;
     private String about;
+    private URL avatar;
     private int permissions;
+    private Date created;
+    private Date updated;
+
 
     public ObjectId getId() {
         return id;
@@ -52,11 +59,35 @@ public final class User {
         this.about = about;
     }
 
+    public URL getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(URL avatar) {
+        this.avatar = avatar;
+    }
+
     public int getPermissions() {
         return permissions;
     }
 
     public void setPermissions(int permissions) {
         this.permissions = permissions;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 }

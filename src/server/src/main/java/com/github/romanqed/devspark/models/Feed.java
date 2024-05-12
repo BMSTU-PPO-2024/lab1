@@ -2,6 +2,7 @@ package com.github.romanqed.devspark.models;
 
 import org.bson.types.ObjectId;
 
+import java.util.Date;
 import java.util.Set;
 
 public final class Feed extends Owned {
@@ -11,6 +12,8 @@ public final class Feed extends Owned {
     private Set<ObjectId> channelIds;
     private Set<ObjectId> topicIds;
     private Set<ObjectId> tagIds;
+    private Date created;
+    private Date updated;
 
     public ObjectId getId() {
         return id;
@@ -58,5 +61,21 @@ public final class Feed extends Owned {
 
     public void setTagIds(Set<ObjectId> tagIds) {
         this.tagIds = tagIds;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 }
