@@ -1,8 +1,8 @@
-FROM openjdk:11
+FROM gradle:8.7.0-jdk11
 
 COPY . /usr/src/server
 
-RUN cd /usr/src/server && tr -d '\015' <gradlew >gradlew.tmp && mv gradlew.tmp gradlew && chmod +x gradlew && ./gradlew shadowJar
+RUN cd /usr/src/server && tr -d '\015' <build.sh >build.tmp && mv build.tmp build.sh && chmod +x build.sh && ./build.sh
 
 WORKDIR "/usr/src/server"
 
