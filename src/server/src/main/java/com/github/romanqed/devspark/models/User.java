@@ -18,7 +18,6 @@ public final class User {
     private Date created;
     private Date updated;
 
-
     public ObjectId getId() {
         return id;
     }

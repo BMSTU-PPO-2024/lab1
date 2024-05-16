@@ -14,7 +14,7 @@ import java.io.File;
 
 @ProviderConsumer
 public final class JavalinServiceConsumer implements ServiceProviderConsumer {
-    private static final File JAVALIN_CONFIG = new File("javalin.json");
+    private static final File JAVALIN_CONFIG = new File("server.json");
     private static final HandlerFactory HANDLER_FACTORY = new JeflectHandlerFactory();
     private Iterable<Class<?>> classes; // Found controller classes
 
