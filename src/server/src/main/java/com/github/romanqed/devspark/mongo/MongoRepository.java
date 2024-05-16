@@ -4,13 +4,12 @@ import com.github.romanqed.devspark.database.Repository;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
 
 import java.util.Collection;
 
 import static com.mongodb.client.model.Filters.eq;
 
-final class MongoRepository<V> implements Repository<ObjectId, V, Bson> {
+final class MongoRepository<V> implements Repository<V> {
     private final MongoCollection<V> collection;
 
     MongoRepository(MongoCollection<V> collection) {
@@ -23,7 +22,7 @@ final class MongoRepository<V> implements Repository<ObjectId, V, Bson> {
     }
 
     @Override
-    public long update(ObjectId key, V model) {
+    public long update(String key, V model) {
         return collection.replaceOne(eq("_id", key), model).getModifiedCount();
     }
 
@@ -37,62 +36,62 @@ final class MongoRepository<V> implements Repository<ObjectId, V, Bson> {
     }
 
     @Override
-    public V find(ObjectId key) {
+    public V find(String key) {
         return findFirst(eq(key));
     }
 
     @Override
-    public Iterable<V> findAll(Iterable<ObjectId> keys) {
+    public Iterable<V> findAll(Iterable<String> keys) {
         return collection.find(Filters.in("_id", keys));
     }
 
     @Override
-    public Iterable<V> filter(Bson filter) {
-        return collection.find(filter);
+    public Iterable<V> filter(Object filter) {
+        return collection.find((Bson) filter);
     }
 
     @Override
-    public Iterable<V> filterAndSort(Bson filter, Bson sort) {
-        return collection.find(filter).sort(sort);
+    public Iterable<V> filterAndSort(Object filter, Object sort) {
+        return collection.find((Bson) filter).sort((Bson) sort);
     }
 
     @Override
-    public V findFirst(Bson filter) {
-        return collection.find(filter).first();
+    public V findFirst(Object filter) {
+        return collection.find((Bson) filter).first();
     }
 
     @Override
-    public long count(Bson filter) {
-        return collection.countDocuments(filter);
+    public long count(Object filter) {
+        return collection.countDocuments((Bson) filter);
     }
 
     @Override
-    public boolean exists(ObjectId id) {
+    public boolean exists(String id) {
         return count(Filters.eq("_id", id)) == 1;
     }
 
     @Override
-    public boolean exists(Collection<ObjectId> ids) {
+    public boolean exists(Collection<String> ids) {
         return count(Filters.in("_id", ids)) == ids.size();
     }
 
     @Override
-    public long deleteFirst(Bson filter) {
-        return collection.deleteOne(filter).getDeletedCount();
+    public long deleteFirst(Object filter) {
+        return collection.deleteOne((Bson) filter).getDeletedCount();
     }
 
     @Override
-    public long deleteAll(Bson filter) {
-        return collection.deleteMany(filter).getDeletedCount();
+    public long deleteAll(Object filter) {
+        return collection.deleteMany((Bson) filter).getDeletedCount();
     }
 
     @Override
-    public long delete(ObjectId key) {
+    public long delete(String key) {
         return deleteFirst(eq(key));
     }
 
     @Override
-    public long deleteAll(Iterable<ObjectId> keys) {
+    public long deleteAll(Iterable<String> keys) {
         return deleteAll(Filters.in("_id", keys));
     }
 }

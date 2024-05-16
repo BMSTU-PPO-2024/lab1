@@ -3,8 +3,6 @@ package com.github.romanqed.devspark.models;
 import com.github.romanqed.devspark.database.Model;
 import com.github.romanqed.devspark.database.Repository;
 import com.mongodb.client.model.Filters;
-import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -13,23 +11,23 @@ import java.util.Set;
 
 @Model("tags")
 public final class Tag {
-    private ObjectId id;
+    private String id;
     private String name;
     private Date created;
     private Date updated;
 
-    public static Set<Tag> getTagsByName(Set<String> tags, Repository<ObjectId, Tag, Bson> repository) {
+    public static Set<Tag> getTagsByName(Set<String> tags, Repository<Tag> repository) {
         var found = repository.filter(Filters.in("name", tags));
         var ret = new HashSet<Tag>();
         found.forEach(ret::add);
         return ret;
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
     }
 

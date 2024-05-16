@@ -2,7 +2,6 @@ package com.github.romanqed.devspark.models;
 
 import com.github.romanqed.devspark.database.Model;
 import com.github.romanqed.devspark.database.Repository;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import java.util.Collections;
@@ -14,7 +13,7 @@ import java.util.Set;
 public final class Topic {
     private ObjectId id;
     private String name;
-    private Set<ObjectId> tagIds;
+    private Set<String> tagIds;
     // Tag Models
     private transient Set<Tag> tags;
     private Date created;
@@ -36,26 +35,26 @@ public final class Topic {
         this.name = name;
     }
 
-    public Set<ObjectId> getTagIds() {
+    public Set<String> getTagIds() {
         return tagIds;
     }
 
-    public void setTagIds(Set<ObjectId> tagIds) {
+    public void setTagIds(Set<String> tagIds) {
         this.tagIds = tagIds;
     }
 
-    public void addTags(Set<ObjectId> ids, Repository<ObjectId, Tag, Bson> repository) {
+    public void addTags(Set<String> ids, Repository<Tag> repository) {
         if (!repository.exists(ids)) {
             throw new IllegalArgumentException("Invalid tag ids");
         }
         this.tagIds.addAll(ids);
     }
 
-    public void removeTags(Set<ObjectId> ids) {
+    public void removeTags(Set<String> ids) {
         this.tagIds.removeAll(ids);
     }
 
-    public void retrieveTags(Repository<ObjectId, Tag, ?> repository) {
+    public void retrieveTags(Repository<Tag> repository) {
         tags = new HashSet<>();
         var found = repository.findAll(tagIds);
         found.forEach(tags::add);

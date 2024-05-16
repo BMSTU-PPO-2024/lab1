@@ -2,7 +2,6 @@ package com.github.romanqed.devspark.models;
 
 import com.github.romanqed.devspark.database.Model;
 import com.github.romanqed.devspark.database.Repository;
-import org.bson.types.ObjectId;
 
 import java.util.Date;
 import java.util.Map;
@@ -11,26 +10,26 @@ import java.util.Map;
 public final class Comment extends Owned {
     // Post model
     Post post;
-    private ObjectId id;
-    private ObjectId postId;
+    private String id;
+    private String postId;
     private String text;
-    private Map<ObjectId, Integer> scores;
+    private Map<String, Integer> scores;
     private Date created;
     private Date updated;
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public ObjectId getPostId() {
+    public String getPostId() {
         return postId;
     }
 
-    public void setPostId(ObjectId postId) {
+    public void setPostId(String postId) {
         this.postId = postId;
     }
 
@@ -42,11 +41,11 @@ public final class Comment extends Owned {
         this.text = text;
     }
 
-    public Map<ObjectId, Integer> getScores() {
+    public Map<String, Integer> getScores() {
         return scores;
     }
 
-    public void setScores(Map<ObjectId, Integer> scores) {
+    public void setScores(Map<String, Integer> scores) {
         this.scores = scores;
     }
 
@@ -58,11 +57,11 @@ public final class Comment extends Owned {
         return ret;
     }
 
-    public void retrievePost(Repository<ObjectId, Post, ?> repository) {
+    public void retrievePost(Repository<Post> repository) {
         this.post = repository.find(postId);
     }
 
-    public Post getPost(Repository<ObjectId, Post, ?> repository) {
+    public Post getPost(Repository<Post> repository) {
         if (post == null) {
             retrievePost(repository);
         }

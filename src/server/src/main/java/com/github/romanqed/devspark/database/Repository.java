@@ -1,38 +1,36 @@
 package com.github.romanqed.devspark.database;
 
-import org.bson.types.ObjectId;
-
 import java.util.Collection;
 
-public interface Repository<K, V, F> {
+public interface Repository<V> {
 
     long put(V model);
 
     long put(Iterable<V> entities);
 
-    long update(K key, V model);
+    long update(String key, V model);
 
-    V find(K key);
+    V find(String key);
 
-    long delete(K key);
+    long delete(String key);
 
-    Iterable<V> findAll(Iterable<K> keys);
+    Iterable<V> findAll(Iterable<String> keys);
 
-    Iterable<V> filter(F filter);
+    Iterable<V> filter(Object filter);
 
-    Iterable<V> filterAndSort(F filter, F sort);
+    Iterable<V> filterAndSort(Object filter, Object sort);
 
-    V findFirst(F filter);
+    V findFirst(Object filter);
 
-    long count(F filter);
+    long count(Object filter);
 
-    boolean exists(ObjectId id);
+    boolean exists(String id);
 
-    boolean exists(Collection<ObjectId> ids);
+    boolean exists(Collection<String> ids);
 
-    long deleteFirst(F filter);
+    long deleteFirst(Object filter);
 
-    long deleteAll(F filter);
+    long deleteAll(Object filter);
 
-    long deleteAll(Iterable<K> keys);
+    long deleteAll(Iterable<String> keys);
 }

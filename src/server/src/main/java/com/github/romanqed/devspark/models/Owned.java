@@ -1,25 +1,24 @@
 package com.github.romanqed.devspark.models;
 
 import com.github.romanqed.devspark.database.Repository;
-import org.bson.types.ObjectId;
 
 class Owned {
-    ObjectId ownerId;
+    String ownerId;
     transient User owner;
 
-    public ObjectId getOwnerId() {
+    public String getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(ObjectId ownerId) {
+    public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
 
-    public void retrieveOwner(Repository<ObjectId, User, ?> repository) {
+    public void retrieveOwner(Repository<User> repository) {
         this.owner = repository.find(ownerId);
     }
 
-    public User getOwner(Repository<ObjectId, User, ?> repository) {
+    public User getOwner(Repository<User> repository) {
         if (owner == null) {
             retrieveOwner(repository);
         }

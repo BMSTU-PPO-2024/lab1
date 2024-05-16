@@ -3,10 +3,8 @@ package com.github.romanqed.devspark.mongo;
 import com.github.romanqed.devspark.database.Database;
 import com.github.romanqed.devspark.database.Repository;
 import com.mongodb.client.MongoDatabase;
-import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
 
-final class MongoDatabaseImpl implements Database<ObjectId, Bson> {
+final class MongoDatabaseImpl implements Database {
 
     private final MongoDatabase database;
 
@@ -15,7 +13,7 @@ final class MongoDatabaseImpl implements Database<ObjectId, Bson> {
     }
 
     @Override
-    public <V> Repository<ObjectId, V, Bson> create(String name, Class<V> type) {
+    public <V> Repository<V> create(String name, Class<V> type) {
         var collection = database.getCollection(name, type);
         return new MongoRepository<>(collection);
     }

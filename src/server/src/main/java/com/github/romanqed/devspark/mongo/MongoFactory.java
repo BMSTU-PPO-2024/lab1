@@ -7,10 +7,8 @@ import org.bson.codecs.ValueCodecProvider;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.jsr310.Jsr310CodecProvider;
 import org.bson.codecs.pojo.PojoCodecProvider;
-import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
 
-final class MongoFactory implements DatabaseFactory<ObjectId, Bson> {
+final class MongoFactory implements DatabaseFactory {
     private final MongoClient client;
 
     MongoFactory(MongoClient client) {
@@ -18,7 +16,7 @@ final class MongoFactory implements DatabaseFactory<ObjectId, Bson> {
     }
 
     @Override
-    public Database<ObjectId, Bson> create(String name, Iterable<Class<?>> classes) {
+    public Database create(String name, Iterable<Class<?>> classes) {
         var builder = PojoCodecProvider.builder();
         classes.forEach(builder::register);
         var database = client

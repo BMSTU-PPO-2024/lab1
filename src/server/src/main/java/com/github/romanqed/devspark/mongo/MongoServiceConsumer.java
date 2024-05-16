@@ -12,16 +12,12 @@ import com.mongodb.client.MongoClients;
 import io.github.amayaframework.di.ServiceProvider;
 import io.github.amayaframework.di.ServiceProviderBuilder;
 import org.atteo.classindex.ClassIndex;
-import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
 
 import java.io.File;
-import java.lang.reflect.Type;
 
 @ProviderConsumer
 public final class MongoServiceConsumer implements ServiceProviderConsumer {
     private static final File MONGO_CONFIG = new File("mongo.json");
-    private static final Type DATABASE_TYPE = Types.of(Database.class, ObjectId.class, Bson.class);
 
     @Override
     public void pre(ServiceProviderBuilder builder) {
@@ -35,10 +31,10 @@ public final class MongoServiceConsumer implements ServiceProviderConsumer {
         for (var clazz : models) {
             var model = clazz.getAnnotation(Model.class);
             var repository = database.create(model.value(), clazz);
-            var type = Types.of(Repository.class, ObjectId.class, clazz, Bson.class);
+            var type = Types.of(Repository.class, clazz);
             builder.addService(type, () -> repository);
         }
-        builder.addService(DATABASE_TYPE, () -> database);
+        builder.addService(Database.class, () -> database);
         builder.addService(MongoClient.class, () -> client);
     }
 
