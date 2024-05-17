@@ -10,14 +10,15 @@ import java.util.UUID;
 
 @Model("comments")
 public final class Comment extends Owned {
-    // Post model
-    Post post;
     private String id;
     private String postId;
     private String text;
     private Map<String, Integer> scores;
     private Date created;
     private Date updated;
+
+    // Post model
+    transient Post post;
 
     public static Comment of(String owner, String postId, String text) {
         var ret = new Comment();
