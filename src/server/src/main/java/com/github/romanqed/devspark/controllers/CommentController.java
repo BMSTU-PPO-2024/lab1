@@ -33,4 +33,14 @@ public final class CommentController extends AuthBase {
     public void delete(Context ctx) {
 
     }
+
+    @Route(method = HandlerType.PUT, route = "/{commentId}/rate")
+    public void addRate(Context ctx) {
+
+    }
+
+    @Route(method = HandlerType.DELETE, route = "/{commentId}/rate")
+    public void deleteRate(Context ctx) {
+
+    }
 }

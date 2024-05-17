@@ -54,4 +54,14 @@ public final class PostController extends AuthBase {
     public void delete(Context ctx) {
 
     }
+
+    @Route(method = HandlerType.PUT, route = "/{postId}/rate")
+    public void addRate(Context ctx) {
+
+    }
+
+    @Route(method = HandlerType.DELETE, route = "/{postId}/rate")
+    public void deleteRate(Context ctx) {
+
+    }
 }
