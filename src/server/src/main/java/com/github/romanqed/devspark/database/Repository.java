@@ -1,6 +1,7 @@
 package com.github.romanqed.devspark.database;
 
 import java.util.Collection;
+import java.util.regex.Pattern;
 
 public interface Repository<V> {
 
@@ -10,27 +11,43 @@ public interface Repository<V> {
 
     long update(String key, V model);
 
-    V find(String key);
+    V get(String key);
 
     long delete(String key);
 
-    Iterable<V> findAll(Iterable<String> keys);
+    Iterable<V> getAll();
 
-    Iterable<V> filter(Object filter);
+    Iterable<V> getAll(int page, int batch);
 
-    Iterable<V> filterAndSort(Object filter, Object sort);
+    Iterable<V> getAll(Iterable<String> keys);
 
-    V findFirst(Object filter);
+    Iterable<V> getAll(Iterable<String> keys, int page, int batch);
 
-    long count(Object filter);
+    V findFirstByField(String field, Object value);
+
+    Iterable<V> findByField(String field, Object value);
+
+    Iterable<V> findByField(String field, Object value, int page, int batch);
+
+    Iterable<V> findByField(String field, Iterable<Object> values);
+
+    Iterable<V> findByField(String field, Iterable<Object> values, int page, int batch);
+
+    Iterable<V> findMatched(String field, String pattern);
+
+    Iterable<V> findMatched(String field, String pattern, int page, int batch);
+
+    Iterable<V> findMatched(String field, Pattern pattern, int page, int batch);
+
+    long countByField(String field, Object value);
+
+    long countByField(String field, Iterable<Object> values);
 
     boolean exists(String id);
 
     boolean exists(Collection<String> ids);
 
-    long deleteFirst(Object filter);
-
-    long deleteAll(Object filter);
+    boolean exists(String field, Object value);
 
     long deleteAll(Iterable<String> keys);
 }

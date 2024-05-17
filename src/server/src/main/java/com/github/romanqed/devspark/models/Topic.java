@@ -2,28 +2,35 @@ package com.github.romanqed.devspark.models;
 
 import com.github.romanqed.devspark.database.Model;
 import com.github.romanqed.devspark.database.Repository;
-import org.bson.types.ObjectId;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Model("topics")
 public final class Topic {
-    private ObjectId id;
+    private String id;
     private String name;
     private Set<String> tagIds;
-    // Tag Models
-    private transient Set<Tag> tags;
     private Date created;
     private Date updated;
+    // Tag Models
+    private transient Set<Tag> tags;
 
-    public ObjectId getId() {
+    public static Topic of(String name, Set<String> tagIds) {
+        var ret = new Topic();
+        ret.id = UUID.randomUUID().toString();
+        ret.name = Objects.requireNonNull(name);
+        ret.tagIds = Objects.requireNonNull(tagIds);
+        var now = new Date();
+        ret.created = now;
+        ret.updated = now;
+        return ret;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -56,7 +63,7 @@ public final class Topic {
 
     public void retrieveTags(Repository<Tag> repository) {
         tags = new HashSet<>();
-        var found = repository.findAll(tagIds);
+        var found = repository.getAll(tagIds);
         found.forEach(tags::add);
     }
 

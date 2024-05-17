@@ -1,33 +1,38 @@
-package com.github.romanqed.devspark.models;
+package com.github.romanqed.devspark.dto;
 
-import com.github.romanqed.devspark.database.Model;
+import com.github.romanqed.devspark.models.User;
 
 import java.net.URL;
 import java.util.Date;
-import java.util.Objects;
-import java.util.UUID;
 
-@Model("users")
-public final class User {
+public final class UserDto {
     private String id;
     private String nickname;
     private String email;
-    private boolean banned;
     private String password;
+    private Boolean banned;
     private String about;
     private URL avatar;
-    private int permissions;
+    private Integer permissions;
     private Date created;
     private Date updated;
 
-    public static User of(String email, String password) {
-        var ret = new User();
-        ret.id = UUID.randomUUID().toString();
-        ret.email = Objects.requireNonNull(email);
-        ret.password = Objects.requireNonNull(password);
-        var now = new Date();
-        ret.created = now;
-        ret.updated = now;
+    public static UserDto of(User user) {
+        var ret = new UserDto();
+        ret.id = user.getId();
+        ret.nickname = user.getNickname();
+        ret.email = user.getEmail();
+        ret.banned = user.isBanned();
+        ret.about = user.getAbout();
+        ret.avatar = user.getAvatar();
+        return ret;
+    }
+
+    public static UserDto ofAll(User user) {
+        var ret = of(user);
+        ret.created = user.getCreated();
+        ret.updated = user.getUpdated();
+        ret.permissions = user.getPermissions();
         return ret;
     }
 
@@ -55,20 +60,28 @@ public final class User {
         this.email = email;
     }
 
-    public boolean isBanned() {
-        return banned;
-    }
-
-    public void setBanned(boolean banned) {
-        this.banned = banned;
-    }
-
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Integer permissions) {
+        this.permissions = permissions;
+    }
+
+    public Boolean isBanned() {
+        return banned;
+    }
+
+    public void setBanned(Boolean banned) {
+        this.banned = banned;
     }
 
     public String getAbout() {
@@ -87,14 +100,6 @@ public final class User {
         this.avatar = avatar;
     }
 
-    public int getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(int permissions) {
-        this.permissions = permissions;
-    }
-
     public Date getCreated() {
         return created;
     }
@@ -109,18 +114,5 @@ public final class User {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
-    }
-
-    public void grantPermission(Permissions permission) {
-        this.permissions |= permission.value;
-    }
-
-    public void revokePermission(Permissions permission) {
-        this.permissions &= ~permission.value;
-    }
-
-    public boolean hasPermission(Permissions permission) {
-        var value = permission.value;
-        return (this.permissions & value) == value;
     }
 }

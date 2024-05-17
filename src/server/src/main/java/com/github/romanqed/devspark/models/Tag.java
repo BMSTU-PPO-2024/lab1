@@ -1,13 +1,10 @@
 package com.github.romanqed.devspark.models;
 
 import com.github.romanqed.devspark.database.Model;
-import com.github.romanqed.devspark.database.Repository;
-import com.mongodb.client.model.Filters;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
+import java.util.UUID;
 
 @Model("tags")
 public final class Tag {
@@ -16,10 +13,13 @@ public final class Tag {
     private Date created;
     private Date updated;
 
-    public static Set<Tag> getTagsByName(Set<String> tags, Repository<Tag> repository) {
-        var found = repository.filter(Filters.in("name", tags));
-        var ret = new HashSet<Tag>();
-        found.forEach(ret::add);
+    public static Tag of(String name) {
+        var ret = new Tag();
+        ret.id = UUID.randomUUID().toString();
+        ret.name = Objects.requireNonNull(name);
+        var now = new Date();
+        ret.created = now;
+        ret.updated = now;
         return ret;
     }
 

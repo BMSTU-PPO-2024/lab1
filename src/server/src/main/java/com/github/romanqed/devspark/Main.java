@@ -1,7 +1,11 @@
 package com.github.romanqed.devspark;
 
+import com.github.romanqed.devspark.database.Repository;
 import com.github.romanqed.devspark.di.ScanProviderDirector;
+import com.github.romanqed.devspark.hash.Encoder;
 import com.github.romanqed.devspark.javalin.ServerConfig;
+import com.github.romanqed.devspark.models.User;
+import com.github.romanqed.jtype.Types;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
 import io.github.amayaframework.di.*;
@@ -41,6 +45,8 @@ public final class Main {
         }
         // Start Mongo instance
         var mongo = startMongo(provider, logger);
+        // Init admin user
+        initAdminUser(provider, logger);
         // Start Javalin instance
         var javalin = startJavalin(provider, logger);
         // Bind stop actions by exit
@@ -79,5 +85,22 @@ public final class Main {
             throw new IllegalStateException("Cannot connect to MongoDB due to", e);
         }
         return client;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void initAdminUser(ServiceProvider provider, Logger logger) {
+        var config = provider.instantiate(ServerConfig.class);
+        var encoder = provider.instantiate(Encoder.class);
+        var users = (Repository<User>) provider.instantiate(Types.of(Repository.class, User.class));
+        if (users.exists("email", config.getLogin())) {
+            logger.info("Admin user exists");
+            return;
+        }
+        var login = config.getLogin();
+        var user = User.of(login, encoder.encode(config.getPassword()));
+        user.setNickname(login);
+        user.setPermissions(Integer.MAX_VALUE);
+        users.put(user);
+        logger.info("Admin user successfully created");
     }
 }

@@ -11,6 +11,7 @@ import io.javalin.plugin.bundled.CorsPluginConfig;
 import org.atteo.classindex.ClassIndex;
 
 import java.io.File;
+import java.util.Objects;
 
 @ProviderConsumer
 public final class JavalinServiceConsumer implements ServiceProviderConsumer {
@@ -27,6 +28,8 @@ public final class JavalinServiceConsumer implements ServiceProviderConsumer {
     @Override
     public void pre(ServiceProviderBuilder builder) {
         var config = Util.read(JAVALIN_CONFIG, ServerConfig.class);
+        Objects.requireNonNull(config.getLogin());
+        Objects.requireNonNull(config.getPassword());
         builder.addService(ServerConfig.class, () -> config);
         var javalin = Javalin.create();
         builder.addService(Javalin.class, () -> javalin);

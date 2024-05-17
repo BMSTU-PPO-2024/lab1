@@ -12,10 +12,23 @@ public final class Post extends Owned {
     private String text;
     private Set<String> tagIds;
     private Map<String, Integer> scores;
-    // Tag Models
-    private transient Set<Tag> tags;
     private Date created;
     private Date updated;
+
+    // Tag Models
+    private transient Set<Tag> tags;
+
+    public static Post of(String owner, String title, String text) {
+        var ret = new Post();
+        ret.id = UUID.randomUUID().toString();
+        ret.title = Objects.requireNonNull(title);
+        ret.text = Objects.requireNonNull(text);
+        ret.ownerId = Objects.requireNonNull(owner);
+        var now = new Date();
+        ret.created = now;
+        ret.updated = now;
+        return ret;
+    }
 
     public String getId() {
         return id;
@@ -78,7 +91,7 @@ public final class Post extends Owned {
 
     public void retrieveTags(Repository<Tag> repository) {
         tags = new HashSet<>();
-        var found = repository.findAll(tagIds);
+        var found = repository.getAll(tagIds);
         found.forEach(tags::add);
     }
 

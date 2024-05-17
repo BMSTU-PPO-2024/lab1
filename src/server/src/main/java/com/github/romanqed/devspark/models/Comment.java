@@ -5,6 +5,8 @@ import com.github.romanqed.devspark.database.Repository;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 @Model("comments")
 public final class Comment extends Owned {
@@ -16,6 +18,18 @@ public final class Comment extends Owned {
     private Map<String, Integer> scores;
     private Date created;
     private Date updated;
+
+    public static Comment of(String owner, String postId, String text) {
+        var ret = new Comment();
+        ret.id = UUID.randomUUID().toString();
+        ret.ownerId = Objects.requireNonNull(owner);
+        ret.postId = Objects.requireNonNull(postId);
+        ret.text = Objects.requireNonNull(text);
+        var now = new Date();
+        ret.created = now;
+        ret.updated = now;
+        return ret;
+    }
 
     public String getId() {
         return id;
@@ -58,7 +72,7 @@ public final class Comment extends Owned {
     }
 
     public void retrievePost(Repository<Post> repository) {
-        this.post = repository.find(postId);
+        this.post = repository.get(postId);
     }
 
     public Post getPost(Repository<Post> repository) {

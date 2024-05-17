@@ -15,7 +15,7 @@ class Owned {
     }
 
     public void retrieveOwner(Repository<User> repository) {
-        this.owner = repository.find(ownerId);
+        this.owner = repository.get(ownerId);
     }
 
     public User getOwner(Repository<User> repository) {
