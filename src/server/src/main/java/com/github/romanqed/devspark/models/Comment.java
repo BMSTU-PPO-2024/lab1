@@ -7,8 +7,6 @@ import java.util.*;
 
 @Model("comments")
 public final class Comment extends Owned implements Rated {
-    // Post model
-    transient Post post;
     private String id;
     private String postId;
     private String text;
@@ -27,6 +25,14 @@ public final class Comment extends Owned implements Rated {
         ret.created = now;
         ret.updated = now;
         return ret;
+    }
+
+    public static boolean delete(String userId, String commentId, Repository<Comment> repository) {
+        var fields = Map.<String, Object>of(
+                "id", commentId,
+                "ownerId", userId
+        );
+        return repository.delete(fields);
     }
 
     public String getId() {
@@ -84,19 +90,8 @@ public final class Comment extends Owned implements Rated {
         return ret;
     }
 
-    public void retrievePost(Repository<Post> repository) {
-        this.post = repository.get(postId);
-    }
-
-    public Post getPost(Repository<Post> repository) {
-        if (post == null) {
-            retrievePost(repository);
-        }
-        return post;
-    }
-
-    public Post getPost() {
-        return post;
+    public Post retrievePost(Repository<Post> repository) {
+        return repository.get(postId);
     }
 
     public Date getCreated() {

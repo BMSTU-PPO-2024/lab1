@@ -2,6 +2,7 @@ package com.github.romanqed.devspark.controllers;
 
 import com.github.romanqed.devspark.database.Repository;
 import com.github.romanqed.devspark.dto.DtoUtil;
+import com.github.romanqed.devspark.dto.Response;
 import com.github.romanqed.devspark.dto.TopicDto;
 import com.github.romanqed.devspark.javalin.JavalinController;
 import com.github.romanqed.devspark.javalin.Route;
@@ -43,18 +44,25 @@ public final class TopicController extends AuthBase {
 
     @Route(method = HandlerType.GET, route = "/{topicId}/tags")
     public void getTags(Context ctx) {
+        var pagination = DtoUtil.parsePagination(ctx);
+        if (pagination == null) {
+            return;
+        }
         var topic = topics.get(ctx.pathParam("topicId"));
         if (topic == null) {
             ctx.status(HttpStatus.NOT_FOUND);
             return;
         }
-        topic.retrieveTags(tags);
-        ctx.json(topic.getTags());
+        ctx.json(topic.retrieveTags(tags, pagination));
     }
 
     @Route(method = HandlerType.GET)
     public void find(Context ctx) {
-        Util.findByName(ctx, topics);
+        var pagination = DtoUtil.parsePagination(ctx);
+        if (pagination == null) {
+            return;
+        }
+        Util.findByName(ctx, topics, pagination);
     }
 
     @Route(method = HandlerType.PUT)
@@ -109,6 +117,7 @@ public final class TopicController extends AuthBase {
         if (ids != null) {
             if (!tags.exists(ids)) {
                 ctx.status(HttpStatus.NOT_FOUND);
+                ctx.json(new Response("Invalid tag ids"));
                 return;
             }
             topic.setTagIds(ids);
@@ -122,7 +131,7 @@ public final class TopicController extends AuthBase {
         if (!validatePermission(ctx, Permissions.MANAGE_TOPICS)) {
             return;
         }
-        if (topics.delete(ctx.pathParam("topicId")) != 1) {
+        if (!topics.delete(ctx.pathParam("topicId"))) {
             ctx.status(HttpStatus.NOT_FOUND);
             return;
         }

@@ -1,9 +1,10 @@
 package com.github.romanqed.devspark.controllers;
 
+import com.github.romanqed.devspark.database.Pagination;
 import com.github.romanqed.devspark.database.Repository;
-import com.github.romanqed.devspark.dto.Pagination;
 import com.github.romanqed.devspark.dto.Response;
 import com.github.romanqed.devspark.models.Rated;
+import com.github.romanqed.devspark.models.User;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 
@@ -27,19 +28,15 @@ public final class Util {
                                          Pattern pattern,
                                          Pagination pagination) {
         if (name != null) {
-            return of(repository.findByField("name", name, pagination.getPage(), pagination.getBatch()));
+            return of(repository.findByField("name", name, pagination));
         }
         if (pattern != null) {
-            return of(repository.findMatched("name", pattern, pagination.getPage(), pagination.getBatch()));
+            return of(repository.findMatched("name", pattern, pagination));
         }
-        return of(repository.getAll(pagination.getPage(), pagination.getBatch()));
+        return of(repository.getAll(pagination));
     }
 
-    public static void findByName(Context ctx, Repository<?> repository) {
-        var pagination = Pagination.from(ctx);
-        if (pagination == null) {
-            return;
-        }
+    public static void findByName(Context ctx, Repository<?> repository, Pagination pagination) {
         var name = ctx.queryParam("name");
         var pattern = ctx.queryParam("pattern");
         try {
@@ -52,19 +49,9 @@ public final class Util {
         }
     }
 
-    public static <V extends Rated> void rate(Context ctx, String id, AuthBase auth, Repository<V> repository) {
-        var user = auth.getCheckedUser(ctx);
-        if (user == null) {
-            return;
-        }
-        var key = ctx.pathParam(id);
-        var entity = repository.get(key);
-        if (entity == null) {
-            ctx.status(HttpStatus.NOT_FOUND);
-            return;
-        }
+    public static <V extends Rated> void rate(Context ctx, User user, String id, V entity, Repository<V> repository) {
         if (entity.rate(user, 1)) {
-            repository.update(key, entity);
+            repository.update(id, entity);
             ctx.status(HttpStatus.OK);
             return;
         }
@@ -72,19 +59,9 @@ public final class Util {
         ctx.json(new Response("Entity is already rated"));
     }
 
-    public static <V extends Rated> void unrate(Context ctx, String id, AuthBase auth, Repository<V> repository) {
-        var user = auth.getCheckedUser(ctx);
-        if (user == null) {
-            return;
-        }
-        var key = ctx.pathParam(id);
-        var entity = repository.get(key);
-        if (entity == null) {
-            ctx.json(HttpStatus.NOT_FOUND);
-            return;
-        }
+    public static <V extends Rated> void unrate(Context ctx, User user, String id, V entity, Repository<V> repository) {
         if (entity.unrate(user)) {
-            repository.update(key, entity);
+            repository.update(id, entity);
             ctx.status(HttpStatus.OK);
             return;
         }

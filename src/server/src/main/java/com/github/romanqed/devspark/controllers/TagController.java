@@ -37,7 +37,11 @@ public final class TagController extends AuthBase {
 
     @Route(method = HandlerType.GET)
     public void find(Context ctx) {
-        Util.findByName(ctx, tags);
+        var pagination = DtoUtil.parsePagination(ctx);
+        if (pagination == null) {
+            return;
+        }
+        Util.findByName(ctx, tags, pagination);
     }
 
     @Route(method = HandlerType.PUT)
@@ -83,7 +87,7 @@ public final class TagController extends AuthBase {
         if (!validatePermission(ctx, Permissions.MANAGE_TAGS)) {
             return;
         }
-        if (tags.delete(ctx.pathParam("tagId")) != 1) {
+        if (!tags.delete(ctx.pathParam("tagId"))) {
             ctx.status(HttpStatus.NOT_FOUND);
             return;
         }

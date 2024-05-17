@@ -1,6 +1,7 @@
 package com.github.romanqed.devspark.models;
 
 import com.github.romanqed.devspark.database.Model;
+import com.github.romanqed.devspark.database.Pagination;
 import com.github.romanqed.devspark.database.Repository;
 
 import java.util.*;
@@ -10,26 +11,43 @@ public final class Post extends Owned implements Rated {
     private String id;
     private String title;
     private String text;
-    private Privacy privacy;
+    private String channelId;
     private Set<String> tagIds;
     private Map<String, Integer> scores;
     private Date created;
     private Date updated;
 
-    // Tag Models
-    private transient Set<Tag> tags;
-
-    public static Post of(String owner, String title, String text) {
+    public static Post of(String owner, String channel, String title, String text) {
         var ret = new Post();
         ret.id = UUID.randomUUID().toString();
         ret.title = Objects.requireNonNull(title);
         ret.text = Objects.requireNonNull(text);
-        ret.privacy = Privacy.PUBLIC;
         ret.ownerId = Objects.requireNonNull(owner);
+        ret.channelId = Objects.requireNonNull(channel);
         var now = new Date();
         ret.created = now;
         ret.updated = now;
         return ret;
+    }
+
+    public static boolean delete(String postId, Repository<Post> posts, Repository<Comment> comments) {
+        if (!posts.delete(postId)) {
+            return false;
+        }
+        comments.deleteAll("postId", postId);
+        return true;
+    }
+
+    public static boolean delete(String userId, String postId, Repository<Post> posts, Repository<Comment> comments) {
+        var fields = Map.<String, Object>of(
+                "id", postId,
+                "ownerId", userId
+        );
+        if (!posts.delete(fields)) {
+            return false;
+        }
+        comments.deleteAll("postId", postId);
+        return true;
     }
 
     public String getId() {
@@ -56,12 +74,12 @@ public final class Post extends Owned implements Rated {
         this.text = text;
     }
 
-    public Privacy getPrivacy() {
-        return privacy;
+    public String getChannelId() {
+        return channelId;
     }
 
-    public void setPrivacy(Privacy privacy) {
-        this.privacy = privacy;
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
     }
 
     public Set<String> getTagIds() {
@@ -88,25 +106,22 @@ public final class Post extends Owned implements Rated {
         return ret;
     }
 
-    public void addTags(Set<String> ids, Repository<Tag> repository) {
-        if (!repository.exists(ids)) {
-            throw new IllegalArgumentException("Invalid tag ids");
-        }
-        this.tagIds.addAll(ids);
-    }
-
     public void removeTags(Set<String> ids) {
         this.tagIds.removeAll(ids);
     }
 
-    public void retrieveTags(Repository<Tag> repository) {
-        tags = new HashSet<>();
-        var found = repository.getAll(tagIds);
-        found.forEach(tags::add);
+    public Set<Tag> retrieveTags(Repository<Tag> repository, Pagination pagination) {
+        var ret = new HashSet<Tag>();
+        var found = repository.getAll(tagIds, pagination);
+        found.forEach(ret::add);
+        return ret;
     }
 
-    public Set<Tag> getTags() {
-        return Collections.unmodifiableSet(tags);
+    public List<Comment> retrieveComments(Repository<Comment> comments, Pagination pagination) {
+        var ret = new LinkedList<Comment>();
+        var found = comments.findByField("postId", id, pagination);
+        found.forEach(ret::add);
+        return ret;
     }
 
     public Date getCreated() {
@@ -123,6 +138,13 @@ public final class Post extends Owned implements Rated {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public boolean isVisible(Repository<Channel> channels) {
+        return channels.exists(Map.of(
+                "id", channelId,
+                "privacy", Privacy.PUBLIC
+        ));
     }
 
     @Override

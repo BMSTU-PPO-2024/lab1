@@ -1,7 +1,6 @@
 package com.github.romanqed.devspark.controllers;
 
 import com.github.romanqed.devspark.database.Repository;
-import com.github.romanqed.devspark.dto.CommentDto;
 import com.github.romanqed.devspark.dto.DtoUtil;
 import com.github.romanqed.devspark.dto.TextDto;
 import com.github.romanqed.devspark.javalin.JavalinController;
@@ -33,66 +32,81 @@ public final class CommentController extends AuthBase {
             ctx.status(HttpStatus.NOT_FOUND);
             return;
         }
-        ctx.json(CommentDto.of(comment));
-    }
-
-    private boolean cannotManipulate(Context ctx, Comment comment) {
-        var user = getCheckedUser(ctx);
-        if (user == null) {
-            return true;
-        }
-        if (!comment.getOwnerId().equals(user.getId()) && !user.hasPermission(Permissions.MANAGE_COMMENTS)) {
-            ctx.status(HttpStatus.FORBIDDEN);
-            return true;
-        }
-        return false;
+        ctx.json(comment);
     }
 
     @Route(method = HandlerType.PATCH, route = "/{commentId}")
     public void update(Context ctx) {
+        var dto = DtoUtil.validate(ctx, TextDto.class);
+        if (dto == null) {
+            return;
+        }
+        var user = getCheckedUser(ctx);
+        if (user == null) {
+            return;
+        }
         var comment = comments.get(ctx.pathParam("commentId"));
         if (comment == null) {
             ctx.status(HttpStatus.NOT_FOUND);
             return;
         }
-        if (cannotManipulate(ctx, comment)) {
-            return;
-        }
-        var dto = DtoUtil.parse(ctx, TextDto.class);
-        if (dto == null) {
+        if (!comment.isOwnedBy(user) && !user.hasPermission(Permissions.MANAGE_COMMENTS)) {
+            ctx.status(HttpStatus.FORBIDDEN);
             return;
         }
         // Update text
-        var text = dto.getText();
-        if (text == null) {
-            ctx.status(HttpStatus.BAD_REQUEST);
-            return;
-        }
-        comment.setText(text);
+        comment.setText(dto.getText());
         comment.setUpdated(new Date());
         comments.update(comment.getId(), comment);
     }
 
+    private void deleteComment(Context ctx, String id) {
+        if (!comments.delete(id)) {
+            ctx.status(HttpStatus.NOT_FOUND);
+            return;
+        }
+        ctx.status(HttpStatus.OK);
+    }
+
     @Route(method = HandlerType.DELETE, route = "/{commentId}")
     public void delete(Context ctx) {
-        var comment = comments.get(ctx.pathParam("commentId"));
+        var user = getCheckedUser(ctx);
+        if (user == null) {
+            return;
+        }
+        var id = ctx.pathParam("commentId");
+        if (user.hasPermission(Permissions.MANAGE_COMMENTS)) {
+            deleteComment(ctx, id);
+            return;
+        }
+        if (!Comment.delete(user.getId(), id, comments)) {
+            ctx.status(HttpStatus.FORBIDDEN);
+            return;
+        }
+        ctx.status(HttpStatus.OK);
+    }
+
+    private void doRate(Context ctx, Consumer5<Context, User, String, Comment, Repository<Comment>> consumer) {
+        var user = getCheckedUser(ctx);
+        if (user == null) {
+            return;
+        }
+        var id = ctx.pathParam("commentId");
+        var comment = comments.get(id);
         if (comment == null) {
             ctx.status(HttpStatus.NOT_FOUND);
             return;
         }
-        if (cannotManipulate(ctx, comment)) {
-            return;
-        }
-        comments.delete(comment.getId());
+        consumer.consume(ctx, user, id, comment, comments);
     }
 
     @Route(method = HandlerType.PUT, route = "/{commentId}/rate")
     public void addRate(Context ctx) {
-        Util.rate(ctx, "commentId", this, comments);
+        doRate(ctx, Util::rate);
     }
 
     @Route(method = HandlerType.DELETE, route = "/{commentId}/rate")
     public void deleteRate(Context ctx) {
-        Util.unrate(ctx, "commentId", this, comments);
+        doRate(ctx, Util::unrate);
     }
 }

@@ -1,6 +1,7 @@
 package com.github.romanqed.devspark.models;
 
 import com.github.romanqed.devspark.database.Model;
+import com.github.romanqed.devspark.database.Pagination;
 import com.github.romanqed.devspark.database.Repository;
 
 import java.util.*;
@@ -12,8 +13,6 @@ public final class Topic {
     private Set<String> tagIds;
     private Date created;
     private Date updated;
-    // Tag Models
-    private transient Set<Tag> tags;
 
     public static Topic of(String name, Set<String> tagIds) {
         var ret = new Topic();
@@ -50,25 +49,15 @@ public final class Topic {
         this.tagIds = tagIds;
     }
 
-    public void addTags(Set<String> ids, Repository<Tag> repository) {
-        if (!repository.exists(ids)) {
-            throw new IllegalArgumentException("Invalid tag ids");
-        }
-        this.tagIds.addAll(ids);
-    }
-
     public void removeTags(Set<String> ids) {
         this.tagIds.removeAll(ids);
     }
 
-    public void retrieveTags(Repository<Tag> repository) {
-        tags = new HashSet<>();
-        var found = repository.getAll(tagIds);
-        found.forEach(tags::add);
-    }
-
-    public Set<Tag> getTags() {
-        return Collections.unmodifiableSet(tags);
+    public Set<Tag> retrieveTags(Repository<Tag> repository, Pagination pagination) {
+        var ret = new HashSet<Tag>();
+        var found = repository.getAll(tagIds, pagination);
+        found.forEach(ret::add);
+        return ret;
     }
 
     public Date getCreated() {
