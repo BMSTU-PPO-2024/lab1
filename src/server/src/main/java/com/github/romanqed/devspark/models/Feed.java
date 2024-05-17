@@ -1,10 +1,13 @@
 package com.github.romanqed.devspark.models;
 
+import com.github.romanqed.devspark.database.Model;
+
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+@Model("feeds")
 public final class Feed extends Owned {
     private String id;
     private String name;

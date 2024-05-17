@@ -11,7 +11,7 @@ import io.javalin.http.HttpStatus;
 import javalinjwt.JWTProvider;
 import javalinjwt.JavalinJWT;
 
-class AuthBase {
+public class AuthBase {
     protected final JWTProvider<JwtUser> provider;
     protected final Repository<User> users;
 

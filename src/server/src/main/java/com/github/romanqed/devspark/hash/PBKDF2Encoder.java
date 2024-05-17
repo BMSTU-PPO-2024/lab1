@@ -4,26 +4,17 @@ import com.github.romanqed.jfunc.Exceptions;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Objects;
 
 public final class PBKDF2Encoder implements Encoder {
-    private static final int SALT_LENGTH = 16;
     private static final int ITERATION_COUNT = 65536;
     private static final int KEY_LENGTH = 128;
     private static final Base64.Encoder ENCODER = Base64.getEncoder();
     private final byte[] salt;
 
-    public PBKDF2Encoder() {
-        this.salt = generateSalt();
-    }
-
-    private byte[] generateSalt() {
-        var random = new SecureRandom();
-        var ret = new byte[SALT_LENGTH];
-        random.nextBytes(ret);
-        return ret;
+    public PBKDF2Encoder(byte[] salt) {
+        this.salt = salt;
     }
 
     private String calculateHash(String value) {

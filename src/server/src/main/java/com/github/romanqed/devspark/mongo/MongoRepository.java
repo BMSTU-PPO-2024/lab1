@@ -5,6 +5,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -81,6 +82,12 @@ final class MongoRepository<V> implements Repository<V> {
     }
 
     @Override
+    public long countByField(Map<String, Object> fields) {
+        // TODO
+        return 0;
+    }
+
+    @Override
     public boolean exists(String id) {
         return collection.countDocuments(Filters.eq("_id", id)) == 1;
     }
@@ -93,6 +100,18 @@ final class MongoRepository<V> implements Repository<V> {
     @Override
     public boolean exists(String field, Object value) {
         return collection.countDocuments(Filters.eq(field, value)) == 1;
+    }
+
+    @Override
+    public boolean exists(String field, Iterable<Object> value) {
+        // TODO
+        return false;
+    }
+
+    @Override
+    public boolean exists(Map<String, Object> fields) {
+        // TODO
+        return false;
     }
 
     @Override
@@ -133,6 +152,18 @@ final class MongoRepository<V> implements Repository<V> {
                 .find(Filters.in(field, values))
                 .skip(batch * (page - 1))
                 .limit(batch);
+    }
+
+    @Override
+    public Iterable<V> findByField(Map<String, Object> fields) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    public Iterable<V> findByField(Map<String, Object> fields, int page, int batch) {
+        // TODO
+        return null;
     }
 
     @Override

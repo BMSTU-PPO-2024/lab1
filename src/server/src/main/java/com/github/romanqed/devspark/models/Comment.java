@@ -3,13 +3,12 @@ package com.github.romanqed.devspark.models;
 import com.github.romanqed.devspark.database.Model;
 import com.github.romanqed.devspark.database.Repository;
 
-import java.util.Date;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Model("comments")
-public final class Comment extends Owned {
+public final class Comment extends Owned implements Rated {
+    // Post model
+    transient Post post;
     private String id;
     private String postId;
     private String text;
@@ -17,15 +16,13 @@ public final class Comment extends Owned {
     private Date created;
     private Date updated;
 
-    // Post model
-    transient Post post;
-
     public static Comment of(String owner, String postId, String text) {
         var ret = new Comment();
         ret.id = UUID.randomUUID().toString();
         ret.ownerId = Objects.requireNonNull(owner);
         ret.postId = Objects.requireNonNull(postId);
         ret.text = Objects.requireNonNull(text);
+        ret.scores = new HashMap<>();
         var now = new Date();
         ret.created = now;
         ret.updated = now;
@@ -62,6 +59,21 @@ public final class Comment extends Owned {
 
     public void setScores(Map<String, Integer> scores) {
         this.scores = scores;
+    }
+
+    @Override
+    public boolean rate(User user, int value) {
+        var id = user.getId();
+        if (this.scores.containsKey(id)) {
+            return false;
+        }
+        this.scores.put(id, value);
+        return true;
+    }
+
+    @Override
+    public boolean unrate(User user) {
+        return this.scores.remove(user.getId()) != null;
     }
 
     public int calculateScore() {

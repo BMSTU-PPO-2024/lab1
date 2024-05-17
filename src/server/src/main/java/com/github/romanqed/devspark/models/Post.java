@@ -6,10 +6,11 @@ import com.github.romanqed.devspark.database.Repository;
 import java.util.*;
 
 @Model("posts")
-public final class Post extends Owned {
+public final class Post extends Owned implements Rated {
     private String id;
     private String title;
     private String text;
+    private Privacy privacy;
     private Set<String> tagIds;
     private Map<String, Integer> scores;
     private Date created;
@@ -23,6 +24,7 @@ public final class Post extends Owned {
         ret.id = UUID.randomUUID().toString();
         ret.title = Objects.requireNonNull(title);
         ret.text = Objects.requireNonNull(text);
+        ret.privacy = Privacy.PUBLIC;
         ret.ownerId = Objects.requireNonNull(owner);
         var now = new Date();
         ret.created = now;
@@ -52,6 +54,14 @@ public final class Post extends Owned {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Privacy getPrivacy() {
+        return privacy;
+    }
+
+    public void setPrivacy(Privacy privacy) {
+        this.privacy = privacy;
     }
 
     public Set<String> getTagIds() {
@@ -113,5 +123,20 @@ public final class Post extends Owned {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    @Override
+    public boolean rate(User user, int value) {
+        var id = user.getId();
+        if (this.scores.containsKey(id)) {
+            return false;
+        }
+        this.scores.put(id, value);
+        return true;
+    }
+
+    @Override
+    public boolean unrate(User user) {
+        return this.scores.remove(user.getId()) != null;
     }
 }

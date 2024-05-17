@@ -19,6 +19,7 @@ public final class Channel extends Owned {
         ret.id = UUID.randomUUID().toString();
         ret.ownerId = Objects.requireNonNull(owner);
         ret.name = Objects.requireNonNull(name);
+        ret.privacy = Privacy.PUBLIC;
         var now = new Date();
         ret.created = now;
         ret.updated = now;

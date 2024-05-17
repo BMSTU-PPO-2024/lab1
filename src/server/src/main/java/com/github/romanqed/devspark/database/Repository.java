@@ -1,6 +1,7 @@
 package com.github.romanqed.devspark.database;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public interface Repository<V> {
@@ -33,6 +34,10 @@ public interface Repository<V> {
 
     Iterable<V> findByField(String field, Iterable<Object> values, int page, int batch);
 
+    Iterable<V> findByField(Map<String, Object> fields);
+
+    Iterable<V> findByField(Map<String, Object> fields, int page, int batch);
+
     Iterable<V> findMatched(String field, String pattern);
 
     Iterable<V> findMatched(String field, String pattern, int page, int batch);
@@ -43,11 +48,17 @@ public interface Repository<V> {
 
     long countByField(String field, Iterable<Object> values);
 
+    long countByField(Map<String, Object> fields);
+
     boolean exists(String id);
 
     boolean exists(Collection<String> ids);
 
     boolean exists(String field, Object value);
+
+    boolean exists(String field, Iterable<Object> value);
+
+    boolean exists(Map<String, Object> fields);
 
     long deleteAll(Iterable<String> keys);
 }
