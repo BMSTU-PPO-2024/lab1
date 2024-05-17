@@ -10,6 +10,7 @@ import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import javalinjwt.JWTProvider;
 import javalinjwt.JavalinJWT;
+import kotlin.jvm.functions.Function2;
 
 public class AuthBase {
     protected final JWTProvider<JwtUser> provider;
@@ -45,19 +46,35 @@ public class AuthBase {
         return decoded.getClaim("id").asString();
     }
 
-    protected User getUser(Context ctx) {
+    protected User getUser(Context ctx, Function2<Repository<User>, String, User> getter) {
         var decoded = JavalinJWT.getTokenFromHeader(ctx).flatMap(provider::validateToken);
         return decoded
-                .map(decodedJWT -> users.get(decodedJWT.getClaim("id").asString()))
+                .map(decodedJWT -> getter.invoke(users, decodedJWT.getClaim("id").asString()))
                 .orElse(null);
     }
 
+    protected User getUser(Context ctx) {
+        return getUser(ctx, User::getAuthUser);
+    }
+
+    protected User getFullUser(Context ctx) {
+        return getUser(ctx, Repository::get);
+    }
+
+    protected User getCheckedFullUser(Context ctx) {
+        return getCheckedUser(ctx, Repository::get);
+    }
+
     protected User getCheckedUser(Context ctx) {
+        return getCheckedUser(ctx, User::getAuthUser);
+    }
+
+    protected User getCheckedUser(Context ctx, Function2<Repository<User>, String, User> getter) {
         var id = getCheckedUserId(ctx);
         if (id == null) {
             return null;
         }
-        var ret = users.get(id);
+        var ret = getter.invoke(users, id);
         if (ret == null) {
             ctx.status(HttpStatus.UNAUTHORIZED);
             ctx.json(new Response("User not found"));

@@ -1,14 +1,18 @@
 package com.github.romanqed.devspark.models;
 
 import com.github.romanqed.devspark.database.Model;
+import com.github.romanqed.devspark.database.Repository;
 
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 @Model("users")
 public final class User {
+    private static final List<String> AUTH_FIELDS = List.of("_id", "banned", "email", "password", "permissions");
+
     private String id;
     private String nickname;
     private String email;
@@ -29,6 +33,10 @@ public final class User {
         ret.created = now;
         ret.updated = now;
         return ret;
+    }
+
+    public static User getAuthUser(Repository<User> users, String id) {
+        return users.get(id, AUTH_FIELDS);
     }
 
     public String getId() {

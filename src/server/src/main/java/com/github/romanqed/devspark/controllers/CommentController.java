@@ -79,7 +79,7 @@ public final class CommentController extends AuthBase {
             deleteComment(ctx, id);
             return;
         }
-        if (!Comment.delete(user.getId(), id, comments)) {
+        if (!Comment.delete(comments, user.getId(), id)) {
             ctx.status(HttpStatus.FORBIDDEN);
             return;
         }

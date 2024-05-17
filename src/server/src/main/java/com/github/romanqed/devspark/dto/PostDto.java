@@ -1,10 +1,13 @@
 package com.github.romanqed.devspark.dto;
 
+import com.github.romanqed.devspark.models.Privacy;
+
 import java.util.Set;
 
 public final class PostDto implements Validated {
     private String title;
     private String text;
+    private Privacy privacy;
     private Set<String> tagIds;
 
     public String getTitle() {
@@ -21,6 +24,14 @@ public final class PostDto implements Validated {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Privacy getPrivacy() {
+        return privacy;
+    }
+
+    public void setPrivacy(Privacy privacy) {
+        this.privacy = privacy;
     }
 
     public Set<String> getTagIds() {

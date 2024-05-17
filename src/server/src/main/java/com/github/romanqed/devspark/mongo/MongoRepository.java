@@ -69,44 +69,10 @@ final class MongoRepository<V> implements Repository<V> {
     }
 
     @Override
-    public Iterable<V> findByField(String field, Object value) {
-        return collection.find(Filters.eq(field, value));
-    }
-
-    @Override
     public Iterable<V> findByField(String field, Object value, List<String> fields) {
         return collection
                 .find(Filters.eq(field, value))
                 .projection(Projections.include(fields));
-    }
-
-    @Override
-    public Iterable<V> findByField(String field, Iterable<Object> values) {
-        return collection.find(Filters.in(field, values));
-    }
-
-    @Override
-    public Iterable<V> findMatched(String field, String pattern) {
-        return collection.find(Filters.regex(field, pattern));
-    }
-
-    @Override
-    public Iterable<V> findMatched(String field, Pattern pattern) {
-        return collection.find(Filters.regex(field, pattern));
-    }
-
-    @Override
-    public Iterable<V> findMatchedWithFields(String field, String pattern, Map<String, Object> fields) {
-        var filters = asList(fields);
-        filters.add(Filters.regex(field, pattern));
-        return collection.find(Filters.and(filters));
-    }
-
-    @Override
-    public Iterable<V> findMatchedWithFields(String field, Pattern pattern, Map<String, Object> fields) {
-        var filters = asList(fields);
-        filters.add(Filters.regex(field, pattern));
-        return collection.find(Filters.and(filters));
     }
 
     @Override
@@ -120,22 +86,6 @@ final class MongoRepository<V> implements Repository<V> {
     }
 
     @Override
-    public long countByField(String field, Object value) {
-        return collection.countDocuments(Filters.eq(field, value));
-    }
-
-    @Override
-    public long countByField(String field, Iterable<Object> values) {
-        return collection.countDocuments(Filters.in(field, values));
-    }
-
-    @Override
-    public long countByField(Map<String, Object> fields) {
-        var filters = asList(fields);
-        return collection.countDocuments(Filters.and(filters));
-    }
-
-    @Override
     public boolean exists(String id) {
         return collection.countDocuments(Filters.eq("_id", id)) == 1;
     }
@@ -146,6 +96,18 @@ final class MongoRepository<V> implements Repository<V> {
             return true;
         }
         return collection.countDocuments(Filters.in("_id", ids)) == ids.size();
+    }
+
+    @Override
+    public boolean exists(Collection<String> ids, String field, Object value) {
+        if (ids.isEmpty()) {
+            return true;
+        }
+        var filter = Filters.and(
+                Filters.in("_id", ids),
+                Filters.eq(field, value)
+        );
+        return collection.countDocuments(filter) == ids.size();
     }
 
     @Override
@@ -200,17 +162,6 @@ final class MongoRepository<V> implements Repository<V> {
         return collection.deleteMany(Filters.eq(field, value)).getDeletedCount();
     }
 
-    @Override
-    public long deleteAll(String field, Iterable<Object> value) {
-        return collection.deleteMany(Filters.in(field, value)).getDeletedCount();
-    }
-
-    @Override
-    public long deleteAll(Map<String, Object> fields) {
-        var filters = asList(fields);
-        return collection.deleteMany(Filters.and(filters)).getDeletedCount();
-    }
-
     // Batched
     @Override
     public Iterable<V> getAll(Pagination pagination) {
@@ -243,23 +194,7 @@ final class MongoRepository<V> implements Repository<V> {
     }
 
     @Override
-    public Iterable<V> findByField(String field, Iterable<Object> values, Pagination pagination) {
-        var batch = pagination.getBatch();
-        var page = pagination.getPage();
-        return collection
-                .find(Filters.in(field, values))
-                .skip(batch * (page - 1))
-                .limit(batch);
-    }
-
-    @Override
-    public Iterable<V> findByField(Map<String, Object> fields) {
-        var filters = asList(fields);
-        return collection.find(Filters.and(filters));
-    }
-
-    @Override
-    public Iterable<V> findByField(Map<String, Object> fields, Pagination pagination) {
+    public Iterable<V> findAnd(Map<String, Object> fields, Pagination pagination) {
         var batch = pagination.getBatch();
         var page = pagination.getPage();
         var filters = asList(fields);
@@ -270,11 +205,13 @@ final class MongoRepository<V> implements Repository<V> {
     }
 
     @Override
-    public Iterable<V> findMatched(String field, String pattern, Pagination pagination) {
+    public Iterable<V> findOr(Map<String, Object> fields1, Map<String, Object> fields2, Pagination pagination) {
         var batch = pagination.getBatch();
         var page = pagination.getPage();
+        var filters1 = asList(fields1);
+        var filters2 = asList(fields2);
         return collection
-                .find(Filters.regex(field, pattern))
+                .find(Filters.or(Filters.and(filters1), Filters.and(filters2)))
                 .skip(batch * (page - 1))
                 .limit(batch);
     }
@@ -291,21 +228,6 @@ final class MongoRepository<V> implements Repository<V> {
 
     @Override
     public Iterable<V> findMatchedWithFields(String field,
-                                             String pattern,
-                                             Map<String, Object> fields,
-                                             Pagination pagination) {
-        var batch = pagination.getBatch();
-        var page = pagination.getPage();
-        var filters = asList(fields);
-        filters.add(Filters.regex(field, pattern));
-        return collection
-                .find(Filters.and(filters))
-                .skip(batch * (page - 1))
-                .limit(batch);
-    }
-
-    @Override
-    public Iterable<V> findMatchedWithFields(String field,
                                              Pattern pattern,
                                              Map<String, Object> fields,
                                              Pagination pagination) {
@@ -315,6 +237,23 @@ final class MongoRepository<V> implements Repository<V> {
         var page = pagination.getPage();
         return collection
                 .find(Filters.and(filters))
+                .skip(batch * (page - 1))
+                .limit(batch);
+    }
+
+    @Override
+    public Iterable<V> findMatchedWithFields(String field,
+                                             Pattern pattern,
+                                             Map<String, Object> fields1,
+                                             Map<String, Object> fields2,
+                                             Pagination pagination) {
+        var filters1 = asList(fields1);
+        var filters2 = asList(fields2);
+        var regex = Filters.regex(field, pattern);
+        var batch = pagination.getBatch();
+        var page = pagination.getPage();
+        return collection
+                .find(Filters.and(regex, Filters.or(Filters.and(filters1), Filters.and(filters2))))
                 .skip(batch * (page - 1))
                 .limit(batch);
     }

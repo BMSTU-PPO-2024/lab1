@@ -27,9 +27,9 @@ public final class Comment extends Owned implements Rated {
         return ret;
     }
 
-    public static boolean delete(String userId, String commentId, Repository<Comment> repository) {
+    public static boolean delete(Repository<Comment> repository, String userId, String commentId) {
         var fields = Map.<String, Object>of(
-                "id", commentId,
+                "_id", commentId,
                 "ownerId", userId
         );
         return repository.delete(fields);

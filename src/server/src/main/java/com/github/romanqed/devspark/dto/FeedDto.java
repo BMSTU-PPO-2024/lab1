@@ -8,7 +8,6 @@ public final class FeedDto implements Validated {
     private String name;
     private Privacy privacy;
     private Set<String> channelIds;
-    private Set<String> topicIds;
     private Set<String> tagIds;
 
     public String getName() {
@@ -33,14 +32,6 @@ public final class FeedDto implements Validated {
 
     public void setChannelIds(Set<String> channelIds) {
         this.channelIds = channelIds;
-    }
-
-    public Set<String> getTopicIds() {
-        return topicIds;
-    }
-
-    public void setTopicIds(Set<String> topicIds) {
-        this.topicIds = topicIds;
     }
 
     public Set<String> getTagIds() {

@@ -1,6 +1,7 @@
 package com.github.romanqed.devspark.models;
 
 import com.github.romanqed.devspark.database.Model;
+import com.github.romanqed.devspark.database.Pagination;
 import com.github.romanqed.devspark.database.Repository;
 
 import java.util.*;
@@ -11,14 +12,13 @@ public final class Feed extends Owned implements Visible {
     private String name;
     private Privacy privacy;
     private Set<String> channelIds;
-    private Set<String> topicIds;
     private Set<String> tagIds;
     private Date created;
     private Date updated;
 
-    public static boolean delete(String userId, String feedId, Repository<Feed> feeds) {
+    public static boolean delete(Repository<Feed> feeds, String userId, String feedId) {
         var fields = Map.<String, Object>of(
-                "id", feedId,
+                "_id", feedId,
                 "ownerId", userId
         );
         return feeds.delete(fields);
@@ -30,6 +30,8 @@ public final class Feed extends Owned implements Visible {
         ret.name = Objects.requireNonNull(name);
         ret.ownerId = Objects.requireNonNull(owner);
         ret.privacy = Privacy.PRIVATE;
+        ret.channelIds = new HashSet<>();
+        ret.tagIds = new HashSet<>();
         var now = new Date();
         ret.created = now;
         ret.updated = now;
@@ -68,14 +70,6 @@ public final class Feed extends Owned implements Visible {
         this.channelIds = channelIds;
     }
 
-    public Set<String> getTopicIds() {
-        return topicIds;
-    }
-
-    public void setTopicIds(Set<String> topicIds) {
-        this.topicIds = topicIds;
-    }
-
     public Set<String> getTagIds() {
         return tagIds;
     }
@@ -103,5 +97,20 @@ public final class Feed extends Owned implements Visible {
     @Override
     public boolean isVisible() {
         return privacy == Privacy.PUBLIC;
+    }
+
+    public List<Post> getPosts(Repository<Post> posts, Pagination pagination) {
+        /*
+        Heuristic:
+        1) If feed has associated public channels, select public posts with the specified tags from it
+        2) If feed has associated public channels, but has no tags, then just get posts from channels
+        3) Otherwise, just select public posts with the specified tags
+        4) If feed has no tags, then select all public posts
+         */
+        /*
+        some tag from tags in post.tags && post.channelId in channels && post.privacy = PUBLIC
+         */
+        // TODO
+        return null;
     }
 }

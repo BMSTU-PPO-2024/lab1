@@ -7,6 +7,8 @@ import com.github.romanqed.devspark.database.Repository;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import static com.github.romanqed.devspark.CollectionUtil.asList;
+
 @Model("channels")
 public final class Channel extends Owned implements Visible {
     private String id;
@@ -27,100 +29,114 @@ public final class Channel extends Owned implements Visible {
         return ret;
     }
 
-    public static List<Channel> findAll(boolean all, Repository<Channel> channels, Pagination pagination) {
-        var found = (Iterable<Channel>) null;
-        if (all) {
-            found = channels.getAll(pagination);
-        } else {
-            found = channels.findByField("privacy", Privacy.PUBLIC, pagination);
-        }
-        var ret = new LinkedList<Channel>();
-        found.forEach(ret::add);
-        return ret;
+    public static boolean isVisible(Repository<Channel> channels, Collection<String> ids) {
+        return channels.exists(ids, "privacy", Privacy.PUBLIC);
     }
 
-    public static List<Channel> findByName(String name,
-                                           boolean all,
-                                           Repository<Channel> channels,
-                                           Pagination pagination) {
-        var found = (Iterable<Channel>) null;
+    public static List<Channel> findAll(Repository<Channel> channels,
+                                        String userId,
+                                        boolean all,
+                                        Pagination pagination) {
         if (all) {
-            found = channels.findByField("name", name, pagination);
-        } else {
-            found = channels.findByField(
-                    Map.of(
-                            "name", name,
-                            "privacy", Privacy.PUBLIC
-                    ),
-                    pagination
+            return asList(channels.getAll(pagination));
+        }
+        if (userId != null) {
+            return asList(
+                    channels.findOr(
+                            Map.of("privacy", Privacy.PUBLIC),
+                            Map.of("ownerId", userId),
+                            pagination
+                    )
             );
         }
-        var ret = new LinkedList<Channel>();
-        found.forEach(ret::add);
-        return ret;
+        return asList(channels.findByField("privacy", Privacy.PUBLIC, pagination));
     }
 
-    public static List<Channel> matchByName(Pattern pattern,
-                                            boolean all,
-                                            Repository<Channel> channels,
-                                            Pagination pagination) {
-        var found = (Iterable<Channel>) null;
+    public static List<Channel> findByName(Repository<Channel> channels,
+                                           String userId,
+                                           String name,
+                                           boolean all,
+                                           Pagination pagination) {
         if (all) {
-            found = channels.findMatched("name", pattern, pagination);
-        } else {
-            found = channels.findMatchedWithFields(
+            return asList(channels.findByField("name", name, pagination));
+        }
+        if (userId != null) {
+            return asList(
+                    channels.findOr(
+                            Map.of(
+                                    "name", name,
+                                    "privacy", Privacy.PUBLIC
+                            ),
+                            Map.of("ownerId", userId),
+                            pagination
+                    )
+            );
+        }
+        return asList(channels.findAnd(
+                Map.of(
+                        "name", name,
+                        "privacy", Privacy.PUBLIC
+                ),
+                pagination
+        ));
+    }
+
+    public static List<Channel> matchByName(Repository<Channel> channels,
+                                            String userId,
+                                            Pattern pattern,
+                                            boolean all,
+                                            Pagination pagination) {
+        if (all) {
+            return asList(channels.findMatched("name", pattern, pagination));
+        }
+        if (userId != null) {
+            return asList(channels.findMatchedWithFields(
                     "name",
                     pattern,
-                    Map.of(
-                            "privacy", Privacy.PUBLIC
-                    ),
+                    Map.of("privacy", Privacy.PUBLIC),
+                    Map.of("ownerId", userId),
                     pagination
-            );
+            ));
         }
-        var ret = new LinkedList<Channel>();
-        found.forEach(ret::add);
-        return ret;
+        return asList(channels.findMatchedWithFields(
+                "name",
+                pattern,
+                Map.of("privacy", Privacy.PUBLIC),
+                pagination
+        ));
     }
 
-    private static void delete(Iterable<Post> ids, Repository<Post> posts, Repository<Comment> comments) {
+    private static void delete(Repository<Post> posts, Repository<Comment> comments, Iterable<Post> ids) {
         var values = new LinkedList<String>();
         ids.forEach(e -> values.add(e.getId()));
         posts.deleteAll(values);
         comments.deleteAll("postId", values);
     }
 
-    public static boolean delete(String channelId,
-                                 Repository<Channel> channels,
+    public static boolean delete(Repository<Channel> channels,
                                  Repository<Post> posts,
-                                 Repository<Comment> comments) {
+                                 Repository<Comment> comments,
+                                 String channelId) {
         if (!channels.delete(channelId)) {
             return false;
         }
-        delete(
-                posts.findByField("channelId", channelId, List.of("id")),
-                posts,
-                comments
-        );
+        delete(posts, comments, posts.findByField("channelId", channelId, List.of("_id")));
         return true;
     }
 
-    public static boolean delete(String userId,
-                                 String channelId,
-                                 Repository<Channel> channels,
+    public static boolean delete(Repository<Channel> channels,
                                  Repository<Post> posts,
-                                 Repository<Comment> comments) {
+                                 Repository<Comment> comments,
+                                 String userId,
+                                 String channelId) {
         var fields = Map.<String, Object>of(
-                "id", channelId,
+                "_id", channelId,
                 "ownerId", userId
         );
         if (!channels.delete(fields)) {
             return false;
         }
-        delete(
-                posts.findByField("channelId", channelId, List.of("id")),
-                posts,
-                comments
-        );
+        delete(posts, comments, posts.findByField("channelId", channelId, List.of("_id")));
         return true;
     }
 
@@ -170,28 +186,25 @@ public final class Channel extends Owned implements Visible {
     }
 
     public List<Post> retrievePosts(Repository<Post> posts, Pagination pagination) {
-        var found = posts.findByField("channelId", id, pagination);
-        var ret = new LinkedList<Post>();
-        found.forEach(ret::add);
-        return ret;
+        return asList(posts.findByField("channelId", id, pagination));
     }
 
-    public List<Post> findPostsByTitle(String title, Repository<Post> posts, Pagination pagination) {
-        var fields = Map.<String, Object>of(
-                "channelId", id,
-                "title", title
-        );
-        var found = posts.findByField(fields, pagination);
-        var ret = new LinkedList<Post>();
-        found.forEach(ret::add);
-        return ret;
+    public List<Post> findPostsByTitle(Repository<Post> posts, String title, boolean all, Pagination pagination) {
+        var fields = new HashMap<String, Object>();
+        fields.put("channelId", id);
+        fields.put("title", title);
+        if (!all) {
+            fields.put("privacy", Privacy.PUBLIC);
+        }
+        return asList(posts.findAnd(fields, pagination));
     }
 
-    public List<Post> matchPostsByTitle(Pattern pattern, Repository<Post> posts, Pagination pagination) {
-        var fields = Map.<String, Object>of("channelId", id);
-        var found = posts.findMatchedWithFields("title", pattern, fields, pagination);
-        var ret = new LinkedList<Post>();
-        found.forEach(ret::add);
-        return ret;
+    public List<Post> matchPostsByTitle(Repository<Post> posts, Pattern pattern, boolean all, Pagination pagination) {
+        var fields = new HashMap<String, Object>();
+        fields.put("channelId", id);
+        if (!all) {
+            fields.put("privacy", Privacy.PUBLIC);
+        }
+        return asList(posts.findMatchedWithFields("title", pattern, fields, pagination));
     }
 }

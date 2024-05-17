@@ -7,35 +7,30 @@ import com.github.romanqed.devspark.models.*;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public final class Util {
+import static com.github.romanqed.devspark.CollectionUtil.asList;
+
+final class Util {
     private Util() {
     }
 
-    public static <T> List<T> of(Iterable<T> iterable) {
-        var ret = new LinkedList<T>();
-        iterable.forEach(ret::add);
-        return ret;
-    }
-
-    public static <T> List<T> findByName(Repository<T> repository,
-                                         String name,
-                                         Pattern pattern,
-                                         Pagination pagination) {
+    static <T> List<T> findByName(Repository<T> repository,
+                                  String name,
+                                  Pattern pattern,
+                                  Pagination pagination) {
         if (name != null) {
-            return of(repository.findByField("name", name, pagination));
+            return asList(repository.findByField("name", name, pagination));
         }
         if (pattern != null) {
-            return of(repository.findMatched("name", pattern, pagination));
+            return asList(repository.findMatched("name", pattern, pagination));
         }
-        return of(repository.getAll(pagination));
+        return asList(repository.getAll(pagination));
     }
 
-    public static void findByName(Context ctx, Repository<?> repository, Pagination pagination) {
+    static void findByName(Context ctx, Repository<?> repository, Pagination pagination) {
         var name = ctx.queryParam("name");
         var pattern = ctx.queryParam("pattern");
         try {
@@ -48,7 +43,7 @@ public final class Util {
         }
     }
 
-    public static <V extends Rated> void rate(Context ctx, User user, String id, V entity, Repository<V> repository) {
+    static <V extends Rated> void rate(Context ctx, User user, String id, V entity, Repository<V> repository) {
         if (entity.rate(user, 1)) {
             repository.update(id, entity);
             ctx.status(HttpStatus.OK);
@@ -58,7 +53,7 @@ public final class Util {
         ctx.json(new Response("Entity is already rated"));
     }
 
-    public static <V extends Rated> void unrate(Context ctx, User user, String id, V entity, Repository<V> repository) {
+    static <V extends Rated> void unrate(Context ctx, User user, String id, V entity, Repository<V> repository) {
         if (entity.unrate(user)) {
             repository.update(id, entity);
             ctx.status(HttpStatus.OK);
@@ -68,7 +63,7 @@ public final class Util {
         ctx.json(new Response("Entity is not rated yet"));
     }
 
-    public static <V extends Owned & Visible> V see(Context ctx, User user, String id, Repository<V> repository) {
+    static <V extends Owned & Visible> V see(Context ctx, User user, String id, Repository<V> repository) {
         var ret = repository.get(ctx.pathParam(id));
         if (ret == null) {
             ctx.status(HttpStatus.NOT_FOUND);

@@ -60,10 +60,11 @@ public final class ChannelController extends AuthBase {
             return;
         }
         var user = getUser(ctx);
+        var id = user == null ? null : user.getId();
         var all = user != null && !user.isBanned() && user.hasPermission(Permissions.IGNORE_VISIBILITY);
         var name = ctx.queryParam("name");
         if (name != null) {
-            var found = Channel.findByName(name, all, channels, pagination);
+            var found = Channel.findByName(channels, id, name, all, pagination);
             ctx.json(found);
             return;
         }
@@ -73,11 +74,11 @@ public final class ChannelController extends AuthBase {
             if (pattern == null) {
                 return;
             }
-            var found = Channel.matchByName(pattern, all, channels, pagination);
+            var found = Channel.matchByName(channels, id, pattern, all, pagination);
             ctx.json(found);
             return;
         }
-        ctx.json(Channel.findAll(all, channels, pagination));
+        ctx.json(Channel.findAll(channels, id, all, pagination));
     }
 
     @Route(method = HandlerType.GET, route = "/{channelId}/posts")
@@ -91,9 +92,11 @@ public final class ChannelController extends AuthBase {
         if (channel == null) {
             return;
         }
+        var all = (user != null && !user.isBanned())
+                && (channel.isOwnedBy(user) || user.hasPermission(Permissions.IGNORE_VISIBILITY));
         var title = ctx.queryParam("title");
         if (title != null) {
-            var found = channel.findPostsByTitle(title, posts, pagination);
+            var found = channel.findPostsByTitle(posts, title, all, pagination);
             ctx.json(found);
             return;
         }
@@ -103,7 +106,7 @@ public final class ChannelController extends AuthBase {
             if (pattern == null) {
                 return;
             }
-            var found = channel.matchPostsByTitle(pattern, posts, pagination);
+            var found = channel.matchPostsByTitle(posts, pattern, all, pagination);
             ctx.json(found);
             return;
         }
@@ -158,6 +161,8 @@ public final class ChannelController extends AuthBase {
         }
         var post = Post.of(user.getId(), channel.getId(), dto.getTitle(), dto.getText());
         post.setTagIds(dto.getTagIds());
+        var privacy = dto.getPrivacy();
+        post.setPrivacy(privacy == null ? channel.getPrivacy() : privacy);
         posts.put(post);
         ctx.json(post);
     }
@@ -195,7 +200,7 @@ public final class ChannelController extends AuthBase {
     }
 
     private void deleteChannel(Context ctx, String id) {
-        if (!Channel.delete(id, channels, posts, comments)) {
+        if (!Channel.delete(channels, posts, comments, id)) {
             ctx.status(HttpStatus.NOT_FOUND);
             return;
         }
@@ -213,7 +218,7 @@ public final class ChannelController extends AuthBase {
             deleteChannel(ctx, id);
             return;
         }
-        if (!Channel.delete(user.getId(), id, channels, posts, comments)) {
+        if (!Channel.delete(channels, posts, comments, user.getId(), id)) {
             ctx.status(HttpStatus.FORBIDDEN);
             return;
         }

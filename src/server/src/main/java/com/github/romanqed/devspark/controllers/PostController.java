@@ -18,7 +18,6 @@ import java.util.Date;
 
 @JavalinController("/post")
 public final class PostController extends AuthBase {
-    private final Repository<Channel> channels;
     private final Repository<Tag> tags;
     private final Repository<Post> posts;
     private final Repository<Comment> comments;
@@ -26,36 +25,18 @@ public final class PostController extends AuthBase {
     public PostController(JWTProvider<JwtUser> provider,
                           Repository<Tag> tags,
                           Repository<User> users,
-                          Repository<Channel> channels,
                           Repository<Post> posts,
                           Repository<Comment> comments) {
         super(provider, users);
-        this.channels = channels;
         this.tags = tags;
         this.posts = posts;
         this.comments = comments;
     }
 
-    private Post seePost(Context ctx, User user) {
-        var post = posts.get(ctx.pathParam("postId"));
-        if (post == null) {
-            ctx.status(HttpStatus.NOT_FOUND);
-            return null;
-        }
-        if (user != null && !user.isBanned() && user.hasPermission(Permissions.IGNORE_VISIBILITY)) {
-            return post;
-        }
-        if (post.isOwnedBy(user) || post.isVisible(channels)) {
-            return post;
-        }
-        ctx.status(HttpStatus.NOT_FOUND);
-        return null;
-    }
-
     @Route(method = HandlerType.GET, route = "/{postId}")
     public void get(Context ctx) {
         var user = getUser(ctx);
-        var post = seePost(ctx, user);
+        var post = Util.see(ctx, user, "postId", posts);
         if (post == null) {
             return;
         }
@@ -69,7 +50,7 @@ public final class PostController extends AuthBase {
             return;
         }
         var user = getUser(ctx);
-        var post = seePost(ctx, user);
+        var post = Util.see(ctx, user, "postId", posts);
         if (post == null) {
             return;
         }
@@ -86,7 +67,7 @@ public final class PostController extends AuthBase {
         if (user == null) {
             return;
         }
-        var post = seePost(ctx, user);
+        var post = Util.see(ctx, user, "postId", posts);
         if (post == null) {
             return;
         }
@@ -108,6 +89,12 @@ public final class PostController extends AuthBase {
         if (text != null) {
             ret = true;
             post.setText(text);
+        }
+        // Update privacy
+        var privacy = dto.getPrivacy();
+        if (privacy != null) {
+            ret = true;
+            post.setPrivacy(privacy);
         }
         // Update tagIds
         var tagIds = dto.getTagIds();
@@ -153,7 +140,7 @@ public final class PostController extends AuthBase {
     }
 
     private void deletePost(Context ctx, String id) {
-        if (!Post.delete(id, posts, comments)) {
+        if (!Post.delete(comments, id, posts)) {
             ctx.status(HttpStatus.NOT_FOUND);
             return;
         }
@@ -171,7 +158,7 @@ public final class PostController extends AuthBase {
             deletePost(ctx, id);
             return;
         }
-        if (!Post.delete(user.getId(), id, posts, comments)) {
+        if (!Post.delete(posts, comments, user.getId(), id)) {
             ctx.status(HttpStatus.FORBIDDEN);
             return;
         }
@@ -184,7 +171,7 @@ public final class PostController extends AuthBase {
         if (user == null) {
             return;
         }
-        var post = seePost(ctx, user);
+        var post = Util.see(ctx, user, "postId", posts);
         if (post == null) {
             return;
         }
@@ -197,7 +184,7 @@ public final class PostController extends AuthBase {
         if (user == null) {
             return;
         }
-        var post = seePost(ctx, user);
+        var post = Util.see(ctx, user, "postId", posts);
         if (post == null) {
             return;
         }
