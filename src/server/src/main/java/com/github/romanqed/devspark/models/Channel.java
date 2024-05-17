@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 @Model("channels")
-public final class Channel extends Owned {
+public final class Channel extends Owned implements Visible {
     private String id;
     private String name;
     private Privacy privacy;
@@ -162,6 +162,11 @@ public final class Channel extends Owned {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    @Override
+    public boolean isVisible() {
+        return this.privacy == Privacy.PUBLIC;
     }
 
     public List<Post> retrievePosts(Repository<Post> posts, Pagination pagination) {

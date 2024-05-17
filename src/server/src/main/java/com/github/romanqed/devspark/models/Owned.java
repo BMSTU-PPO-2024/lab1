@@ -2,7 +2,7 @@ package com.github.romanqed.devspark.models;
 
 import com.github.romanqed.devspark.database.Repository;
 
-class Owned {
+public class Owned {
     String ownerId;
 
     public String getOwnerId() {

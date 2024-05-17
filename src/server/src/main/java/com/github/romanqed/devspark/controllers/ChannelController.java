@@ -43,26 +43,10 @@ public final class ChannelController extends AuthBase {
         }
     }
 
-    private Channel seeChannel(Context ctx, User user) {
-        var channel = channels.get(ctx.pathParam("channelId"));
-        if (channel == null) {
-            ctx.status(HttpStatus.NOT_FOUND);
-            return null;
-        }
-        if (user != null && !user.isBanned() && user.hasPermission(Permissions.IGNORE_VISIBILITY)) {
-            return channel;
-        }
-        if (channel.isOwnedBy(user) || channel.getPrivacy() == Privacy.PUBLIC) {
-            return channel;
-        }
-        ctx.status(HttpStatus.NOT_FOUND);
-        return null;
-    }
-
     @Route(method = HandlerType.GET, route = "/{channelId}")
     public void get(Context ctx) {
         var user = getUser(ctx);
-        var channel = seeChannel(ctx, user);
+        var channel = Util.see(ctx, user, "channelId", channels);
         if (channel == null) {
             return;
         }
@@ -103,7 +87,7 @@ public final class ChannelController extends AuthBase {
             return;
         }
         var user = getUser(ctx);
-        var channel = seeChannel(ctx, user);
+        var channel = Util.see(ctx, user, "channelId", channels);
         if (channel == null) {
             return;
         }

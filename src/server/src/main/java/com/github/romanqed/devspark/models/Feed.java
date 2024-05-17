@@ -1,14 +1,12 @@
 package com.github.romanqed.devspark.models;
 
 import com.github.romanqed.devspark.database.Model;
+import com.github.romanqed.devspark.database.Repository;
 
-import java.util.Date;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Model("feeds")
-public final class Feed extends Owned {
+public final class Feed extends Owned implements Visible {
     private String id;
     private String name;
     private Privacy privacy;
@@ -17,6 +15,14 @@ public final class Feed extends Owned {
     private Set<String> tagIds;
     private Date created;
     private Date updated;
+
+    public static boolean delete(String userId, String feedId, Repository<Feed> feeds) {
+        var fields = Map.<String, Object>of(
+                "id", feedId,
+                "ownerId", userId
+        );
+        return feeds.delete(fields);
+    }
 
     public static Feed of(String owner, String name) {
         var ret = new Feed();
@@ -92,5 +98,10 @@ public final class Feed extends Owned {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    @Override
+    public boolean isVisible() {
+        return privacy == Privacy.PUBLIC;
     }
 }

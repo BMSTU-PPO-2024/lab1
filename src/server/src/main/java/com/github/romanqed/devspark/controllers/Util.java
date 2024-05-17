@@ -3,8 +3,7 @@ package com.github.romanqed.devspark.controllers;
 import com.github.romanqed.devspark.database.Pagination;
 import com.github.romanqed.devspark.database.Repository;
 import com.github.romanqed.devspark.dto.Response;
-import com.github.romanqed.devspark.models.Rated;
-import com.github.romanqed.devspark.models.User;
+import com.github.romanqed.devspark.models.*;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 
@@ -67,5 +66,20 @@ public final class Util {
         }
         ctx.status(HttpStatus.CONFLICT);
         ctx.json(new Response("Entity is not rated yet"));
+    }
+
+    public static <V extends Owned & Visible> V see(Context ctx, User user, String id, Repository<V> repository) {
+        var ret = repository.get(ctx.pathParam(id));
+        if (ret == null) {
+            ctx.status(HttpStatus.NOT_FOUND);
+            return null;
+        }
+        if (user != null && !user.isBanned() && user.hasPermission(Permissions.IGNORE_VISIBILITY)) {
+            return ret;
+        }
+        if (ret.isOwnedBy(user) || ret.isVisible()) {
+            return ret;
+        }
+        return null;
     }
 }
