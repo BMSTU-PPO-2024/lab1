@@ -6,6 +6,8 @@ import com.github.romanqed.devspark.database.Repository;
 
 import java.util.*;
 
+import static com.github.romanqed.devspark.CollectionUtil.asList;
+
 @Model("feeds")
 public final class Feed extends Owned implements Visible {
     private String id;
@@ -99,6 +101,7 @@ public final class Feed extends Owned implements Visible {
         return privacy == Privacy.PUBLIC;
     }
 
+    @SuppressWarnings("unchecked")
     public List<Post> getPosts(Repository<Post> posts, Pagination pagination) {
         /*
         Heuristic:
@@ -110,7 +113,13 @@ public final class Feed extends Owned implements Visible {
         /*
         some tag from tags in post.tags && post.channelId in channels && post.privacy = PUBLIC
          */
-        // TODO
-        return null;
+        var ins = new HashMap<String, Iterable<?>>();
+        ins.put("tagIds", this.tagIds);
+        if (channelIds != null && !channelIds.isEmpty()) {
+            ins.put("channelId", channelIds);
+        }
+        var map = (Map<String, Iterable<Object>>) (Map<?, ?>) ins;
+        var found = posts.findByField(map, Map.of("privacy", Privacy.PUBLIC), pagination);
+        return asList(found);
     }
 }

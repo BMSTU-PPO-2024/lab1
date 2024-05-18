@@ -41,6 +41,8 @@ public interface Repository<V> {
 
     Iterable<V> findByField(String field, Object value, Pagination pagination);
 
+    Iterable<V> findByField(Map<String, Iterable<Object>> in, Map<String, Object> eq, Pagination pagination);
+
     Iterable<V> findAnd(Map<String, Object> fields, Pagination pagination);
 
     Iterable<V> findOr(Map<String, Object> fields1, Map<String, Object> fields2, Pagination pagination);

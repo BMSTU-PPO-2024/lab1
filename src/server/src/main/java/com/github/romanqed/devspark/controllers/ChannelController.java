@@ -14,8 +14,6 @@ import io.javalin.http.HttpStatus;
 import javalinjwt.JWTProvider;
 
 import java.util.Date;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 @JavalinController("/channel")
 public final class ChannelController extends AuthBase {
@@ -34,15 +32,6 @@ public final class ChannelController extends AuthBase {
         this.comments = comments;
     }
 
-    private static Pattern checkPattern(Context ctx, String pattern) {
-        try {
-            return Pattern.compile(pattern);
-        } catch (PatternSyntaxException e) {
-            ctx.status(HttpStatus.BAD_REQUEST);
-            return null;
-        }
-    }
-
     @Route(method = HandlerType.GET, route = "/{channelId}")
     public void get(Context ctx) {
         var user = getUser(ctx);
@@ -55,30 +44,7 @@ public final class ChannelController extends AuthBase {
 
     @Route(method = HandlerType.GET)
     public void find(Context ctx) {
-        var pagination = DtoUtil.parsePagination(ctx);
-        if (pagination == null) {
-            return;
-        }
-        var user = getUser(ctx);
-        var id = user == null ? null : user.getId();
-        var all = user != null && !user.isBanned() && user.hasPermission(Permissions.IGNORE_VISIBILITY);
-        var name = ctx.queryParam("name");
-        if (name != null) {
-            var found = Channel.findByName(channels, id, name, all, pagination);
-            ctx.json(found);
-            return;
-        }
-        var raw = ctx.queryParam("pattern");
-        if (raw != null) {
-            var pattern = checkPattern(ctx, raw);
-            if (pattern == null) {
-                return;
-            }
-            var found = Channel.matchByName(channels, id, pattern, all, pagination);
-            ctx.json(found);
-            return;
-        }
-        ctx.json(Channel.findAll(channels, id, all, pagination));
+        Util.findAll(ctx, this, channels);
     }
 
     @Route(method = HandlerType.GET, route = "/{channelId}/posts")
@@ -102,7 +68,7 @@ public final class ChannelController extends AuthBase {
         }
         var raw = ctx.queryParam("pattern");
         if (raw != null) {
-            var pattern = checkPattern(ctx, raw);
+            var pattern = Util.checkPattern(ctx, raw);
             if (pattern == null) {
                 return;
             }

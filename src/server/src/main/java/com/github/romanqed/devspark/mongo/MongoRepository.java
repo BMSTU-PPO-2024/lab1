@@ -8,6 +8,7 @@ import com.mongodb.client.model.Projections;
 import org.bson.conversions.Bson;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -189,6 +190,25 @@ final class MongoRepository<V> implements Repository<V> {
         var page = pagination.getPage();
         return collection
                 .find(Filters.eq(field, value))
+                .skip(batch * (page - 1))
+                .limit(batch);
+    }
+
+    @Override
+    public Iterable<V> findByField(Map<String, Iterable<Object>> in, Map<String, Object> eq, Pagination pagination) {
+        var ins = in
+                .entrySet()
+                .stream()
+                .map(entry -> Filters.in(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+        var eqs = asList(eq);
+        var filters = new LinkedList<Bson>();
+        filters.addAll(ins);
+        filters.addAll(eqs);
+        var batch = pagination.getBatch();
+        var page = pagination.getPage();
+        return collection
+                .find(Filters.and(filters))
                 .skip(batch * (page - 1))
                 .limit(batch);
     }

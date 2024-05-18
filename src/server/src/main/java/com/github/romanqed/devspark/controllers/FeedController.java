@@ -60,11 +60,7 @@ public final class FeedController extends AuthBase {
 
     @Route(method = HandlerType.GET)
     public void find(Context ctx) {
-        var pagination = DtoUtil.parsePagination(ctx);
-        if (pagination == null) {
-            return;
-        }
-        Util.findByName(ctx, feeds, pagination);
+        Util.findAll(ctx, this, feeds);
     }
 
     @Route(method = HandlerType.PUT)

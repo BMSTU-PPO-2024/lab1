@@ -1,5 +1,6 @@
 package com.github.romanqed.devspark.controllers;
 
+import com.github.romanqed.devspark.database.Pagination;
 import com.github.romanqed.devspark.database.Repository;
 import com.github.romanqed.devspark.dto.DtoUtil;
 import com.github.romanqed.devspark.dto.UserDto;
@@ -7,10 +8,7 @@ import com.github.romanqed.devspark.hash.Encoder;
 import com.github.romanqed.devspark.javalin.JavalinController;
 import com.github.romanqed.devspark.javalin.Route;
 import com.github.romanqed.devspark.jwt.JwtUser;
-import com.github.romanqed.devspark.models.Channel;
-import com.github.romanqed.devspark.models.Feed;
-import com.github.romanqed.devspark.models.Permissions;
-import com.github.romanqed.devspark.models.User;
+import com.github.romanqed.devspark.models.*;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
@@ -141,25 +139,65 @@ public final class UserController extends AuthBase {
         users.update(user.getId(), user);
     }
 
+    private void list(Context ctx, Repository<?> repository, String userId, boolean all, Pagination pagination) {
+        var raw = ctx.queryParam("pattern");
+        if (raw != null) {
+            var pattern = Util.checkPattern(ctx, raw);
+            if (pattern == null) {
+                return;
+            }
+            var found = ModelUtil.matchByUserId(repository, userId, pattern, all, pagination);
+            ctx.json(found);
+            return;
+        }
+        var name = ctx.queryParam("name");
+        var found = ModelUtil.findByUserId(repository, userId, name, all, pagination);
+        ctx.json(found);
+    }
+
+    private void listSelf(Context ctx, Repository<?> repository) {
+        var pagination = DtoUtil.parsePagination(ctx);
+        if (pagination == null) {
+            return;
+        }
+        var user = getCheckedUser(ctx);
+        if (user == null) {
+            return;
+        }
+        list(ctx, channels, user.getId(), true, pagination);
+    }
+
+    private void listUser(Context ctx, Repository<?> repository) {
+        var pagination = DtoUtil.parsePagination(ctx);
+        if (pagination == null) {
+            return;
+        }
+        var id = ctx.pathParam("userId");
+        var user = getUser(ctx);
+        var all = user != null && !user.isBanned()
+                && (id.equals(user.getId()) || user.hasPermission(Permissions.IGNORE_VISIBILITY));
+        list(ctx, channels, id, all, pagination);
+    }
+
     // List channels
     @Route(method = HandlerType.GET, route = "/channels")
     public void listSelfChannels(Context ctx) {
-        // TODO
+        listSelf(ctx, channels);
     }
 
     @Route(method = HandlerType.GET, route = "/{userId}/channels")
     public void listChannels(Context ctx) {
-        // TODO
+        listUser(ctx, channels);
     }
 
     // List feeds
     @Route(method = HandlerType.GET, route = "/feeds")
     public void listSelfFeeds(Context ctx) {
-        // TODO
+        listSelf(ctx, feeds);
     }
 
     @Route(method = HandlerType.GET, route = "/{userId}/feeds")
     public void listFeeds(Context ctx) {
-        // TODO
+        listUser(ctx, feeds);
     }
 }

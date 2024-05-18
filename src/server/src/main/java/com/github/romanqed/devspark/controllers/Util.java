@@ -2,6 +2,7 @@ package com.github.romanqed.devspark.controllers;
 
 import com.github.romanqed.devspark.database.Pagination;
 import com.github.romanqed.devspark.database.Repository;
+import com.github.romanqed.devspark.dto.DtoUtil;
 import com.github.romanqed.devspark.dto.Response;
 import com.github.romanqed.devspark.models.*;
 import io.javalin.http.Context;
@@ -76,5 +77,41 @@ final class Util {
             return ret;
         }
         return null;
+    }
+
+    static Pattern checkPattern(Context ctx, String pattern) {
+        try {
+            return Pattern.compile(pattern);
+        } catch (PatternSyntaxException e) {
+            ctx.status(HttpStatus.BAD_REQUEST);
+            return null;
+        }
+    }
+
+    static void findAll(Context ctx, AuthBase auth, Repository<?> repository) {
+        var pagination = DtoUtil.parsePagination(ctx);
+        if (pagination == null) {
+            return;
+        }
+        var user = auth.getUser(ctx);
+        var id = user == null ? null : user.getId();
+        var all = user != null && !user.isBanned() && user.hasPermission(Permissions.IGNORE_VISIBILITY);
+        var name = ctx.queryParam("name");
+        if (name != null) {
+            var found = ModelUtil.findAllByName(repository, id, name, all, pagination);
+            ctx.json(found);
+            return;
+        }
+        var raw = ctx.queryParam("pattern");
+        if (raw != null) {
+            var pattern = Util.checkPattern(ctx, raw);
+            if (pattern == null) {
+                return;
+            }
+            var found = ModelUtil.matchAllByName(repository, id, pattern, all, pagination);
+            ctx.json(found);
+            return;
+        }
+        ctx.json(ModelUtil.findAll(repository, id, all, pagination));
     }
 }
