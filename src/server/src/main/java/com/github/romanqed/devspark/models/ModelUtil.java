@@ -25,7 +25,7 @@ public final class ModelUtil {
             fields.put("name", name);
         }
         if (!all) {
-            fields.put("privacy", Privacy.PUBLIC);
+            fields.put("visible", true);
         }
         return asList(repository.findAnd(fields, pagination));
     }
@@ -38,7 +38,7 @@ public final class ModelUtil {
         var fields = new HashMap<String, Object>();
         fields.put("ownerId", userId);
         if (!all) {
-            fields.put("privacy", Privacy.PUBLIC);
+            fields.put("visible", true);
         }
         return asList(repository.findMatchedWithFields("name", pattern, fields, pagination));
     }
@@ -53,13 +53,13 @@ public final class ModelUtil {
         if (userId != null) {
             return asList(
                     repository.findOr(
-                            Map.of("privacy", Privacy.PUBLIC),
+                            Map.of("visible", true),
                             Map.of("ownerId", userId),
                             pagination
                     )
             );
         }
-        return asList(repository.findByField("privacy", Privacy.PUBLIC, pagination));
+        return asList(repository.findByField("visible", true, pagination));
     }
 
     public static <T> List<T> findAllByName(Repository<T> repository,
@@ -75,7 +75,7 @@ public final class ModelUtil {
                     repository.findOr(
                             Map.of(
                                     "name", name,
-                                    "privacy", Privacy.PUBLIC
+                                    "visible", true
                             ),
                             Map.of("ownerId", userId),
                             pagination
@@ -85,7 +85,7 @@ public final class ModelUtil {
         return asList(repository.findAnd(
                 Map.of(
                         "name", name,
-                        "privacy", Privacy.PUBLIC
+                        "visible", true
                 ),
                 pagination
         ));
@@ -103,7 +103,7 @@ public final class ModelUtil {
             return asList(repository.findMatchedWithFields(
                     "name",
                     pattern,
-                    Map.of("privacy", Privacy.PUBLIC),
+                    Map.of("visible", true),
                     Map.of("ownerId", userId),
                     pagination
             ));
@@ -111,7 +111,7 @@ public final class ModelUtil {
         return asList(repository.findMatchedWithFields(
                 "name",
                 pattern,
-                Map.of("privacy", Privacy.PUBLIC),
+                Map.of("visible", true),
                 pagination
         ));
     }

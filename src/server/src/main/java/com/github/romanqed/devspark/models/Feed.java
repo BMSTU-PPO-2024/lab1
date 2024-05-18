@@ -12,7 +12,7 @@ import static com.github.romanqed.devspark.CollectionUtil.asList;
 public final class Feed extends Owned implements Visible {
     private String id;
     private String name;
-    private Privacy privacy;
+    private boolean visible;
     private Set<String> channelIds;
     private Set<String> tagIds;
     private Date created;
@@ -31,7 +31,7 @@ public final class Feed extends Owned implements Visible {
         ret.id = UUID.randomUUID().toString();
         ret.name = Objects.requireNonNull(name);
         ret.ownerId = Objects.requireNonNull(owner);
-        ret.privacy = Privacy.PRIVATE;
+        ret.visible = false;
         ret.channelIds = new HashSet<>();
         ret.tagIds = new HashSet<>();
         var now = new Date();
@@ -56,12 +56,13 @@ public final class Feed extends Owned implements Visible {
         this.name = name;
     }
 
-    public Privacy getPrivacy() {
-        return privacy;
+    @Override
+    public boolean isVisible() {
+        return visible;
     }
 
-    public void setPrivacy(Privacy privacy) {
-        this.privacy = privacy;
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     public Set<String> getChannelIds() {
@@ -96,30 +97,21 @@ public final class Feed extends Owned implements Visible {
         this.updated = updated;
     }
 
-    @Override
-    public boolean isVisible() {
-        return privacy == Privacy.PUBLIC;
-    }
-
     @SuppressWarnings("unchecked")
     public List<Post> getPosts(Repository<Post> posts, Pagination pagination) {
-        /*
-        Heuristic:
-        1) If feed has associated public channels, select public posts with the specified tags from it
-        2) If feed has associated public channels, but has no tags, then just get posts from channels
-        3) Otherwise, just select public posts with the specified tags
-        4) If feed has no tags, then select all public posts
-         */
-        /*
-        some tag from tags in post.tags && post.channelId in channels && post.privacy = PUBLIC
-         */
+        // If feed has no channels and tags, then select all public posts
+        if (channelIds.isEmpty() && tagIds.isEmpty()) {
+            return asList(posts.findByField("visible", true, pagination));
+        }
         var ins = new HashMap<String, Iterable<?>>();
-        ins.put("tagIds", this.tagIds);
-        if (channelIds != null && !channelIds.isEmpty()) {
+        if (!tagIds.isEmpty()) {
+            ins.put("tagIds", this.tagIds);
+        }
+        if (!channelIds.isEmpty()) {
             ins.put("channelId", channelIds);
         }
         var map = (Map<String, Iterable<Object>>) (Map<?, ?>) ins;
-        var found = posts.findByField(map, Map.of("privacy", Privacy.PUBLIC), pagination);
+        var found = posts.findByField(map, Map.of("visible", true), pagination);
         return asList(found);
     }
 }

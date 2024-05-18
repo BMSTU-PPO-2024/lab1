@@ -35,7 +35,7 @@ public final class UserController extends AuthBase {
 
     @Route(method = HandlerType.GET)
     public void getSelf(Context ctx) {
-        var user = getCheckedUser(ctx);
+        var user = getCheckedFullUser(ctx);
         if (user == null) {
             return;
         }
@@ -44,17 +44,20 @@ public final class UserController extends AuthBase {
 
     @Route(method = HandlerType.GET, route = "/{userId}")
     public void get(Context ctx) {
-        var found = users.get(ctx.pathParam("userId"));
+        var id = ctx.pathParam("userId");
+        var found = users.get(id);
         if (found == null) {
             ctx.status(HttpStatus.NOT_FOUND);
             return;
         }
-        var user = getUser(ctx);
-        if (user == null || user.isBanned() || !user.hasPermission(Permissions.MANAGE_USERS)) {
-            ctx.json(UserDto.of(found));
+        var user = getFullUser(ctx);
+        var all = user != null && !user.isBanned()
+                && (id.equals(user.getId()) || user.hasPermission(Permissions.MANAGE_USERS));
+        if (all) {
+            ctx.json(UserDto.ofAll(found));
             return;
         }
-        ctx.json(UserDto.ofAll(found));
+        ctx.json(UserDto.of(found));
     }
 
     private boolean updateUser(UserDto dto, User user) {
@@ -164,7 +167,7 @@ public final class UserController extends AuthBase {
         if (user == null) {
             return;
         }
-        list(ctx, channels, user.getId(), true, pagination);
+        list(ctx, repository, user.getId(), true, pagination);
     }
 
     private void listUser(Context ctx, Repository<?> repository) {
@@ -176,7 +179,7 @@ public final class UserController extends AuthBase {
         var user = getUser(ctx);
         var all = user != null && !user.isBanned()
                 && (id.equals(user.getId()) || user.hasPermission(Permissions.IGNORE_VISIBILITY));
-        list(ctx, channels, id, all, pagination);
+        list(ctx, repository, id, all, pagination);
     }
 
     // List channels

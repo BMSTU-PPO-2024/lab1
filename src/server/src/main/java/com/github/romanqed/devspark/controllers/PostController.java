@@ -91,10 +91,10 @@ public final class PostController extends AuthBase {
             post.setText(text);
         }
         // Update privacy
-        var privacy = dto.getPrivacy();
+        var privacy = dto.getVisible();
         if (privacy != null) {
             ret = true;
-            post.setPrivacy(privacy);
+            post.setVisible(privacy);
         }
         // Update tagIds
         var tagIds = dto.getTagIds();

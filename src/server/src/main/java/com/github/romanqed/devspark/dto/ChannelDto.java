@@ -1,10 +1,8 @@
 package com.github.romanqed.devspark.dto;
 
-import com.github.romanqed.devspark.models.Privacy;
-
 public final class ChannelDto implements Validated {
     private String name;
-    private Privacy privacy;
+    private Boolean visible;
 
     public String getName() {
         return name;
@@ -14,12 +12,12 @@ public final class ChannelDto implements Validated {
         this.name = name;
     }
 
-    public Privacy getPrivacy() {
-        return privacy;
+    public Boolean getVisible() {
+        return visible;
     }
 
-    public void setPrivacy(Privacy privacy) {
-        this.privacy = privacy;
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
     }
 
     @Override

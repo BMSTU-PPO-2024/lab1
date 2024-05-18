@@ -13,7 +13,7 @@ import static com.github.romanqed.devspark.CollectionUtil.asList;
 public final class Channel extends Owned implements Visible {
     private String id;
     private String name;
-    private Privacy privacy;
+    private boolean visible;
     private Date created;
     private Date updated;
 
@@ -22,7 +22,7 @@ public final class Channel extends Owned implements Visible {
         ret.id = UUID.randomUUID().toString();
         ret.ownerId = Objects.requireNonNull(owner);
         ret.name = Objects.requireNonNull(name);
-        ret.privacy = Privacy.PUBLIC;
+        ret.visible = true;
         var now = new Date();
         ret.created = now;
         ret.updated = now;
@@ -30,7 +30,7 @@ public final class Channel extends Owned implements Visible {
     }
 
     public static boolean isVisible(Repository<Channel> channels, Collection<String> ids) {
-        return channels.exists(ids, "privacy", Privacy.PUBLIC);
+        return channels.exists(ids, "visible", true);
     }
 
     private static void delete(Repository<Post> posts, Repository<Comment> comments, Iterable<Post> ids) {
@@ -83,12 +83,13 @@ public final class Channel extends Owned implements Visible {
         this.name = name;
     }
 
-    public Privacy getPrivacy() {
-        return privacy;
+    @Override
+    public boolean isVisible() {
+        return visible;
     }
 
-    public void setPrivacy(Privacy privacy) {
-        this.privacy = privacy;
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     public Date getCreated() {
@@ -107,11 +108,6 @@ public final class Channel extends Owned implements Visible {
         this.updated = updated;
     }
 
-    @Override
-    public boolean isVisible() {
-        return this.privacy == Privacy.PUBLIC;
-    }
-
     public List<Post> retrievePosts(Repository<Post> posts, Pagination pagination) {
         return asList(posts.findByField("channelId", id, pagination));
     }
@@ -121,7 +117,7 @@ public final class Channel extends Owned implements Visible {
         fields.put("channelId", id);
         fields.put("title", title);
         if (!all) {
-            fields.put("privacy", Privacy.PUBLIC);
+            fields.put("visible", true);
         }
         return asList(posts.findAnd(fields, pagination));
     }
@@ -130,7 +126,7 @@ public final class Channel extends Owned implements Visible {
         var fields = new HashMap<String, Object>();
         fields.put("channelId", id);
         if (!all) {
-            fields.put("privacy", Privacy.PUBLIC);
+            fields.put("visible", true);
         }
         return asList(posts.findMatchedWithFields("title", pattern, fields, pagination));
     }

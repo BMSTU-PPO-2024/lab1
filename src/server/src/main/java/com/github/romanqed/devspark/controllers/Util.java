@@ -76,6 +76,7 @@ final class Util {
         if (ret.isOwnedBy(user) || ret.isVisible()) {
             return ret;
         }
+        ctx.status(HttpStatus.NOT_FOUND);
         return null;
     }
 

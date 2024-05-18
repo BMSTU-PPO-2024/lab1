@@ -16,7 +16,7 @@ public final class Post extends Owned implements Rated, Visible {
     private String text;
     private String channelId;
     private Set<String> tagIds;
-    private Privacy privacy;
+    private boolean visible;
     private Map<String, Integer> scores;
     private Date created;
     private Date updated;
@@ -28,7 +28,6 @@ public final class Post extends Owned implements Rated, Visible {
         ret.text = Objects.requireNonNull(text);
         ret.ownerId = Objects.requireNonNull(owner);
         ret.channelId = Objects.requireNonNull(channel);
-        ret.privacy = Privacy.PUBLIC;
         ret.scores = new HashMap<>();
         ret.tagIds = new HashSet<>();
         var now = new Date();
@@ -89,12 +88,13 @@ public final class Post extends Owned implements Rated, Visible {
         this.channelId = channelId;
     }
 
-    public Privacy getPrivacy() {
-        return privacy;
+    @Override
+    public boolean isVisible() {
+        return this.visible;
     }
 
-    public void setPrivacy(Privacy privacy) {
-        this.privacy = privacy;
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     public Set<String> getTagIds() {
@@ -147,11 +147,6 @@ public final class Post extends Owned implements Rated, Visible {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
-    }
-
-    @Override
-    public boolean isVisible() {
-        return this.privacy == Privacy.PUBLIC;
     }
 
     @Override

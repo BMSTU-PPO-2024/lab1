@@ -1,12 +1,10 @@
 package com.github.romanqed.devspark.dto;
 
-import com.github.romanqed.devspark.models.Privacy;
-
 import java.util.Set;
 
 public final class FeedDto implements Validated {
     private String name;
-    private Privacy privacy;
+    private Boolean visible;
     private Set<String> channelIds;
     private Set<String> tagIds;
 
@@ -18,12 +16,12 @@ public final class FeedDto implements Validated {
         this.name = name;
     }
 
-    public Privacy getPrivacy() {
-        return privacy;
+    public Boolean getVisible() {
+        return visible;
     }
 
-    public void setPrivacy(Privacy privacy) {
-        this.privacy = privacy;
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
     }
 
     public Set<String> getChannelIds() {

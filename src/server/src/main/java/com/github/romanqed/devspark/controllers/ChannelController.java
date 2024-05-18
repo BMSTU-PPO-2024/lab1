@@ -90,9 +90,9 @@ public final class ChannelController extends AuthBase {
             return;
         }
         var channel = Channel.of(user.getId(), dto.getName());
-        var privacy = dto.getPrivacy();
-        if (privacy != null) {
-            channel.setPrivacy(privacy);
+        var visible = dto.getVisible();
+        if (visible != null) {
+            channel.setVisible(visible);
         }
         channels.put(channel);
         ctx.json(channel);
@@ -127,8 +127,8 @@ public final class ChannelController extends AuthBase {
         }
         var post = Post.of(user.getId(), channel.getId(), dto.getTitle(), dto.getText());
         post.setTagIds(dto.getTagIds());
-        var privacy = dto.getPrivacy();
-        post.setPrivacy(privacy == null ? channel.getPrivacy() : privacy);
+        var visible = dto.getVisible();
+        post.setVisible(visible == null ? channel.isVisible() : visible);
         posts.put(post);
         ctx.json(post);
     }
@@ -140,8 +140,8 @@ public final class ChannelController extends AuthBase {
             return;
         }
         var name = dto.getName();
-        var privacy = dto.getPrivacy();
-        if (name == null && privacy == null) {
+        var visible = dto.getVisible();
+        if (name == null && visible == null) {
             ctx.status(HttpStatus.BAD_REQUEST);
             return;
         }
@@ -158,8 +158,8 @@ public final class ChannelController extends AuthBase {
             channel.setName(name);
         }
         // Update privacy
-        if (privacy != null) {
-            channel.setPrivacy(privacy);
+        if (visible != null) {
+            channel.setVisible(visible);
         }
         channel.setUpdated(new Date());
         channels.update(channel.getId(), channel);

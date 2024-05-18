@@ -74,9 +74,9 @@ public final class FeedController extends AuthBase {
             return;
         }
         var feed = Feed.of(user.getId(), dto.getName());
-        var privacy = dto.getPrivacy();
+        var privacy = dto.getVisible();
         if (privacy != null) {
-            feed.setPrivacy(privacy);
+            feed.setVisible(privacy);
         }
         if (updateIds(ctx, dto, feed) == null) {
             return;
@@ -117,9 +117,9 @@ public final class FeedController extends AuthBase {
             feed.setName(name);
         }
         // Update privacy
-        var privacy = dto.getPrivacy();
+        var privacy = dto.getVisible();
         if (privacy != null) {
-            feed.setPrivacy(privacy);
+            feed.setVisible(privacy);
         }
         var count = updateIds(ctx, dto, feed);
         if (count == null) {
