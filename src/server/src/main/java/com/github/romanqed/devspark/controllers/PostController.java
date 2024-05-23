@@ -175,7 +175,7 @@ public final class PostController extends AuthBase {
         if (post == null) {
             return;
         }
-        Util.rate(ctx, user, post.getId(), post, posts);
+        Util.rate(ctx, user, post, posts);
     }
 
     @Route(method = HandlerType.DELETE, route = "/{postId}/rate")
@@ -188,6 +188,6 @@ public final class PostController extends AuthBase {
         if (post == null) {
             return;
         }
-        Util.unrate(ctx, user, post.getId(), post, posts);
+        Util.unrate(ctx, user, post, posts);
     }
 }

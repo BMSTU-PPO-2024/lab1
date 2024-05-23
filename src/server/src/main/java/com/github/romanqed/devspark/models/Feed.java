@@ -9,7 +9,7 @@ import java.util.*;
 import static com.github.romanqed.devspark.CollectionUtil.asList;
 
 @Model("feeds")
-public final class Feed extends Owned implements Visible {
+public final class Feed extends Owned implements Visible, Identified {
     private String id;
     private String name;
     private boolean visible;
@@ -40,6 +40,7 @@ public final class Feed extends Owned implements Visible {
         return ret;
     }
 
+    @Override
     public String getId() {
         return id;
     }

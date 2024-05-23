@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Model("tags")
-public final class Tag {
+public final class Tag implements Identified {
     private String id;
     private String name;
     private Date created;
@@ -23,6 +23,7 @@ public final class Tag {
         return ret;
     }
 
+    @Override
     public String getId() {
         return id;
     }

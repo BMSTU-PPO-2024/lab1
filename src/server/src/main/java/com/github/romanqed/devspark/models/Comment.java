@@ -6,7 +6,7 @@ import com.github.romanqed.devspark.database.Repository;
 import java.util.*;
 
 @Model("comments")
-public final class Comment extends Owned implements Rated {
+public final class Comment extends Owned implements Rated, Identified {
     private String id;
     private String postId;
     private String text;
@@ -35,6 +35,7 @@ public final class Comment extends Owned implements Rated {
         return repository.delete(fields);
     }
 
+    @Override
     public String getId() {
         return id;
     }

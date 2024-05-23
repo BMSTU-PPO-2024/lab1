@@ -10,7 +10,7 @@ import java.util.*;
 import static com.github.romanqed.devspark.CollectionUtil.asSet;
 
 @Model("posts")
-public final class Post extends Owned implements Rated, Visible {
+public final class Post extends Owned implements Rated, Visible, Identified {
     private String id;
     private String title;
     private String text;
@@ -56,6 +56,7 @@ public final class Post extends Owned implements Rated, Visible {
         return true;
     }
 
+    @Override
     public String getId() {
         return id;
     }

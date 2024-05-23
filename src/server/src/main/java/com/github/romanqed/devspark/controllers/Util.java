@@ -44,9 +44,9 @@ final class Util {
         }
     }
 
-    static <V extends Rated> void rate(Context ctx, User user, String id, V entity, Repository<V> repository) {
+    static <V extends Rated & Identified> void rate(Context ctx, User user, V entity, Repository<V> repository) {
         if (entity.rate(user, 1)) {
-            repository.update(id, entity);
+            repository.update(entity.getId(), entity);
             ctx.status(HttpStatus.OK);
             return;
         }
@@ -54,9 +54,9 @@ final class Util {
         ctx.json(new Response("Entity is already rated"));
     }
 
-    static <V extends Rated> void unrate(Context ctx, User user, String id, V entity, Repository<V> repository) {
+    static <V extends Rated & Identified> void unrate(Context ctx, User user, V entity, Repository<V> repository) {
         if (entity.unrate(user)) {
-            repository.update(id, entity);
+            repository.update(entity.getId(), entity);
             ctx.status(HttpStatus.OK);
             return;
         }

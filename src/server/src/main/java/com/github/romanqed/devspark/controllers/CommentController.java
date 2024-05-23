@@ -86,7 +86,7 @@ public final class CommentController extends AuthBase {
         ctx.status(HttpStatus.OK);
     }
 
-    private void doRate(Context ctx, Consumer5<Context, User, String, Comment, Repository<Comment>> consumer) {
+    private void doRate(Context ctx, Consumer4<Context, User, Comment, Repository<Comment>> consumer) {
         var user = getCheckedUser(ctx);
         if (user == null) {
             return;
@@ -97,7 +97,7 @@ public final class CommentController extends AuthBase {
             ctx.status(HttpStatus.NOT_FOUND);
             return;
         }
-        consumer.consume(ctx, user, id, comment, comments);
+        consumer.consume(ctx, user, comment, comments);
     }
 
     @Route(method = HandlerType.PUT, route = "/{commentId}/rate")

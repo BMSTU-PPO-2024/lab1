@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import static com.github.romanqed.devspark.CollectionUtil.asList;
 
 @Model("channels")
-public final class Channel extends Owned implements Visible {
+public final class Channel extends Owned implements Visible, Identified {
     private String id;
     private String name;
     private boolean visible;
@@ -67,6 +67,7 @@ public final class Channel extends Owned implements Visible {
         return true;
     }
 
+    @Override
     public String getId() {
         return id;
     }

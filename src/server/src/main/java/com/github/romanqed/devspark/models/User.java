@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Model("users")
-public final class User {
+public final class User implements Identified {
     private static final List<String> AUTH_FIELDS = List.of("_id", "banned", "email", "password", "permissions");
 
     private String id;
@@ -39,6 +39,7 @@ public final class User {
         return users.get(id, AUTH_FIELDS);
     }
 
+    @Override
     public String getId() {
         return id;
     }
