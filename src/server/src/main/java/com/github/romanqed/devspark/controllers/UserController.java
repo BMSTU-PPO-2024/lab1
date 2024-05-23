@@ -50,7 +50,7 @@ public final class UserController extends AuthBase {
             ctx.status(HttpStatus.NOT_FOUND);
             return;
         }
-        var user = getFullUser(ctx);
+        var user = getUser(ctx);
         var all = user != null && !user.isBanned()
                 && (id.equals(user.getId()) || user.hasPermission(Permissions.MANAGE_USERS));
         if (all) {
