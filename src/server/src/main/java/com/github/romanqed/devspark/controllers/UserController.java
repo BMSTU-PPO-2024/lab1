@@ -7,12 +7,12 @@ import com.github.romanqed.devspark.dto.UserDto;
 import com.github.romanqed.devspark.hash.Encoder;
 import com.github.romanqed.devspark.javalin.JavalinController;
 import com.github.romanqed.devspark.javalin.Route;
+import com.github.romanqed.devspark.jwt.JwtProvider;
 import com.github.romanqed.devspark.jwt.JwtUser;
 import com.github.romanqed.devspark.models.*;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
-import javalinjwt.JWTProvider;
 
 import java.util.Date;
 
@@ -22,7 +22,7 @@ public final class UserController extends AuthBase {
     private final Repository<Channel> channels;
     private final Repository<Feed> feeds;
 
-    public UserController(JWTProvider<JwtUser> provider,
+    public UserController(JwtProvider<JwtUser> provider,
                           Repository<User> users,
                           Repository<Channel> channels,
                           Repository<Feed> feeds,

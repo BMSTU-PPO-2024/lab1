@@ -5,6 +5,7 @@ import com.github.romanqed.devspark.dto.DtoUtil;
 import com.github.romanqed.devspark.dto.TagDto;
 import com.github.romanqed.devspark.javalin.JavalinController;
 import com.github.romanqed.devspark.javalin.Route;
+import com.github.romanqed.devspark.jwt.JwtProvider;
 import com.github.romanqed.devspark.jwt.JwtUser;
 import com.github.romanqed.devspark.models.Permissions;
 import com.github.romanqed.devspark.models.Tag;
@@ -12,7 +13,6 @@ import com.github.romanqed.devspark.models.User;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
-import javalinjwt.JWTProvider;
 
 import java.util.Date;
 
@@ -20,7 +20,7 @@ import java.util.Date;
 public final class TagController extends AuthBase {
     private final Repository<Tag> tags;
 
-    public TagController(JWTProvider<JwtUser> provider, Repository<User> users, Repository<Tag> tags) {
+    public TagController(JwtProvider<JwtUser> provider, Repository<User> users, Repository<Tag> tags) {
         super(provider, users);
         this.tags = tags;
     }

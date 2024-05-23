@@ -3,20 +3,20 @@ package com.github.romanqed.devspark.controllers;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.github.romanqed.devspark.database.Repository;
 import com.github.romanqed.devspark.dto.Response;
+import com.github.romanqed.devspark.jwt.JwtProvider;
 import com.github.romanqed.devspark.jwt.JwtUser;
 import com.github.romanqed.devspark.models.Permissions;
 import com.github.romanqed.devspark.models.User;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
-import javalinjwt.JWTProvider;
 import javalinjwt.JavalinJWT;
 import kotlin.jvm.functions.Function2;
 
 public class AuthBase {
-    protected final JWTProvider<JwtUser> provider;
+    protected final JwtProvider<JwtUser> provider;
     protected final Repository<User> users;
 
-    protected AuthBase(JWTProvider<JwtUser> provider, Repository<User> users) {
+    protected AuthBase(JwtProvider<JwtUser> provider, Repository<User> users) {
         this.provider = provider;
         this.users = users;
     }

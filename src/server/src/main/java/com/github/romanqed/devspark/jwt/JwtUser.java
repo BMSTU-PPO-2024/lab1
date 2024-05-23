@@ -43,4 +43,13 @@ public final class JwtUser {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        return "JwtUser{" +
+                "id='" + id + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

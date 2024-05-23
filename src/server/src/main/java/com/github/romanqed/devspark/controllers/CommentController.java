@@ -5,6 +5,7 @@ import com.github.romanqed.devspark.dto.DtoUtil;
 import com.github.romanqed.devspark.dto.TextDto;
 import com.github.romanqed.devspark.javalin.JavalinController;
 import com.github.romanqed.devspark.javalin.Route;
+import com.github.romanqed.devspark.jwt.JwtProvider;
 import com.github.romanqed.devspark.jwt.JwtUser;
 import com.github.romanqed.devspark.models.Comment;
 import com.github.romanqed.devspark.models.Permissions;
@@ -12,7 +13,6 @@ import com.github.romanqed.devspark.models.User;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
-import javalinjwt.JWTProvider;
 
 import java.util.Date;
 
@@ -20,7 +20,7 @@ import java.util.Date;
 public final class CommentController extends AuthBase {
     private final Repository<Comment> comments;
 
-    public CommentController(JWTProvider<JwtUser> provider, Repository<User> users, Repository<Comment> comments) {
+    public CommentController(JwtProvider<JwtUser> provider, Repository<User> users, Repository<Comment> comments) {
         super(provider, users);
         this.comments = comments;
     }

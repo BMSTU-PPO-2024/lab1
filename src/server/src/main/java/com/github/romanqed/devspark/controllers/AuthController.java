@@ -8,20 +8,20 @@ import com.github.romanqed.devspark.dto.Token;
 import com.github.romanqed.devspark.hash.Encoder;
 import com.github.romanqed.devspark.javalin.JavalinController;
 import com.github.romanqed.devspark.javalin.Route;
+import com.github.romanqed.devspark.jwt.JwtProvider;
 import com.github.romanqed.devspark.jwt.JwtUser;
 import com.github.romanqed.devspark.models.User;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
-import javalinjwt.JWTProvider;
 
 @JavalinController
 public final class AuthController {
     private final Repository<User> users;
-    private final JWTProvider<JwtUser> jwt;
+    private final JwtProvider<JwtUser> jwt;
     private final Encoder encoder;
 
-    public AuthController(Repository<User> users, JWTProvider<JwtUser> jwt, Encoder encoder) {
+    public AuthController(Repository<User> users, JwtProvider<JwtUser> jwt, Encoder encoder) {
         this.users = users;
         this.jwt = jwt;
         this.encoder = encoder;
@@ -61,8 +61,8 @@ public final class AuthController {
         var email = credentials.getEmail();
         var user = users.findFirstByField("email", email);
         if (user == null) {
-            ctx.status(HttpStatus.UNAUTHORIZED);
-            ctx.json(new Response("Invalid credentials"));
+            ctx.status(HttpStatus.NOT_FOUND);
+            ctx.json(new Response("Unknown user"));
             return;
         }
         if (user.isBanned()) {

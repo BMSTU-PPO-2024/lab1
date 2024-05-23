@@ -18,7 +18,7 @@ import java.util.Date;
 @ProviderConsumer
 public final class JwtServiceConsumer implements ServiceProviderConsumer {
     private static final File AUTH_CONFIG = new File("auth.json");
-    private static final Type JWT_PROVIDER_TYPE = Types.of(JWTProvider.class, JwtUser.class);
+    private static final Type JWT_PROVIDER_TYPE = Types.of(JwtProvider.class, JwtUser.class);
 
     private static Date getExpirationTime(int unit, int lifetime) {
         var calendar = Calendar.getInstance();
@@ -45,7 +45,8 @@ public final class JwtServiceConsumer implements ServiceProviderConsumer {
         var algorithm = hmac.apply(secret);
         var verifier = JWT.require(algorithm).build();
         var jwtProvider = new JWTProvider<>(algorithm, generator, verifier);
-        builder.addService(JWT_PROVIDER_TYPE, () -> jwtProvider);
+        var wrapper = new JwtProviderImpl<>(jwtProvider);
+        builder.addService(JWT_PROVIDER_TYPE, () -> wrapper);
     }
 
     @Override
