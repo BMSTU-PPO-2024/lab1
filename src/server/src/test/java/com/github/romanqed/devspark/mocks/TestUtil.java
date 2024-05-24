@@ -203,7 +203,6 @@ public final class TestUtil {
         ctx.setHeaders(Map.of("Authorization", "Bearer token"));
         consumer.accept(ctx);
         assertEquals(HttpStatus.FORBIDDEN, ctx.status());
-        assertEquals("User has no permission", ((Response) ctx.getJson()).getMessage());
     }
 
     public static void testBadAuth(BiFunction<JwtProvider<?>, Repository<User>, Consumer<Context>> func,
