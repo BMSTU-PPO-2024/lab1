@@ -23,7 +23,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class JavalinContextMock implements Context {
+public class ContextMock implements Context {
     private HttpStatus status;
     private HandlerType type;
     private Object body;

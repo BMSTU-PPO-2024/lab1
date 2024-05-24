@@ -31,13 +31,6 @@ public class AuthBase {
         return decoded.get();
     }
 
-    protected String getUserId(Context ctx) {
-        var decoded = JavalinJWT.getTokenFromHeader(ctx).flatMap(provider::validateToken);
-        return decoded
-                .map(decodedJWT -> decodedJWT.getClaim("id").asString())
-                .orElse(null);
-    }
-
     protected String getCheckedUserId(Context ctx) {
         var decoded = auth(ctx);
         if (decoded == null) {
@@ -55,10 +48,6 @@ public class AuthBase {
 
     protected User getUser(Context ctx) {
         return getUser(ctx, User::getAuthUser);
-    }
-
-    protected User getFullUser(Context ctx) {
-        return getUser(ctx, Repository::get);
     }
 
     protected User getCheckedFullUser(Context ctx) {
@@ -95,6 +84,7 @@ public class AuthBase {
         }
         if (!user.hasPermission(permission)) {
             ctx.status(HttpStatus.FORBIDDEN);
+            ctx.json(new Response("User has no permission"));
             return false;
         }
         return true;

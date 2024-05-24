@@ -6,8 +6,8 @@ import com.github.romanqed.devspark.dto.Response;
 import com.github.romanqed.devspark.dto.Token;
 import com.github.romanqed.devspark.hash.Encoder;
 import com.github.romanqed.devspark.jwt.JwtUser;
+import com.github.romanqed.devspark.mocks.ContextMock;
 import com.github.romanqed.devspark.mocks.EncoderMock;
-import com.github.romanqed.devspark.mocks.JavalinContextMock;
 import com.github.romanqed.devspark.mocks.JwtProviderMock;
 import com.github.romanqed.devspark.mocks.RepositoryMock;
 import com.github.romanqed.devspark.models.User;
@@ -23,7 +23,7 @@ public final class AuthControllerTest {
     @Test
     public void testMissingBodyAtRegister() {
         var controller = new AuthController(null, null, null);
-        var ctx = new JavalinContextMock();
+        var ctx = new ContextMock();
         ctx.setBody(null);
         controller.register(ctx);
         assertEquals(HttpStatus.BAD_REQUEST, ctx.status());
@@ -33,7 +33,7 @@ public final class AuthControllerTest {
     @Test
     public void testMissingEmailAtRegister() {
         var controller = new AuthController(null, null, null);
-        var ctx = new JavalinContextMock();
+        var ctx = new ContextMock();
         var creds = new Credentials();
         creds.setEmail(null);
         creds.setPassword("");
@@ -46,7 +46,7 @@ public final class AuthControllerTest {
     @Test
     public void testInvalidEmailAtRegister() {
         var controller = new AuthController(null, null, null);
-        var ctx = new JavalinContextMock();
+        var ctx = new ContextMock();
         var creds = new Credentials();
         creds.setEmail("it's not email");
         creds.setPassword("");
@@ -59,7 +59,7 @@ public final class AuthControllerTest {
     @Test
     public void testMissingPasswordAtRegister() {
         var controller = new AuthController(null, null, null);
-        var ctx = new JavalinContextMock();
+        var ctx = new ContextMock();
         var creds = new Credentials();
         creds.setEmail("email@email.e");
         creds.setPassword(null);
@@ -72,7 +72,7 @@ public final class AuthControllerTest {
     @Test
     public void testMissingBodyAtLogin() {
         var controller = new AuthController(null, null, null);
-        var ctx = new JavalinContextMock();
+        var ctx = new ContextMock();
         ctx.setBody(null);
         controller.login(ctx);
         assertEquals(HttpStatus.BAD_REQUEST, ctx.status());
@@ -82,7 +82,7 @@ public final class AuthControllerTest {
     @Test
     public void testMissingEmailAtLogin() {
         var controller = new AuthController(null, null, null);
-        var ctx = new JavalinContextMock();
+        var ctx = new ContextMock();
         var creds = new Credentials();
         creds.setEmail(null);
         creds.setPassword("");
@@ -95,7 +95,7 @@ public final class AuthControllerTest {
     @Test
     public void testInvalidEmailAtLogin() {
         var controller = new AuthController(null, null, null);
-        var ctx = new JavalinContextMock();
+        var ctx = new ContextMock();
         var creds = new Credentials();
         creds.setEmail("it's not email");
         creds.setPassword("");
@@ -108,7 +108,7 @@ public final class AuthControllerTest {
     @Test
     public void testMissingPasswordAtLogin() {
         var controller = new AuthController(null, null, null);
-        var ctx = new JavalinContextMock();
+        var ctx = new ContextMock();
         var creds = new Credentials();
         creds.setEmail("email@email.e");
         creds.setPassword(null);
@@ -128,7 +128,7 @@ public final class AuthControllerTest {
             }
         };
         var controller = new AuthController(users, null, null);
-        var ctx = new JavalinContextMock();
+        var ctx = new ContextMock();
         var creds = new Credentials();
         creds.setEmail("email@email.e");
         creds.setPassword("");
@@ -150,7 +150,7 @@ public final class AuthControllerTest {
         };
         var provider = new JwtProviderMock<JwtUser>();
         var controller = new AuthController(users, provider, ENCODER);
-        var ctx = new JavalinContextMock();
+        var ctx = new ContextMock();
         var creds = new Credentials();
         creds.setEmail("email@email.e");
         creds.setPassword("123");
@@ -171,7 +171,7 @@ public final class AuthControllerTest {
     public void testUserNotFound() {
         var users = new RepositoryMock<User>();
         var controller = new AuthController(users, null, null);
-        var ctx = new JavalinContextMock();
+        var ctx = new ContextMock();
         var creds = new Credentials();
         creds.setEmail("email@email.e");
         creds.setPassword("123");
@@ -192,7 +192,7 @@ public final class AuthControllerTest {
             }
         };
         var controller = new AuthController(users, null, ENCODER);
-        var ctx = new JavalinContextMock();
+        var ctx = new ContextMock();
         var creds = new Credentials();
         creds.setEmail("email@email.e");
         creds.setPassword("123");
@@ -215,7 +215,7 @@ public final class AuthControllerTest {
         };
         var provider = new JwtProviderMock<JwtUser>();
         var controller = new AuthController(users, provider, ENCODER);
-        var ctx = new JavalinContextMock();
+        var ctx = new ContextMock();
         var creds = new Credentials();
         creds.setEmail("email@email.e");
         creds.setPassword("123");

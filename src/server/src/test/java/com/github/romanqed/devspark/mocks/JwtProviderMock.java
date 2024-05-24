@@ -3,11 +3,18 @@ package com.github.romanqed.devspark.mocks;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.github.romanqed.devspark.jwt.JwtProvider;
 
+import java.util.Map;
 import java.util.Optional;
 
 public class JwtProviderMock<T> implements JwtProvider<T> {
     private T tokenObj;
     private DecodedJWT jwt;
+
+    public static <T> JwtProviderMock<T> withJwt(Map<String, Object> claims) {
+        var ret = new JwtProviderMock<T>();
+        ret.setJwt(DecodedJWTMock.with(claims));
+        return ret;
+    }
 
     public T getTokenObj() {
         return tokenObj;

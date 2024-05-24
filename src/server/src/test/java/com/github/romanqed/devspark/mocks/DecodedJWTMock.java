@@ -4,11 +4,20 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class DecodedJWTMock implements DecodedJWT {
     private Map<String, Claim> claims;
+
+    public static DecodedJWTMock with(Map<String, Object> claims) {
+        var ret = new DecodedJWTMock();
+        var map = new HashMap<String, Claim>();
+        claims.forEach((k, v) -> map.put(k, ClaimMock.of(v)));
+        ret.setClaims(map);
+        return ret;
+    }
 
     @Override
     public String getToken() {
