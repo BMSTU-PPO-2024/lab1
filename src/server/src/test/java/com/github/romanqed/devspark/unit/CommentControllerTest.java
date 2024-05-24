@@ -22,7 +22,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static com.github.romanqed.devspark.mocks.TestUtil.*;
+import static com.github.romanqed.devspark.unit.TestUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public final class CommentControllerTest {

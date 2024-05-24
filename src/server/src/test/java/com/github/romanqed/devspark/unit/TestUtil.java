@@ -1,10 +1,14 @@
-package com.github.romanqed.devspark.mocks;
+package com.github.romanqed.devspark.unit;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.github.romanqed.devspark.database.Pagination;
 import com.github.romanqed.devspark.database.Repository;
 import com.github.romanqed.devspark.dto.Response;
 import com.github.romanqed.devspark.jwt.JwtProvider;
+import com.github.romanqed.devspark.mocks.ContextMock;
+import com.github.romanqed.devspark.mocks.DecodedJWTMock;
+import com.github.romanqed.devspark.mocks.JwtProviderMock;
+import com.github.romanqed.devspark.mocks.RepositoryMock;
 import com.github.romanqed.devspark.models.User;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;

@@ -165,7 +165,7 @@ public final class UserControllerTest {
         var controller = new UserController(
                 PROVIDER_MOCK,
                 USERS_MOCK,
-                (Repository<Channel>) (Repository<?>)repository,
+                (Repository<Channel>) (Repository<?>) repository,
                 (Repository<Feed>) (Repository<?>) repository,
                 null
         );

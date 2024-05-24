@@ -9,7 +9,6 @@ import com.github.romanqed.devspark.jwt.JwtUser;
 import com.github.romanqed.devspark.mocks.ContextMock;
 import com.github.romanqed.devspark.mocks.JwtProviderMock;
 import com.github.romanqed.devspark.mocks.RepositoryMock;
-import com.github.romanqed.devspark.mocks.TestUtil;
 import com.github.romanqed.devspark.models.Permissions;
 import com.github.romanqed.devspark.models.Tag;
 import com.github.romanqed.devspark.models.User;
@@ -23,7 +22,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.github.romanqed.devspark.mocks.TestUtil.*;
+import static com.github.romanqed.devspark.unit.TestUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public final class TagControllerTest {
