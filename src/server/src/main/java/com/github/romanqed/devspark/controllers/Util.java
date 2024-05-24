@@ -73,7 +73,7 @@ final class Util {
         if (user != null && !user.isBanned() && user.hasPermission(Permissions.IGNORE_VISIBILITY)) {
             return ret;
         }
-        if (ret.isOwnedBy(user) || ret.isVisible()) {
+        if (ret.isVisible() || ret.isOwnedBy(user)) {
             return ret;
         }
         ctx.status(HttpStatus.NOT_FOUND);

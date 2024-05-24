@@ -23,14 +23,14 @@ public final class PostController extends AuthBase {
     private final Repository<Comment> comments;
 
     public PostController(JwtProvider<JwtUser> provider,
-                          Repository<Tag> tags,
                           Repository<User> users,
                           Repository<Post> posts,
-                          Repository<Comment> comments) {
+                          Repository<Comment> comments,
+                          Repository<Tag> tags) {
         super(provider, users);
-        this.tags = tags;
         this.posts = posts;
         this.comments = comments;
+        this.tags = tags;
     }
 
     @Route(method = HandlerType.GET, route = "/{postId}")

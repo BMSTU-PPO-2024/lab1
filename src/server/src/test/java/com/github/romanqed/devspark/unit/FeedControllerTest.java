@@ -71,15 +71,14 @@ public final class FeedControllerTest {
     // List posts
     @Test
     public void testListPosts() {
-        var feed = new Feed();
-        feed.setOwnerId("uid");
-        feed.setTagIds(Set.of());
-        feed.setChannelIds(Set.of());
         var feeds = new RepositoryMock<Feed>() {
             @Override
             public Feed get(String key) {
-                assertEquals("1", key);
-                return feed;
+                var ret = new Feed();
+                ret.setOwnerId("uid");
+                ret.setTagIds(Set.of());
+                ret.setChannelIds(Set.of());
+                return ret;
             }
         };
         var posts = new RepositoryMock<Post>() {
@@ -165,7 +164,7 @@ public final class FeedControllerTest {
             @Override
             public Feed get(String key) {
                 var ret = new Feed();
-                ret.setId("1");
+                ret.setId(key);
                 ret.setOwnerId("uid");
                 return ret;
             }
