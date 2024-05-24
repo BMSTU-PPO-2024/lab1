@@ -95,7 +95,7 @@ public final class UserController extends AuthBase {
         if (dto == null) {
             return;
         }
-        var user = getCheckedUser(ctx);
+        var user = getCheckedFullUser(ctx);
         if (user == null) {
             return;
         }
