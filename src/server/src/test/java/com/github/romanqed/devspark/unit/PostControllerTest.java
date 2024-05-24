@@ -1,4 +1,4 @@
-package com.github.romanqed.devspark;
+package com.github.romanqed.devspark.unit;
 
 import org.junit.jupiter.api.Test;
 

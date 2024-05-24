@@ -1,4 +1,4 @@
-package com.github.romanqed.devspark;
+package com.github.romanqed.devspark.unit;
 
 import com.github.romanqed.devspark.controllers.CommentController;
 import com.github.romanqed.devspark.database.Repository;

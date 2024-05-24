@@ -8,7 +8,7 @@ import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.jsr310.Jsr310CodecProvider;
 import org.bson.codecs.pojo.PojoCodecProvider;
 
-final class MongoFactory implements DatabaseFactory {
+public final class MongoFactory implements DatabaseFactory {
     private final MongoClient client;
 
     MongoFactory(MongoClient client) {

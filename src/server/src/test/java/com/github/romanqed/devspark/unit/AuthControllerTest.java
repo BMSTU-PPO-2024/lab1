@@ -1,4 +1,4 @@
-package com.github.romanqed.devspark;
+package com.github.romanqed.devspark.unit;
 
 import com.github.romanqed.devspark.controllers.AuthController;
 import com.github.romanqed.devspark.dto.Credentials;

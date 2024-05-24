@@ -1,9 +1,9 @@
-package com.github.romanqed.devspark;
+package com.github.romanqed.devspark.unit;
 
 import org.junit.jupiter.api.Test;
 
 // TODO
-public final class FeedControllerTest {
+public final class ChannelControllerTest {
 
     // Get
     @Test
@@ -38,27 +38,13 @@ public final class FeedControllerTest {
 
     }
 
+    // Publish post
+    @Test
+    public void testPublish() {
+
+    }
+
     // Update
-    @Test
-    public void testUpdateInvalid() {
-
-    }
-
-    @Test
-    public void testUpdateNotFound() {
-
-    }
-
-    @Test
-    public void testUpdateForbidden() {
-
-    }
-
-    @Test
-    public void testAdminUpdate() {
-
-    }
-
     @Test
     public void testUpdate() {
 
@@ -66,22 +52,39 @@ public final class FeedControllerTest {
 
     // Delete
     @Test
-    public void testDeleteNotFound() {
-
-    }
-
-    @Test
-    public void testDeleteForbidden() {
-
-    }
-
-    @Test
-    public void testAdminDelete() {
-
-    }
-
-    @Test
     public void testDelete() {
+
+    }
+
+    // Rate
+    @Test
+    public void testRateNotFound() {
+
+    }
+
+    @Test
+    public void testRateConflict() {
+
+    }
+
+    @Test
+    public void testRate() {
+
+    }
+
+    // Unrate
+    @Test
+    public void testUnrateNotFound() {
+
+    }
+
+    @Test
+    public void testUnrateConflict() {
+
+    }
+
+    @Test
+    public void testUnrate() {
 
     }
 }
