@@ -100,6 +100,7 @@ public final class UserControllerTest {
     @Test
     public void testUpdateSelf() {
         var users = new RepositoryMock<User>() {
+            boolean updated = false;
 
             @Override
             public User get(String key) {
@@ -112,15 +113,18 @@ public final class UserControllerTest {
                 assertEquals("psd", model.getPassword());
                 assertEquals("abt", model.getAbout());
                 assertEquals("https://ya.ru", model.getAvatar().toString());
+                updated = true;
                 return true;
             }
         };
         testUpdate(users, UserController::updateSelf, Map.of());
+        assertTrue(users.updated);
     }
 
     @Test
     public void testUpdate() {
         var users = new RepositoryMock<User>() {
+            boolean updated = false;
 
             @Override
             public User get(String key) {
@@ -145,20 +149,22 @@ public final class UserControllerTest {
                 assertEquals("psd", model.getPassword());
                 assertEquals("abt", model.getAbout());
                 assertEquals("https://ya.ru", model.getAvatar().toString());
+                updated = true;
                 return true;
             }
         };
         testUpdate(users, UserController::update, Map.of("userId", "uid"));
+        assertTrue(users.updated);
     }
 
     @SuppressWarnings("unchecked")
     private void testList(BiConsumer<UserController, Context> consumer, Map<String, String> pathParams) {
         var repository = new RepositoryMock<>() {
-            boolean found;
+            boolean listed;
 
             @Override
             public Iterable<Object> findAnd(Map<String, Object> fields, Pagination pagination) {
-                found = true;
+                listed = true;
                 return List.of();
             }
         };
@@ -176,7 +182,7 @@ public final class UserControllerTest {
         ctx.setPathParams(pathParams);
         consumer.accept(controller, ctx);
         assertEquals(HttpStatus.OK, ctx.status());
-        assertTrue(repository.found);
+        assertTrue(repository.listed);
     }
 
     // List channels

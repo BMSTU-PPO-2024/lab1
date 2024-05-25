@@ -107,10 +107,13 @@ public final class FeedControllerTest {
             }
         };
         var posts = new RepositoryMock<Post>() {
+            boolean retrieved = false;
+
             @Override
             public Iterable<Post> findByField(String field, Object value, Pagination pagination) {
                 assertEquals("visible", field);
                 assertEquals(true, value);
+                retrieved = true;
                 return List.of();
             }
         };
@@ -121,6 +124,7 @@ public final class FeedControllerTest {
         ctx.setPathParams(Map.of("feedId", "1"));
         ctx.setQueryParams(Map.of());
         controller.listPosts(ctx);
+        assertTrue(posts.retrieved);
         assertEquals(HttpStatus.OK, ctx.status());
         assertInstanceOf(List.class, ctx.getJson());
     }
@@ -164,6 +168,7 @@ public final class FeedControllerTest {
         dto.setChannelIds(Set.of("c1"));
         dto.setTagIds(Set.of("t1"));
         var feeds = new RepositoryMock<Feed>() {
+            boolean updated = false;
 
             @Override
             public Feed get(String key) {
@@ -180,6 +185,7 @@ public final class FeedControllerTest {
                 assertTrue(model.isVisible());
                 assertEquals(Set.of("c1"), model.getChannelIds());
                 assertEquals(Set.of("t1"), model.getTagIds());
+                updated = true;
                 return true;
             }
         };
@@ -191,6 +197,7 @@ public final class FeedControllerTest {
         ctx.setQueryParams(Map.of());
         ctx.setPathParams(Map.of("feedId", "1"));
         controller.update(ctx);
+        assertTrue(feeds.updated);
         assertEquals(HttpStatus.OK, ctx.status());
     }
 
