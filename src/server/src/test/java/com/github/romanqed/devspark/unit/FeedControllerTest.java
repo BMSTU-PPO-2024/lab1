@@ -68,6 +68,31 @@ public final class FeedControllerTest {
         assertEquals(feed, ctx.getJson());
     }
 
+    // Find
+    @Test
+    public void testFind() {
+        var feeds = new RepositoryMock<Feed>() {
+            boolean retrieved = false;
+
+            @Override
+            public Iterable<Feed> findByField(String field, Object value, Pagination pagination) {
+                retrieved = true;
+                assertEquals("visible", field);
+                assertEquals(true, value);
+                return List.of();
+            }
+        };
+        var controller = new FeedController(PROVIDER_MOCK, null, feeds, null, null, null);
+        var ctx = new ContextMock();
+        ctx.status(HttpStatus.OK);
+        ctx.setHeaders(Map.of());
+        ctx.setQueryParams(Map.of());
+        controller.find(ctx);
+        assertTrue(feeds.retrieved);
+        assertEquals(HttpStatus.OK, ctx.status());
+        assertInstanceOf(List.class, ctx.getJson());
+    }
+
     // List posts
     @Test
     public void testListPosts() {
@@ -100,27 +125,6 @@ public final class FeedControllerTest {
         assertInstanceOf(List.class, ctx.getJson());
     }
 
-    // Find
-    @Test
-    public void testFind() {
-        var feeds = new RepositoryMock<Feed>() {
-            @Override
-            public Iterable<Feed> findByField(String field, Object value, Pagination pagination) {
-                assertEquals("visible", field);
-                assertEquals(true, value);
-                return List.of();
-            }
-        };
-        var controller = new FeedController(PROVIDER_MOCK, null, feeds, null, null, null);
-        var ctx = new ContextMock();
-        ctx.status(HttpStatus.OK);
-        ctx.setHeaders(Map.of());
-        ctx.setQueryParams(Map.of());
-        controller.find(ctx);
-        assertEquals(HttpStatus.OK, ctx.status());
-        assertInstanceOf(List.class, ctx.getJson());
-    }
-
     // Put
     @Test
     public void testPut() {
@@ -131,13 +135,13 @@ public final class FeedControllerTest {
         dto.setTagIds(Set.of("t1"));
         var feeds = new RepositoryMock<Feed>() {
             @Override
-            public long put(Feed model) {
+            public boolean put(Feed model) {
                 assertEquals("uid", model.getOwnerId());
                 assertEquals("feed", model.getName());
                 assertTrue(model.isVisible());
                 assertEquals(Set.of("c1"), model.getChannelIds());
                 assertEquals(Set.of("t1"), model.getTagIds());
-                return 1;
+                return true;
             }
         };
         var controller = new FeedController(PROVIDER_MOCK, USERS_MOCK, feeds, null, CHANNELS_MOCK, TAGS_MOCK);
@@ -170,13 +174,13 @@ public final class FeedControllerTest {
             }
 
             @Override
-            public long update(String key, Feed model) {
+            public boolean update(String key, Feed model) {
                 assertEquals("1", key);
                 assertEquals("feed", model.getName());
                 assertTrue(model.isVisible());
                 assertEquals(Set.of("c1"), model.getChannelIds());
                 assertEquals(Set.of("t1"), model.getTagIds());
-                return 1;
+                return true;
             }
         };
         var controller = new FeedController(PROVIDER_MOCK, USERS_MOCK, feeds, null, CHANNELS_MOCK, TAGS_MOCK);

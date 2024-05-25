@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 public class RepositoryMock<V> implements Repository<V> {
 
     @Override
-    public long put(V model) {
-        return 0;
+    public boolean put(V model) {
+        return false;
     }
 
     @Override
@@ -21,8 +21,8 @@ public class RepositoryMock<V> implements Repository<V> {
     }
 
     @Override
-    public long update(String key, V model) {
-        return 0;
+    public boolean update(String key, V model) {
+        return false;
     }
 
     @Override
@@ -96,7 +96,7 @@ public class RepositoryMock<V> implements Repository<V> {
     }
 
     @Override
-    public Iterable<V> findByField(Map<String, Iterable<Object>> in, Map<String, Object> eq, Pagination pagination) {
+    public Iterable<V> findByField(Map<String, Iterable<?>> in, Map<String, ?> eq, Pagination pagination) {
         return null;
     }
 
@@ -163,5 +163,10 @@ public class RepositoryMock<V> implements Repository<V> {
     @Override
     public long deleteAll(String field, Object value) {
         return 0;
+    }
+
+    @Override
+    public boolean deleteAll(String field, Collection<?> values) {
+        return false;
     }
 }

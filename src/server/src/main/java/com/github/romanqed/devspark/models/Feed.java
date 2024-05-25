@@ -98,7 +98,6 @@ public final class Feed extends Owned implements Visible, Identified {
         this.updated = updated;
     }
 
-    @SuppressWarnings("unchecked")
     public List<Post> getPosts(Repository<Post> posts, Pagination pagination) {
         // If feed has no channels and tags, then select all public posts
         if (channelIds.isEmpty() && tagIds.isEmpty()) {
@@ -111,8 +110,7 @@ public final class Feed extends Owned implements Visible, Identified {
         if (!channelIds.isEmpty()) {
             ins.put("channelId", channelIds);
         }
-        var map = (Map<String, Iterable<Object>>) (Map<?, ?>) ins;
-        var found = posts.findByField(map, Map.of("visible", true), pagination);
+        var found = posts.findByField(ins, Map.of("visible", true), pagination);
         return asList(found);
     }
 }

@@ -23,7 +23,7 @@ final class MongoRepository<V> implements Repository<V> {
         this.collection = collection;
     }
 
-    private static List<Bson> asList(Map<String, Object> fields) {
+    private static List<Bson> asList(Map<String, ?> fields) {
         return fields
                 .entrySet()
                 .stream()
@@ -32,20 +32,20 @@ final class MongoRepository<V> implements Repository<V> {
     }
 
     @Override
-    public long put(V model) {
-        return collection.insertOne(model).wasAcknowledged() ? 1 : 0;
+    public boolean put(V model) {
+        return collection.insertOne(model).wasAcknowledged();
     }
 
     @Override
-    public long update(String key, V model) {
-        return collection.replaceOne(eq("_id", key), model).getModifiedCount();
+    public boolean update(String key, V model) {
+        return collection.replaceOne(eq("_id", key), model).getModifiedCount() == 1;
     }
 
     @Override
     public long put(Iterable<V> entities) {
         var ret = 0L;
         for (var entity : entities) {
-            ret += put(entity);
+            ret += put(entity) ? 1 : 0;
         }
         return ret;
     }
@@ -163,6 +163,11 @@ final class MongoRepository<V> implements Repository<V> {
         return collection.deleteMany(Filters.eq(field, value)).getDeletedCount();
     }
 
+    @Override
+    public boolean deleteAll(String field, Collection<?> values) {
+        return collection.deleteMany(Filters.in(field, values)).getDeletedCount() == values.size();
+    }
+
     // Batched
     @Override
     public Iterable<V> getAll(Pagination pagination) {
@@ -195,7 +200,7 @@ final class MongoRepository<V> implements Repository<V> {
     }
 
     @Override
-    public Iterable<V> findByField(Map<String, Iterable<Object>> in, Map<String, Object> eq, Pagination pagination) {
+    public Iterable<V> findByField(Map<String, Iterable<?>> in, Map<String, ?> eq, Pagination pagination) {
         var ins = in
                 .entrySet()
                 .stream()

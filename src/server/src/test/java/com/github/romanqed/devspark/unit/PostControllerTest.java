@@ -38,7 +38,7 @@ public final class PostControllerTest {
     @Test
     public void testGet() {
         var post = new Post();
-        post.setOwnerId("uid");
+        post.setVisible(true);
         var posts = new RepositoryMock<Post>() {
 
             @Override
@@ -47,10 +47,10 @@ public final class PostControllerTest {
                 return post;
             }
         };
-        var controller = new PostController(PROVIDER_MOCK, USERS_MOCK, posts, null, null);
+        var controller = new PostController(PROVIDER_MOCK, null, posts, null, null);
         var ctx = new ContextMock();
         ctx.status(HttpStatus.OK);
-        ctx.setHeaders(HEADERS);
+        ctx.setHeaders(Map.of());
         ctx.setPathParams(Map.of("postId", "1"));
         controller.get(ctx);
         assertEquals(HttpStatus.OK, ctx.status());
@@ -110,12 +110,12 @@ public final class PostControllerTest {
             Comment comment;
 
             @Override
-            public long put(Comment model) {
+            public boolean put(Comment model) {
                 assertEquals("1", model.getPostId());
                 assertEquals("text", model.getText());
                 assertEquals("uid", model.getOwnerId());
                 comment = model;
-                return 1;
+                return true;
             }
         };
         var dto = new TextDto();
@@ -146,14 +146,14 @@ public final class PostControllerTest {
             }
 
             @Override
-            public long update(String key, Post model) {
+            public boolean update(String key, Post model) {
                 updated = true;
                 assertEquals("1", key);
                 assertEquals("title", model.getTitle());
                 assertEquals("text", model.getText());
                 assertFalse(model.isVisible());
                 assertEquals(Set.of("t1"), model.getTagIds());
-                return 1;
+                return true;
             }
         };
         var tags = new RepositoryMock<Tag>() {

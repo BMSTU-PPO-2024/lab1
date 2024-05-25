@@ -4,6 +4,7 @@ import com.github.romanqed.devspark.database.Repository;
 import com.github.romanqed.devspark.dto.ChannelDto;
 import com.github.romanqed.devspark.dto.DtoUtil;
 import com.github.romanqed.devspark.dto.PostDto;
+import com.github.romanqed.devspark.dto.Response;
 import com.github.romanqed.devspark.javalin.JavalinController;
 import com.github.romanqed.devspark.javalin.Route;
 import com.github.romanqed.devspark.jwt.JwtProvider;
@@ -20,16 +21,19 @@ public final class ChannelController extends AuthBase {
     private final Repository<Channel> channels;
     private final Repository<Post> posts;
     private final Repository<Comment> comments;
+    private final Repository<Tag> tags;
 
     public ChannelController(JwtProvider<JwtUser> provider,
                              Repository<User> users,
                              Repository<Channel> channels,
                              Repository<Post> posts,
-                             Repository<Comment> comments) {
+                             Repository<Comment> comments,
+                             Repository<Tag> tags) {
         super(provider, users);
         this.channels = channels;
         this.posts = posts;
         this.comments = comments;
+        this.tags = tags;
     }
 
     @Route(method = HandlerType.GET, route = "/{channelId}")
@@ -126,7 +130,13 @@ public final class ChannelController extends AuthBase {
             return;
         }
         var post = Post.of(user.getId(), channel.getId(), dto.getTitle(), dto.getText());
-        post.setTagIds(dto.getTagIds());
+        var ids = dto.getTagIds();
+        if (!tags.exists(ids)) {
+            ctx.status(HttpStatus.NOT_FOUND);
+            ctx.json(new Response("Invalid tag ids"));
+            return;
+        }
+        post.setTagIds(ids);
         var visible = dto.getVisible();
         post.setVisible(visible == null ? channel.isVisible() : visible);
         posts.put(post);
@@ -179,7 +189,7 @@ public final class ChannelController extends AuthBase {
         if (user == null) {
             return;
         }
-        var id = ctx.pathParam("postId");
+        var id = ctx.pathParam("channelId");
         if (user.hasPermission(Permissions.MANAGE_CHANNELS)) {
             deleteChannel(ctx, id);
             return;
