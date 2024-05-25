@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Set;
 
 public final class TestEntity {
-    private String id;
-    private int i;
-    private double d;
-    private char c;
-    private List<String> l;
-    private Set<String> s;
+    String id;
+    int i;
+    double d;
+    char c;
+    List<String> l;
+    Set<String> s;
 
     public String getId() {
         return id;
