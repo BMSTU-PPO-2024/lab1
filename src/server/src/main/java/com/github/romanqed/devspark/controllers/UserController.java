@@ -3,6 +3,7 @@ package com.github.romanqed.devspark.controllers;
 import com.github.romanqed.devspark.database.Pagination;
 import com.github.romanqed.devspark.database.Repository;
 import com.github.romanqed.devspark.dto.DtoUtil;
+import com.github.romanqed.devspark.dto.Response;
 import com.github.romanqed.devspark.dto.UserDto;
 import com.github.romanqed.devspark.hash.Encoder;
 import com.github.romanqed.devspark.javalin.JavalinController;
@@ -177,8 +178,12 @@ public final class UserController extends AuthBase {
         }
         var id = ctx.pathParam("userId");
         var user = getUser(ctx);
-        var all = user != null && !user.isBanned()
-                && (id.equals(user.getId()) || user.hasPermission(Permissions.IGNORE_VISIBILITY));
+        if (user == null) {
+            ctx.status(HttpStatus.NOT_FOUND);
+            ctx.json(new Response("User not found"));
+            return;
+        }
+        var all = !user.isBanned() && (id.equals(user.getId()) || user.hasPermission(Permissions.IGNORE_VISIBILITY));
         list(ctx, repository, id, all, pagination);
     }
 
