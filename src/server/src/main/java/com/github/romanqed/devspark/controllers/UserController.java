@@ -177,13 +177,15 @@ public final class UserController extends AuthBase {
             return;
         }
         var id = ctx.pathParam("userId");
-        var user = getUser(ctx);
-        if (user == null) {
+        if (!users.exists(id)) {
             ctx.status(HttpStatus.NOT_FOUND);
             ctx.json(new Response("User not found"));
             return;
         }
-        var all = !user.isBanned() && (id.equals(user.getId()) || user.hasPermission(Permissions.IGNORE_VISIBILITY));
+        var user = getUser(ctx);
+        var all = user != null
+                && !user.isBanned()
+                && (id.equals(user.getId()) || user.hasPermission(Permissions.IGNORE_VISIBILITY));
         list(ctx, repository, id, all, pagination);
     }
 
