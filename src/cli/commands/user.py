@@ -51,7 +51,7 @@ class Get(ICommand):
 class UpdateSelf(ICommand):
 
     def get_name(self) -> str:
-        return 'update-self'
+        return 'upd-self'
 
     def get_method(self) -> HttpMethod:
         return HttpMethod.PATCH
@@ -69,7 +69,7 @@ class UpdateSelf(ICommand):
 class Update(ICommand):
 
     def get_name(self) -> str:
-        return 'update-user'
+        return 'upd-user'
 
     def get_method(self) -> HttpMethod:
         return HttpMethod.PATCH

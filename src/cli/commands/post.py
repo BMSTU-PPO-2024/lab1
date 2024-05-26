@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Set
 
 from client.HttpRequest import HttpMethod
 from manager.ICommand import ICommand
@@ -17,82 +17,133 @@ def register(commands: List[ICommand]):
 class Get(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'get-post'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.GET
 
     def get_url(self) -> str:
-        pass
+        return '/post/{postId}'
+
+    def get_path_params(self) -> Set[str]:
+        return {'postId'}
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
 
 
 class ListComments(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'list-post-cs'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.GET
 
     def get_url(self) -> str:
-        pass
+        return '/post/{postId}/comments'
+
+    def get_path_params(self) -> Set[str]:
+        return {'postId'}
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
+
+    def get_queries(self) -> Set[str]:
+        return {'page', 'batch'}
 
 
 class PublishComment(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'add-comment'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.PUT
 
     def get_url(self) -> str:
-        pass
+        return '/post/{postId}/comment'
+
+    def get_path_params(self) -> Set[str]:
+        return {'postId'}
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
+
+    def get_body_params(self) -> Set[str]:
+        return {'text'}
 
 
 class Update(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'upd-post'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.PATCH
 
     def get_url(self) -> str:
-        pass
+        return '/post/{postId}'
+
+    def get_path_params(self) -> Set[str]:
+        return {'postId'}
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
+
+    def get_body_params(self) -> Set[str]:
+        return {'title', 'text', 'visible', 'tagIds'}
 
 
 class Delete(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'del-post'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.DELETE
 
     def get_url(self) -> str:
-        pass
+        return '/post/{postId}'
+
+    def get_path_params(self) -> Set[str]:
+        return {'postId'}
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
 
 
 class Rate(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'rate-post'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.PUT
 
     def get_url(self) -> str:
-        pass
+        return '/post/{postId}/rate'
+
+    def get_path_params(self) -> Set[str]:
+        return {'postId'}
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
 
 
 class Unrate(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'unrate-post'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.DELETE
 
     def get_url(self) -> str:
-        pass
+        return '/post/{postId}/rate'
+
+    def get_path_params(self) -> Set[str]:
+        return {'postId'}
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}

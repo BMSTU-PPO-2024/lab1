@@ -63,7 +63,7 @@ class Put(ICommand):
 class Update(ICommand):
 
     def get_name(self) -> str:
-        return 'update-tag'
+        return 'upd-tag'
 
     def get_method(self) -> HttpMethod:
         return HttpMethod.PATCH
@@ -84,7 +84,7 @@ class Update(ICommand):
 class Delete(ICommand):
 
     def get_name(self) -> str:
-        return 'delete-tag'
+        return 'del-tag'
 
     def get_method(self) -> HttpMethod:
         return HttpMethod.DELETE
