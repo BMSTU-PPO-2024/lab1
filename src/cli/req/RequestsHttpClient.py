@@ -35,6 +35,10 @@ class RequestsHttpClient(IHttpClient):
             data=body,
             headers=request.get_headers()
         )
-        body = json.loads(raw_response.text)
+        text = raw_response.text.strip()
+        if len(text) == 0:
+            body = {}
+        else:
+            body = json.loads(text)
         ret = HttpResponse(raw_response.status_code, body)
         return ret

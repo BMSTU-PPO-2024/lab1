@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Set
 
 from client.HttpRequest import HttpMethod
 from manager.ICommand import ICommand
@@ -15,58 +15,85 @@ def register(commands: List[ICommand]):
 class Get(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'get-tag'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.GET
 
     def get_url(self) -> str:
-        pass
+        return '/tag/{tagId}'
+
+    def get_path_params(self) -> Set[str]:
+        return {'tagId'}
 
 
 class Find(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'find-tag'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.GET
 
     def get_url(self) -> str:
-        pass
+        return '/tag'
+
+    def get_queries(self) -> Set[str]:
+        return {'name', 'pattern', 'page', 'batch'}
 
 
 class Put(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'put-tag'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.PUT
 
     def get_url(self) -> str:
-        pass
+        return '/tag'
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
+
+    def get_body_params(self) -> Set[str]:
+        return {'name'}
 
 
 class Update(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'update-tag'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.PATCH
 
     def get_url(self) -> str:
-        pass
+        return '/tag/{tagId}'
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
+
+    def get_path_params(self) -> Set[str]:
+        return {'tagId'}
+
+    def get_body_params(self) -> Set[str]:
+        return {'name'}
 
 
 class Delete(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'delete-tag'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.DELETE
 
     def get_url(self) -> str:
-        pass
+        return '/tag/{tagId}'
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
+
+    def get_path_params(self) -> Set[str]:
+        return {'tagId'}

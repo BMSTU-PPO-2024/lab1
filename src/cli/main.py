@@ -19,7 +19,9 @@ def print_json(e):
         return
     if isinstance(e, list):
         for item in e:
+            print('===')
             print_json(item)
+        return
     print(e)
 
 
@@ -43,7 +45,7 @@ def build(builder: ManagerBuilder, token, args) -> Manager:
 
     # Set source
     def source(name):
-        if name == 'token':
+        if name == 'Authorization':
             return token
         return args.get(name)
 
@@ -83,7 +85,7 @@ def read_token():
         return None
     try:
         with open(TOKEN_FILE, 'r') as f:
-            return f.readline().strip()
+            return 'Bearer ' + f.readline().strip()
     except:
         return None
 
