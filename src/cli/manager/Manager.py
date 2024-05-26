@@ -17,9 +17,23 @@ class Manager:
         self._printer = printer
 
     def help(self):
-        print("Available commands:")
-        for command in self._commands.keys():
-            print(command)
+        command_name = self._source('command')
+        if command_name is None:
+            print("Available commands:")
+            for command in self._commands.keys():
+                print(command)
+            return
+        command = self._commands.get(command_name)
+        if command is None:
+            print('Unknown command')
+            return
+        print('Command: ' + command.get_name())
+        print('Method: ' + str(command.get_method()))
+        print('Url: ' + command.get_url())
+        print('Headers: ' + str(list(command.get_headers())))
+        print('Path parameters: ' + str(list(command.get_path_params())))
+        print('Query parameters: ' + str(list(command.get_queries())))
+        print('Body values: ' + str(list(command.get_body_params())))
 
     def execute(self, command_name: str) -> bool:
         if command_name == 'help':
