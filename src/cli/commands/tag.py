@@ -21,10 +21,10 @@ class Get(ICommand):
         return HttpMethod.GET
 
     def get_url(self) -> str:
-        return '/tag/{tagId}'
+        return '/tag/{id}'
 
     def get_path_params(self) -> Set[str]:
-        return {'tagId'}
+        return {'id'}
 
 
 class Find(ICommand):
@@ -69,13 +69,13 @@ class Update(ICommand):
         return HttpMethod.PATCH
 
     def get_url(self) -> str:
-        return '/tag/{tagId}'
+        return '/tag/{id}'
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}
 
     def get_path_params(self) -> Set[str]:
-        return {'tagId'}
+        return {'id'}
 
     def get_body_params(self) -> Set[str]:
         return {'name'}
@@ -90,10 +90,10 @@ class Delete(ICommand):
         return HttpMethod.DELETE
 
     def get_url(self) -> str:
-        return '/tag/{tagId}'
+        return '/tag/{id}'
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}
 
     def get_path_params(self) -> Set[str]:
-        return {'tagId'}
+        return {'id'}

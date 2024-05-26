@@ -39,10 +39,10 @@ class Get(ICommand):
         return HttpMethod.GET
 
     def get_url(self) -> str:
-        return '/user/{userId}'
+        return '/user/{id}'
 
     def get_path_params(self) -> Set[str]:
-        return {'userId'}
+        return {'id'}
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}
@@ -75,10 +75,10 @@ class Update(ICommand):
         return HttpMethod.PATCH
 
     def get_url(self) -> str:
-        return '/user/{userId}'
+        return '/user/{id}'
 
     def get_path_params(self) -> Set[str]:
-        return {'userId'}
+        return {'id'}
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}
@@ -114,13 +114,13 @@ class ListChs(ICommand):
         return HttpMethod.GET
 
     def get_url(self) -> str:
-        return '/user/{userId}/channels'
+        return '/user/{id}/channels'
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}
 
     def get_path_params(self) -> Set[str]:
-        return {'userId'}
+        return {'id'}
 
     def get_queries(self) -> Set[str]:
         return {'page', 'batch'}
@@ -153,13 +153,13 @@ class ListFds(ICommand):
         return HttpMethod.GET
 
     def get_url(self) -> str:
-        return '/user/{userId}/feeds'
+        return '/user/{id}/feeds'
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}
 
     def get_path_params(self) -> Set[str]:
-        return {'userId'}
+        return {'id'}
 
     def get_queries(self) -> Set[str]:
         return {'page', 'batch'}

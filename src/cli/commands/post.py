@@ -23,10 +23,10 @@ class Get(ICommand):
         return HttpMethod.GET
 
     def get_url(self) -> str:
-        return '/post/{postId}'
+        return '/post/{id}'
 
     def get_path_params(self) -> Set[str]:
-        return {'postId'}
+        return {'id'}
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}
@@ -41,10 +41,10 @@ class ListComments(ICommand):
         return HttpMethod.GET
 
     def get_url(self) -> str:
-        return '/post/{postId}/comments'
+        return '/post/{id}/comments'
 
     def get_path_params(self) -> Set[str]:
-        return {'postId'}
+        return {'id'}
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}
@@ -62,10 +62,10 @@ class PublishComment(ICommand):
         return HttpMethod.PUT
 
     def get_url(self) -> str:
-        return '/post/{postId}/comment'
+        return '/post/{id}/comment'
 
     def get_path_params(self) -> Set[str]:
-        return {'postId'}
+        return {'id'}
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}
@@ -83,16 +83,16 @@ class Update(ICommand):
         return HttpMethod.PATCH
 
     def get_url(self) -> str:
-        return '/post/{postId}'
+        return '/post/{id}'
 
     def get_path_params(self) -> Set[str]:
-        return {'postId'}
+        return {'id'}
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}
 
     def get_body_params(self) -> Set[str]:
-        return {'title', 'text', 'visible', 'tagIds'}
+        return {'title', 'text', 'visible', 'ids'}
 
 
 class Delete(ICommand):
@@ -104,10 +104,10 @@ class Delete(ICommand):
         return HttpMethod.DELETE
 
     def get_url(self) -> str:
-        return '/post/{postId}'
+        return '/post/{id}'
 
     def get_path_params(self) -> Set[str]:
-        return {'postId'}
+        return {'id'}
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}
@@ -122,10 +122,10 @@ class Rate(ICommand):
         return HttpMethod.PUT
 
     def get_url(self) -> str:
-        return '/post/{postId}/rate'
+        return '/post/{id}/rate'
 
     def get_path_params(self) -> Set[str]:
-        return {'postId'}
+        return {'id'}
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}
@@ -140,10 +140,10 @@ class Unrate(ICommand):
         return HttpMethod.DELETE
 
     def get_url(self) -> str:
-        return '/post/{postId}/rate'
+        return '/post/{id}/rate'
 
     def get_path_params(self) -> Set[str]:
-        return {'postId'}
+        return {'id'}
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}

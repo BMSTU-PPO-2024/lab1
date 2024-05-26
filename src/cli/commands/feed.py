@@ -85,7 +85,7 @@ class Put(ICommand):
         return {'Authorization'}
 
     def get_body_params(self) -> Set[str]:
-        return {'name', 'visible', 'channelIds', 'tagIds'}
+        return {'name', 'visible', 'channelIds', 'ids'}
 
 
 class Update(ICommand):
@@ -106,7 +106,7 @@ class Update(ICommand):
         return {'Authorization'}
 
     def get_body_params(self) -> Set[str]:
-        return {'name', 'visible', 'channelIds', 'tagIds'}
+        return {'name', 'visible', 'channelIds', 'ids'}
 
 
 class Delete(ICommand):
