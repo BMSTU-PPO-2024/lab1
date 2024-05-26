@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Set
 
 from client.HttpRequest import HttpMethod
 from manager.ICommand import ICommand
@@ -18,94 +18,148 @@ def register(commands: List[ICommand]):
 class GetSelf(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'get-self'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.GET
 
     def get_url(self) -> str:
-        pass
+        return '/user'
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
 
 
 class Get(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'get-user'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.GET
 
     def get_url(self) -> str:
-        pass
+        return '/user/{userId}'
+
+    def get_path_params(self) -> Set[str]:
+        return {'userId'}
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
 
 
 class UpdateSelf(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'update-self'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.PATCH
 
     def get_url(self) -> str:
-        pass
+        return '/user'
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
+
+    def get_body_params(self) -> Set[str]:
+        return {'nickname', 'password', 'about', 'avatar'}
 
 
 class Update(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'update-user'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.PATCH
 
     def get_url(self) -> str:
-        pass
+        return '/user/{userId}'
+
+    def get_path_params(self) -> Set[str]:
+        return {'userId'}
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
+
+    def get_body_params(self) -> Set[str]:
+        return {'nickname', 'password', 'about', 'avatar', 'permissions', 'banned'}
 
 
 class ListSelfChs(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'list-self-chs'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.GET
 
     def get_url(self) -> str:
-        pass
+        return '/user/channels'
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
+
+    def get_queries(self) -> Set[str]:
+        return {'page', 'batch'}
 
 
 class ListChs(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'list-chs'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.GET
 
     def get_url(self) -> str:
-        pass
+        return '/user/{userId}/channels'
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
+
+    def get_path_params(self) -> Set[str]:
+        return {'userId'}
+
+    def get_queries(self) -> Set[str]:
+        return {'page', 'batch'}
 
 
 class ListSelfFds(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'list-self-fds'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.GET
 
     def get_url(self) -> str:
-        pass
+        return '/user/feeds'
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
+
+    def get_queries(self) -> Set[str]:
+        return {'page', 'batch'}
 
 
 class ListFds(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'list-fds'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.GET
 
     def get_url(self) -> str:
-        pass
+        return '/user/{userId}/feeds'
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
+
+    def get_path_params(self) -> Set[str]:
+        return {'userId'}
+
+    def get_queries(self) -> Set[str]:
+        return {'page', 'batch'}

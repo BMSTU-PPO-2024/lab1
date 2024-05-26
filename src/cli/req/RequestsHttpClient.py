@@ -38,6 +38,8 @@ class RequestsHttpClient(IHttpClient):
         text = raw_response.text.strip()
         if len(text) == 0:
             body = {}
+        elif '{' not in text and '[' not in text:
+            body = text
         else:
             body = json.loads(text)
         ret = HttpResponse(raw_response.status_code, body)
