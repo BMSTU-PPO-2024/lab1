@@ -19,7 +19,7 @@ public final class User implements Identified {
     private boolean banned;
     private String password;
     private String about;
-    private URL avatar;
+    private String avatar;
     private int permissions;
     private Date created;
     private Date updated;
@@ -88,11 +88,11 @@ public final class User implements Identified {
         this.about = about;
     }
 
-    public URL getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(URL avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 

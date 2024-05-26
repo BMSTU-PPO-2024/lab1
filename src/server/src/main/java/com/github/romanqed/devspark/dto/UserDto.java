@@ -1,6 +1,7 @@
 package com.github.romanqed.devspark.dto;
 
 import com.github.romanqed.devspark.models.User;
+import com.github.romanqed.jfunc.Exceptions;
 
 import java.net.URL;
 import java.util.Date;
@@ -24,7 +25,7 @@ public final class UserDto {
         ret.email = user.getEmail();
         ret.banned = user.isBanned();
         ret.about = user.getAbout();
-        ret.avatar = user.getAvatar();
+        ret.avatar = Exceptions.suppress(() -> new URL(user.getAvatar()));
         return ret;
     }
 

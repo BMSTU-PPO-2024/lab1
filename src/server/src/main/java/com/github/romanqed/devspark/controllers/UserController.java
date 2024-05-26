@@ -84,7 +84,7 @@ public final class UserController extends AuthBase {
         var avatar = dto.getAvatar();
         if (avatar != null) {
             ret = true;
-            user.setAvatar(avatar);
+            user.setAvatar(avatar.toString());
         }
         return ret;
     }
