@@ -1,3 +1,4 @@
+import json
 import os.path
 import sys
 
@@ -73,7 +74,10 @@ def parse_named(args):
         if index < 0:
             ret[arg[2:]] = None
         else:
-            ret[arg[2:index]] = arg[index + 1:]
+            value = arg[index + 1:]
+            if value.startswith('[') and value.endswith(']'):
+                value = json.loads(value)
+            ret[arg[2:index]] = value
     return ret
 
 

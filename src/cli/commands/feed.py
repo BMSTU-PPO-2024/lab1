@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Set
 
 from client.HttpRequest import HttpMethod
 from manager.ICommand import ICommand
@@ -16,70 +16,112 @@ def register(commands: List[ICommand]):
 class Get(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'get-feed'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.GET
 
     def get_url(self) -> str:
-        pass
+        return '/feed/{feedId}'
+
+    def get_path_params(self) -> Set[str]:
+        return {'feedId'}
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
 
 
 class ListPosts(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'see-feed'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.GET
 
     def get_url(self) -> str:
-        pass
+        return '/feed/{feedId}/posts'
+
+    def get_path_params(self) -> Set[str]:
+        return {'feedId'}
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
+
+    def get_queries(self) -> Set[str]:
+        return {'page', 'batch'}
 
 
 class Find(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'find-feed'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.GET
 
     def get_url(self) -> str:
-        pass
+        return '/feed'
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
+
+    def get_queries(self) -> Set[str]:
+        return {'name', 'pattern', 'page', 'batch'}
 
 
 class Put(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'put-feed'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.PUT
 
     def get_url(self) -> str:
-        pass
+        return '/feed'
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
+
+    def get_body_params(self) -> Set[str]:
+        return {'name', 'visible', 'channelIds', 'tagIds'}
 
 
 class Update(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'upd-feed'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.PATCH
 
     def get_url(self) -> str:
-        pass
+        return '/feed/{feedId}'
+
+    def get_path_params(self) -> Set[str]:
+        return {'feedId'}
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
+
+    def get_body_params(self) -> Set[str]:
+        return {'name', 'visible', 'channelIds', 'tagIds'}
 
 
 class Delete(ICommand):
 
     def get_name(self) -> str:
-        pass
+        return 'del-feed'
 
     def get_method(self) -> HttpMethod:
-        pass
+        return HttpMethod.DELETE
 
     def get_url(self) -> str:
-        pass
+        return '/feed/{feedId}'
+
+    def get_path_params(self) -> Set[str]:
+        return {'feedId'}
+
+    def get_headers(self) -> Set[str]:
+        return {'Authorization'}
