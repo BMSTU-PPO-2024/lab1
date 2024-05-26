@@ -5,11 +5,11 @@ from manager.ICommand import ICommand
 
 
 def register(commands: List[ICommand]):
-    commands.append(LoginCommand())
-    commands.append(RegisterCommand())
+    commands.append(Login())
+    commands.append(Register())
 
 
-class LoginCommand(ICommand):
+class Login(ICommand):
 
     def get_name(self) -> str:
         return 'login'
@@ -24,7 +24,7 @@ class LoginCommand(ICommand):
         return {'email', 'password'}
 
 
-class RegisterCommand(ICommand):
+class Register(ICommand):
     def get_name(self) -> str:
         return 'register'
 

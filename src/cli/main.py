@@ -1,3 +1,4 @@
+import os.path
 import sys
 
 from client.HttpResponse import HttpResponse
@@ -9,11 +10,10 @@ from req.RequestsHttpClient import RequestsHttpClient
 
 def output(response: HttpResponse):
     print('Status: ' + str(response.get_status()))
-    for k, v in response.get_body().items():
-        print(k + ': ' + v)
+    print(response.get_body())
 
 
-def build(builder: ManagerBuilder, args) -> Manager:
+def build(builder: ManagerBuilder, token, args) -> Manager:
     # Set host
     host = args.get('host')
     if host is None:
@@ -27,6 +27,8 @@ def build(builder: ManagerBuilder, args) -> Manager:
 
     # Set source
     def source(name):
+        if name == 'token':
+            return token
         return args.get(name)
 
     builder.set_source(source)
@@ -57,12 +59,27 @@ def parse_named(args):
     return ret
 
 
+TOKEN_FILE = 'token.txt'
+
+
+def read_token():
+    if not os.path.exists(TOKEN_FILE):
+        return None
+    try:
+        with open(TOKEN_FILE, 'r') as f:
+            return f.readline().strip()
+    except:
+        return None
+
+
 def main(args):
     if len(args) == 0:
         print('Missing command')
         return 1
+    token = read_token()
+    print(token)
     builder = ManagerBuilder()
-    manager = build(builder, parse_named(args[1:]))
+    manager = build(builder, token, parse_named(args[1:]))
     return 0 if manager.execute(args[0]) else 1
 
 

@@ -1,5 +1,5 @@
-from client.HttpResponse import HttpResponse
 from client.HttpRequest import HttpRequest
+from client.HttpResponse import HttpResponse
 
 
 class IHttpClient:
