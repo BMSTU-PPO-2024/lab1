@@ -1,5 +1,6 @@
 from typing import List
 
+from client.HttpRequest import HttpMethod
 from manager.ICommand import ICommand
 
 
@@ -15,32 +16,96 @@ def register(commands: List[ICommand]):
 
 
 class GetSelf(ICommand):
-    pass
+
+    def get_name(self) -> str:
+        pass
+
+    def get_method(self) -> HttpMethod:
+        pass
+
+    def get_url(self) -> str:
+        pass
 
 
 class Get(ICommand):
-    pass
+
+    def get_name(self) -> str:
+        pass
+
+    def get_method(self) -> HttpMethod:
+        pass
+
+    def get_url(self) -> str:
+        pass
 
 
 class UpdateSelf(ICommand):
-    pass
+
+    def get_name(self) -> str:
+        pass
+
+    def get_method(self) -> HttpMethod:
+        pass
+
+    def get_url(self) -> str:
+        pass
 
 
 class Update(ICommand):
-    pass
+
+    def get_name(self) -> str:
+        pass
+
+    def get_method(self) -> HttpMethod:
+        pass
+
+    def get_url(self) -> str:
+        pass
 
 
 class ListSelfChs(ICommand):
-    pass
+
+    def get_name(self) -> str:
+        pass
+
+    def get_method(self) -> HttpMethod:
+        pass
+
+    def get_url(self) -> str:
+        pass
 
 
 class ListChs(ICommand):
-    pass
+
+    def get_name(self) -> str:
+        pass
+
+    def get_method(self) -> HttpMethod:
+        pass
+
+    def get_url(self) -> str:
+        pass
 
 
 class ListSelfFds(ICommand):
-    pass
+
+    def get_name(self) -> str:
+        pass
+
+    def get_method(self) -> HttpMethod:
+        pass
+
+    def get_url(self) -> str:
+        pass
 
 
 class ListFds(ICommand):
-    pass
+
+    def get_name(self) -> str:
+        pass
+
+    def get_method(self) -> HttpMethod:
+        pass
+
+    def get_url(self) -> str:
+        pass

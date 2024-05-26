@@ -8,9 +8,25 @@ from manager.ManagerBuilder import ManagerBuilder
 from req.RequestsHttpClient import RequestsHttpClient
 
 
+def print_dict(e):
+    for k, v in e.items():
+        print(k + ': ' + str(v))
+
+
+def print_json(e):
+    if isinstance(e, dict):
+        print_dict(e)
+        return
+    if isinstance(e, list):
+        for item in e:
+            print_json(item)
+    print(e)
+
+
 def output(response: HttpResponse):
     print('Status: ' + str(response.get_status()))
-    print(response.get_body())
+    body = response.get_body()
+    print_json(body)
 
 
 def build(builder: ManagerBuilder, token, args) -> Manager:
@@ -77,7 +93,6 @@ def main(args):
         print('Missing command')
         return 1
     token = read_token()
-    print(token)
     builder = ManagerBuilder()
     manager = build(builder, token, parse_named(args[1:]))
     return 0 if manager.execute(args[0]) else 1

@@ -1,5 +1,6 @@
 from typing import List
 
+from client.HttpRequest import HttpMethod
 from manager.ICommand import ICommand
 
 
@@ -14,28 +15,84 @@ def register(commands: List[ICommand]):
 
 
 class Get(ICommand):
-    pass
+
+    def get_name(self) -> str:
+        pass
+
+    def get_method(self) -> HttpMethod:
+        pass
+
+    def get_url(self) -> str:
+        pass
 
 
 class Find(ICommand):
-    pass
+
+    def get_name(self) -> str:
+        pass
+
+    def get_method(self) -> HttpMethod:
+        pass
+
+    def get_url(self) -> str:
+        pass
 
 
 class ListPosts(ICommand):
-    pass
+
+    def get_name(self) -> str:
+        pass
+
+    def get_method(self) -> HttpMethod:
+        pass
+
+    def get_url(self) -> str:
+        pass
 
 
 class Put(ICommand):
-    pass
+
+    def get_name(self) -> str:
+        pass
+
+    def get_method(self) -> HttpMethod:
+        pass
+
+    def get_url(self) -> str:
+        pass
 
 
 class PublishPost(ICommand):
-    pass
+
+    def get_name(self) -> str:
+        pass
+
+    def get_method(self) -> HttpMethod:
+        pass
+
+    def get_url(self) -> str:
+        pass
 
 
 class Update(ICommand):
-    pass
+
+    def get_name(self) -> str:
+        pass
+
+    def get_method(self) -> HttpMethod:
+        pass
+
+    def get_url(self) -> str:
+        pass
 
 
 class Delete(ICommand):
-    pass
+
+    def get_name(self) -> str:
+        pass
+
+    def get_method(self) -> HttpMethod:
+        pass
+
+    def get_url(self) -> str:
+        pass
