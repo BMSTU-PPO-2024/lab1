@@ -22,10 +22,10 @@ class Get(ICommand):
         return HttpMethod.GET
 
     def get_url(self) -> str:
-        return '/feed/{feedId}'
+        return '/feed/{id}'
 
     def get_path_params(self) -> Set[str]:
-        return {'feedId'}
+        return {'id'}
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}
@@ -40,10 +40,10 @@ class ListPosts(ICommand):
         return HttpMethod.GET
 
     def get_url(self) -> str:
-        return '/feed/{feedId}/posts'
+        return '/feed/{id}/posts'
 
     def get_path_params(self) -> Set[str]:
-        return {'feedId'}
+        return {'id'}
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}
@@ -97,10 +97,10 @@ class Update(ICommand):
         return HttpMethod.PATCH
 
     def get_url(self) -> str:
-        return '/feed/{feedId}'
+        return '/feed/{id}'
 
     def get_path_params(self) -> Set[str]:
-        return {'feedId'}
+        return {'id'}
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}
@@ -118,10 +118,10 @@ class Delete(ICommand):
         return HttpMethod.DELETE
 
     def get_url(self) -> str:
-        return '/feed/{feedId}'
+        return '/feed/{id}'
 
     def get_path_params(self) -> Set[str]:
-        return {'feedId'}
+        return {'id'}
 
     def get_headers(self) -> Set[str]:
         return {'Authorization'}
