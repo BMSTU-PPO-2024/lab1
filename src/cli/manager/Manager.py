@@ -16,7 +16,15 @@ class Manager:
         self._source = source
         self._printer = printer
 
+    def help(self):
+        print("Available commands:")
+        for command in self._commands.keys():
+            print(command)
+
     def execute(self, command_name: str) -> bool:
+        if command_name == 'help':
+            self.help()
+            return True
         command = self._commands.get(command_name)
         if command is None:
             print('Command not found')
