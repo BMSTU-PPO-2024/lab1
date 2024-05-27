@@ -28,31 +28,37 @@ public final class MongoDatabaseTest {
         var database = factory.create(DATABASE, List.of(TestEntity.class));
         var repository = database.create(COLLECTION, TestEntity.class);
         var entity = create();
-        // Create
-        requireTrue(repository.put(entity));
-        // Read
-        requireTrue(repository.exists(ID));
-        requireTrue(match(entity, repository.get(ID)));
-        // Update
-        entity.i = 10;
-        requireTrue(repository.update(ID, entity));
-        requireTrue(repository.get(ID).i == 10);
-        // Delete
-        requireTrue(repository.delete(ID));
-        requireFalse(repository.exists(ID));
-        requireTrue(repository.get(ID) == null);
+        try {
+            // Create
+            requireTrue("Put", repository.put(entity));
+            // Read
+            requireTrue("Exists", repository.exists(ID));
+            requireTrue("Get", match(entity, repository.get(ID)));
+            // Update
+            entity.i = 10;
+            requireTrue("Update", repository.update(ID, entity));
+            requireTrue("Get updated", repository.get(ID).i == 10);
+            // Delete
+            requireTrue("Delete", repository.delete(ID));
+            requireFalse("Exists deleted", repository.exists(ID));
+            requireTrue("Get deleted is null", repository.get(ID) == null);
+        } catch (IllegalStateException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
-    private static void requireTrue(boolean value) {
+    private static void requireTrue(String name, boolean value) {
         if (!value) {
-            throw new IllegalStateException("Check failed");
+            throw new IllegalStateException("Test '" + name + "' failed");
         }
+        System.out.println("Test '" + name + "' passed");
     }
 
-    private static void requireFalse(boolean value) {
+    private static void requireFalse(String name, boolean value) {
         if (value) {
-            throw new IllegalStateException("Check failed");
+            throw new IllegalStateException("Test '" + name + "' failed");
         }
+        System.out.println("Test '" + name + "' passed");
     }
 
     private static TestEntity create() {

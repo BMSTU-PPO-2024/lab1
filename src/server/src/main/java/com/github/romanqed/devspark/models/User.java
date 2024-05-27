@@ -3,7 +3,6 @@ package com.github.romanqed.devspark.models;
 import com.github.romanqed.devspark.database.Model;
 import com.github.romanqed.devspark.database.Repository;
 
-import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
