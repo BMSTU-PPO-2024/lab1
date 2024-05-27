@@ -32,8 +32,7 @@ dependencies {
     // Logger API
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.13'
     // Logger impl
-    compileOnly group: 'org.slf4j', name: 'slf4j-reload4j', version: '2.0.13'
-    runtimeOnly group: 'org.slf4j', name: 'slf4j-reload4j', version: '2.0.13'
+    implementation group: 'org.slf4j', name: 'slf4j-reload4j', version: '2.0.13'
     // Javalin
     implementation group: 'io.javalin', name: 'javalin', version: '6.1.4'
     // Mongo driver (sync)
@@ -48,6 +47,10 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+configurations.testImplementation {
+    exclude group: 'org.slf4j', module: 'slf4j-reload4j'
 }
 
 shadowJar {

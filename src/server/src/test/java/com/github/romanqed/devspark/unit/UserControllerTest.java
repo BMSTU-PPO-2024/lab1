@@ -36,6 +36,11 @@ public final class UserControllerTest {
         }
 
         @Override
+        public boolean exists(String id) {
+            return true;
+        }
+
+        @Override
         public User get(String key, List<String> fields) {
             return new User();
         }

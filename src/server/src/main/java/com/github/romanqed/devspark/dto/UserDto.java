@@ -25,7 +25,10 @@ public final class UserDto {
         ret.email = user.getEmail();
         ret.banned = user.isBanned();
         ret.about = user.getAbout();
-        ret.avatar = Exceptions.suppress(() -> new URL(user.getAvatar()));
+        var avatar = user.getAvatar();
+        if (avatar != null) {
+            ret.avatar = Exceptions.suppress(() -> new URL(user.getAvatar()));
+        }
         return ret;
     }
 
