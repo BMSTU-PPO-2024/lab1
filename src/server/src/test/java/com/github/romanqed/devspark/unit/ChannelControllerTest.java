@@ -123,12 +123,11 @@ public final class ChannelControllerTest {
             Channel channel;
 
             @Override
-            public boolean put(Channel model) {
+            public void put(Channel model) {
                 assertEquals("uid", model.getOwnerId());
                 assertEquals("channel", model.getName());
                 assertTrue(model.isVisible());
                 channel = model;
-                return true;
             }
         };
         var dto = new ChannelDto();
@@ -161,7 +160,7 @@ public final class ChannelControllerTest {
             Post post;
 
             @Override
-            public boolean put(Post model) {
+            public void put(Post model) {
                 assertEquals("uid", model.getOwnerId());
                 assertEquals("1", model.getChannelId());
                 assertEquals("title", model.getTitle());
@@ -169,7 +168,6 @@ public final class ChannelControllerTest {
                 assertEquals(Set.of("t1"), model.getTagIds());
                 assertTrue(model.isVisible());
                 post = model;
-                return true;
             }
         };
         var tags = new RepositoryMock<Tag>() {
@@ -210,12 +208,11 @@ public final class ChannelControllerTest {
             }
 
             @Override
-            public boolean update(String key, Channel model) {
+            public void update(String key, Channel model) {
                 assertEquals("1", key);
                 assertEquals("name", model.getName());
                 assertTrue(model.isVisible());
                 updated = true;
-                return true;
             }
         };
         var dto = new ChannelDto();
@@ -256,19 +253,17 @@ public final class ChannelControllerTest {
             }
 
             @Override
-            public long deleteAll(Iterable<String> keys) {
+            public void deleteAll(List<String> keys) {
                 deleted = true;
-                return 0;
             }
         };
         var comments = new RepositoryMock<Comment>() {
             boolean deleted = false;
 
             @Override
-            public boolean deleteAll(String field, Collection<?> values) {
+            public void deleteAll(String field, Collection<?> values) {
                 assertEquals("postId", field);
                 deleted = true;
-                return true;
             }
         };
         var controller = new ChannelController(PROVIDER_MOCK, USERS_MOCK, channels, posts, comments, null);

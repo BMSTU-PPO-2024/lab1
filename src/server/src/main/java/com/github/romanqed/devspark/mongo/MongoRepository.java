@@ -32,22 +32,24 @@ final class MongoRepository<V> implements Repository<V> {
     }
 
     @Override
-    public boolean put(V model) {
-        return collection.insertOne(model).wasAcknowledged();
-    }
-
-    @Override
-    public boolean update(String key, V model) {
-        return collection.replaceOne(eq("_id", key), model).getModifiedCount() == 1;
-    }
-
-    @Override
-    public long put(Iterable<V> entities) {
-        var ret = 0L;
-        for (var entity : entities) {
-            ret += put(entity) ? 1 : 0;
+    public void put(V model) {
+        if (!collection.insertOne(model).wasAcknowledged()) {
+            throw new IllegalStateException("Transaction was not acknowledged");
         }
-        return ret;
+    }
+
+    @Override
+    public void update(String key, V model) {
+        if (collection.replaceOne(eq("_id", key), model).getModifiedCount() != 1) {
+            throw new IllegalStateException("Transaction was not acknowledged");
+        }
+    }
+
+    @Override
+    public void put(List<V> entities) {
+        if (!collection.insertMany(entities).wasAcknowledged()) {
+            throw new IllegalStateException("Transaction was not acknowledged");
+        }
     }
 
     @Override
@@ -79,11 +81,6 @@ final class MongoRepository<V> implements Repository<V> {
     @Override
     public Iterable<V> getAll() {
         return collection.find();
-    }
-
-    @Override
-    public Iterable<V> getAll(Iterable<String> keys) {
-        return collection.find(Filters.in("_id", keys));
     }
 
     @Override
@@ -133,11 +130,6 @@ final class MongoRepository<V> implements Repository<V> {
     }
 
     @Override
-    public boolean delete(Iterable<String> keys) {
-        return collection.deleteOne(Filters.in("_id", keys)).getDeletedCount() == 1;
-    }
-
-    @Override
     public boolean delete(String field, Object value) {
         return collection.deleteOne(Filters.eq(field, value)).getDeletedCount() == 1;
     }
@@ -154,8 +146,10 @@ final class MongoRepository<V> implements Repository<V> {
     }
 
     @Override
-    public long deleteAll(Iterable<String> keys) {
-        return collection.deleteMany(Filters.in("_id", keys)).getDeletedCount();
+    public void deleteAll(List<String> keys) {
+        if (collection.deleteMany(Filters.in("_id", keys)).getDeletedCount() != keys.size()) {
+            throw new IllegalStateException("Transaction was not acknowledged");
+        }
     }
 
     @Override
@@ -164,8 +158,10 @@ final class MongoRepository<V> implements Repository<V> {
     }
 
     @Override
-    public boolean deleteAll(String field, Collection<?> values) {
-        return collection.deleteMany(Filters.in(field, values)).getDeletedCount() == values.size();
+    public void deleteAll(String field, Collection<?> values) {
+        if (collection.deleteMany(Filters.in(field, values)).getDeletedCount() == values.size()) {
+            throw new IllegalStateException("Transaction was not acknowledged");
+        }
     }
 
     // Batched

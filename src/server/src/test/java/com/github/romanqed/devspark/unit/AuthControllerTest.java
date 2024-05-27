@@ -143,9 +143,8 @@ public final class AuthControllerTest {
             User user;
 
             @Override
-            public boolean put(User model) {
+            public void put(User model) {
                 user = model;
-                return true;
             }
         };
         var provider = new JwtProviderMock<JwtUser>();

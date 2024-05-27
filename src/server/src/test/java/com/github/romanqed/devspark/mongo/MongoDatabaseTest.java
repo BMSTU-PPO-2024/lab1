@@ -30,13 +30,13 @@ public final class MongoDatabaseTest {
         var entity = create();
         try {
             // Create
-            requireTrue("Put", repository.put(entity));
+            requireNoExcept("Put", () -> repository.put(entity));
             // Read
             requireTrue("Exists", repository.exists(ID));
             requireTrue("Get", match(entity, repository.get(ID)));
             // Update
             entity.i = 10;
-            requireTrue("Update", repository.update(ID, entity));
+            requireNoExcept("Update", () -> repository.update(ID, entity));
             requireTrue("Get updated", repository.get(ID).i == 10);
             // Delete
             requireTrue("Delete", repository.delete(ID));
@@ -44,6 +44,15 @@ public final class MongoDatabaseTest {
             requireTrue("Get deleted is null", repository.get(ID) == null);
         } catch (IllegalStateException e) {
             System.err.println(e.getMessage());
+        }
+    }
+
+    private static void requireNoExcept(String name, Runnable runnable) {
+        try {
+            runnable.run();
+            System.out.println("Test '" + name + "' passed");
+        } catch (Throwable e) {
+            throw new IllegalStateException("Test '" + name + "' failed", e);
         }
     }
 

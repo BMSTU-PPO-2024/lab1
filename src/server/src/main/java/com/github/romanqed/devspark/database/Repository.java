@@ -7,19 +7,17 @@ import java.util.regex.Pattern;
 
 public interface Repository<V> {
 
-    boolean put(V model);
+    void put(V model);
 
-    long put(Iterable<V> entities);
+    void put(List<V> entities);
 
-    boolean update(String key, V model);
+    void update(String key, V model);
 
     V get(String key);
 
     V get(String key, List<String> fields);
 
     boolean delete(String key);
-
-    boolean delete(Iterable<String> keys);
 
     boolean delete(String field, Object value);
 
@@ -30,8 +28,6 @@ public interface Repository<V> {
     Iterable<V> getAll();
 
     Iterable<V> getAll(Pagination pagination);
-
-    Iterable<V> getAll(Iterable<String> keys);
 
     Iterable<V> getAll(Iterable<String> keys, Pagination pagination);
 
@@ -72,9 +68,9 @@ public interface Repository<V> {
 
     boolean exists(Map<String, Object> fields);
 
-    long deleteAll(Iterable<String> keys);
+    void deleteAll(List<String> keys);
 
     long deleteAll(String field, Object value);
 
-    boolean deleteAll(String field, Collection<?> values);
+    void deleteAll(String field, Collection<?> values);
 }

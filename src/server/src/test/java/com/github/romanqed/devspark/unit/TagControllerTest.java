@@ -142,9 +142,8 @@ public final class TagControllerTest {
             Tag tag;
 
             @Override
-            public boolean put(Tag model) {
+            public void put(Tag model) {
                 tag = model;
-                return true;
             }
         };
         var controller = new TagController(PROVIDER_MOCK, USERS_MOCK, tags);
@@ -204,9 +203,8 @@ public final class TagControllerTest {
             }
 
             @Override
-            public boolean update(String key, Tag model) {
+            public void update(String key, Tag model) {
                 tag = model;
-                return true;
             }
         };
         var controller = new TagController(PROVIDER_MOCK, USERS_MOCK, tags);

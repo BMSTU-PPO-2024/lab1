@@ -146,9 +146,8 @@ public final class CommentControllerTest {
             }
 
             @Override
-            public boolean update(String key, Comment model) {
+            public void update(String key, Comment model) {
                 comment = model;
-                return true;
             }
         };
         var controller = new CommentController(PROVIDER_MOCK, USERS_MOCK, comments);

@@ -108,13 +108,12 @@ public final class UserControllerTest {
             }
 
             @Override
-            public boolean update(String key, User model) {
+            public void update(String key, User model) {
                 assertEquals("nick", model.getNickname());
                 assertEquals("psd", model.getPassword());
                 assertEquals("abt", model.getAbout());
                 assertEquals("https://ya.ru", model.getAvatar().toString());
                 updated = true;
-                return true;
             }
         };
         testUpdate(users, UserController::updateSelf, Map.of());
@@ -143,14 +142,13 @@ public final class UserControllerTest {
             }
 
             @Override
-            public boolean update(String key, User model) {
+            public void update(String key, User model) {
                 assertEquals("uid", key);
                 assertEquals("nick", model.getNickname());
                 assertEquals("psd", model.getPassword());
                 assertEquals("abt", model.getAbout());
-                assertEquals("https://ya.ru", model.getAvatar().toString());
+                assertEquals("https://ya.ru", model.getAvatar());
                 updated = true;
-                return true;
             }
         };
         testUpdate(users, UserController::update, Map.of("userId", "uid"));

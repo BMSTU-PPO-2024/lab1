@@ -110,12 +110,11 @@ public final class PostControllerTest {
             Comment comment;
 
             @Override
-            public boolean put(Comment model) {
+            public void put(Comment model) {
                 assertEquals("1", model.getPostId());
                 assertEquals("text", model.getText());
                 assertEquals("uid", model.getOwnerId());
                 comment = model;
-                return true;
             }
         };
         var dto = new TextDto();
@@ -146,14 +145,13 @@ public final class PostControllerTest {
             }
 
             @Override
-            public boolean update(String key, Post model) {
+            public void update(String key, Post model) {
                 updated = true;
                 assertEquals("1", key);
                 assertEquals("title", model.getTitle());
                 assertEquals("text", model.getText());
                 assertFalse(model.isVisible());
                 assertEquals(Set.of("t1"), model.getTagIds());
-                return true;
             }
         };
         var tags = new RepositoryMock<Tag>() {

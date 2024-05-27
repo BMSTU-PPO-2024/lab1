@@ -139,13 +139,12 @@ public final class FeedControllerTest {
         dto.setTagIds(Set.of("t1"));
         var feeds = new RepositoryMock<Feed>() {
             @Override
-            public boolean put(Feed model) {
+            public void put(Feed model) {
                 assertEquals("uid", model.getOwnerId());
                 assertEquals("feed", model.getName());
                 assertTrue(model.isVisible());
                 assertEquals(Set.of("c1"), model.getChannelIds());
                 assertEquals(Set.of("t1"), model.getTagIds());
-                return true;
             }
         };
         var controller = new FeedController(PROVIDER_MOCK, USERS_MOCK, feeds, null, CHANNELS_MOCK, TAGS_MOCK);
@@ -179,14 +178,13 @@ public final class FeedControllerTest {
             }
 
             @Override
-            public boolean update(String key, Feed model) {
+            public void update(String key, Feed model) {
                 assertEquals("1", key);
                 assertEquals("feed", model.getName());
                 assertTrue(model.isVisible());
                 assertEquals(Set.of("c1"), model.getChannelIds());
                 assertEquals(Set.of("t1"), model.getTagIds());
                 updated = true;
-                return true;
             }
         };
         var controller = new FeedController(PROVIDER_MOCK, USERS_MOCK, feeds, null, CHANNELS_MOCK, TAGS_MOCK);
