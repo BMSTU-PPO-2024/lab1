@@ -28,23 +28,19 @@ public final class MongoDatabaseTest {
         var database = factory.create(DATABASE, List.of(TestEntity.class));
         var repository = database.create(COLLECTION, TestEntity.class);
         var entity = create();
-        try {
-            // Create
-            requireNoExcept("Put", () -> repository.put(entity));
-            // Read
-            requireTrue("Exists", repository.exists(ID));
-            requireTrue("Get", match(entity, repository.get(ID)));
-            // Update
-            entity.i = 10;
-            requireNoExcept("Update", () -> repository.update(ID, entity));
-            requireTrue("Get updated", repository.get(ID).i == 10);
-            // Delete
-            requireTrue("Delete", repository.delete(ID));
-            requireFalse("Exists deleted", repository.exists(ID));
-            requireTrue("Get deleted is null", repository.get(ID) == null);
-        } catch (IllegalStateException e) {
-            System.err.println(e.getMessage());
-        }
+        // Create
+        requireNoExcept("Put", () -> repository.put(entity));
+        // Read
+        requireTrue("Exists", repository.exists(ID));
+        requireTrue("Get", match(entity, repository.get(ID)));
+        // Update
+        entity.i = 10;
+        requireNoExcept("Update", () -> repository.update(ID, entity));
+        requireTrue("Get updated", repository.get(ID).i == 10);
+        // Delete
+        requireTrue("Delete", repository.delete(ID));
+        requireFalse("Exists deleted", repository.exists(ID));
+        requireTrue("Get deleted is null", repository.get(ID) == null);
     }
 
     private static void requireNoExcept(String name, Runnable runnable) {
@@ -52,20 +48,23 @@ public final class MongoDatabaseTest {
             runnable.run();
             System.out.println("Test '" + name + "' passed");
         } catch (Throwable e) {
-            throw new IllegalStateException("Test '" + name + "' failed", e);
+            System.err.println("Test '" + name + "' failed");
+            System.exit(1);
         }
     }
 
     private static void requireTrue(String name, boolean value) {
         if (!value) {
-            throw new IllegalStateException("Test '" + name + "' failed");
+            System.err.println("Test '" + name + "' failed");
+            System.exit(1);
         }
         System.out.println("Test '" + name + "' passed");
     }
 
     private static void requireFalse(String name, boolean value) {
         if (value) {
-            throw new IllegalStateException("Test '" + name + "' failed");
+            System.err.println("Test '" + name + "' failed");
+            System.exit(1);
         }
         System.out.println("Test '" + name + "' passed");
     }
