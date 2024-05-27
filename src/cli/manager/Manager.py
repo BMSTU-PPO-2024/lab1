@@ -28,7 +28,7 @@ class Manager:
             print('Unknown command')
             return
         print('Command: ' + command.get_name())
-        print('Method: ' + str(command.get_method()))
+        print('Method: ' + command.get_method().name)
         print('Url: ' + command.get_url())
         print('Headers: ' + str(list(command.get_headers())))
         print('Path parameters: ' + str(list(command.get_path_params())))
