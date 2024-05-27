@@ -46,9 +46,10 @@ def build(builder: ManagerBuilder, token, args) -> Manager:
 
     # Set source
     def source(name):
-        if name == 'Authorization':
+        ret = args.get(name)
+        if ret is None and name == 'Authorization':
             return token
-        return args.get(name)
+        return ret
 
     builder.set_source(source)
 
