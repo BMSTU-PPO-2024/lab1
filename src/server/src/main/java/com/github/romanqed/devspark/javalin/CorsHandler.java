@@ -10,5 +10,6 @@ final class CorsHandler implements Handler {
     @Override
     public void handle(@NotNull Context ctx) {
         ctx.header(Header.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+        ctx.header(Header.ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT, PATCH, DELETE, OPTIONS");
     }
 }

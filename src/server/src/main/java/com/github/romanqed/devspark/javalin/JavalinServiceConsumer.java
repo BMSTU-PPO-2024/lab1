@@ -7,6 +7,7 @@ import io.github.amayaframework.di.ServiceProvider;
 import io.github.amayaframework.di.ServiceProviderBuilder;
 import io.javalin.Javalin;
 import io.javalin.json.JsonMapper;
+import io.javalin.plugin.bundled.CorsPluginConfig;
 import org.atteo.classindex.ClassIndex;
 
 import java.io.File;
@@ -30,7 +31,12 @@ public final class JavalinServiceConsumer implements ServiceProviderConsumer {
         Objects.requireNonNull(config.getLogin());
         Objects.requireNonNull(config.getPassword());
         builder.addService(ServerConfig.class, () -> config);
-        var javalin = Javalin.create();
+        var javalin = Javalin.create(e ->
+                e.bundledPlugins.enableCors(cors ->
+                        cors.addRule(CorsPluginConfig.CorsRule::anyHost
+                        )
+                )
+        );
         javalin.after(new CorsHandler());
         builder.addService(Javalin.class, () -> javalin);
         classes = ClassIndex.getAnnotated(JavalinController.class);
