@@ -15,6 +15,8 @@ import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
 
 import java.util.Date;
+import java.util.Objects;
+import java.util.Set;
 
 @JavalinController("/channel")
 public final class ChannelController extends AuthBase {
@@ -130,8 +132,8 @@ public final class ChannelController extends AuthBase {
             return;
         }
         var post = Post.of(user.getId(), channel.getId(), dto.getTitle(), dto.getText());
-        var ids = dto.getTagIds();
-        if (!tags.exists(ids)) {
+        var ids = Objects.requireNonNullElse(dto.getTagIds(), Set.<String>of());
+        if (!ids.isEmpty() && !tags.exists(ids)) {
             ctx.status(HttpStatus.NOT_FOUND);
             ctx.json(new Response("Invalid tag ids"));
             return;

@@ -159,7 +159,7 @@ final class MongoRepository<V> implements Repository<V> {
 
     @Override
     public void deleteAll(String field, Collection<?> values) {
-        if (collection.deleteMany(Filters.in(field, values)).getDeletedCount() == values.size()) {
+        if (collection.deleteMany(Filters.in(field, values)).getDeletedCount() != values.size()) {
             throw new IllegalStateException("Transaction was not acknowledged");
         }
     }
