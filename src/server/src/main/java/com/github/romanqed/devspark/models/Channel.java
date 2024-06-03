@@ -131,4 +131,16 @@ public final class Channel extends Owned implements Visible, Identified {
         }
         return asList(posts.findMatchedWithFields("title", pattern, fields, pagination));
     }
+
+    @Override
+    public String toString() {
+        return "Channel{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", visible=" + visible +
+                ", created=" + created +
+                ", updated=" + updated +
+                ", ownerId='" + ownerId + '\'' +
+                '}';
+    }
 }

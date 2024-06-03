@@ -164,4 +164,20 @@ public final class Post extends Owned implements Rated, Visible, Identified {
     public boolean unrate(User user) {
         return this.scores.remove(user.getId()) != null;
     }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", text='" + text + '\'' +
+                ", channelId='" + channelId + '\'' +
+                ", tagIds=" + tagIds +
+                ", visible=" + visible +
+                ", scores=" + scores +
+                ", created=" + created +
+                ", updated=" + updated +
+                ", ownerId='" + ownerId + '\'' +
+                '}';
+    }
 }
