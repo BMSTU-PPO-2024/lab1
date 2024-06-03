@@ -102,6 +102,7 @@ public final class ChannelController extends AuthBase {
         }
         channels.put(channel);
         ctx.json(channel);
+        logger.debug("Channel {} added", channel.getId());
     }
 
     private Channel accessChannel(Context ctx, User user) {
@@ -143,6 +144,7 @@ public final class ChannelController extends AuthBase {
         post.setVisible(visible == null ? channel.isVisible() : visible);
         posts.put(post);
         ctx.json(post);
+        logger.debug("Post {} published at {}", post.getId(), channel.getId());
     }
 
     @Route(method = HandlerType.PATCH, route = "/{channelId}")
@@ -175,6 +177,7 @@ public final class ChannelController extends AuthBase {
         }
         channel.setUpdated(new Date());
         channels.update(channel.getId(), channel);
+        logger.debug("Channel {} updated", channel.getId());
     }
 
     private void deleteChannel(Context ctx, String id) {
@@ -183,6 +186,7 @@ public final class ChannelController extends AuthBase {
             return;
         }
         ctx.status(HttpStatus.OK);
+        logger.debug("Channel {} deleted by privileged user", id);
     }
 
     @Route(method = HandlerType.DELETE, route = "/{channelId}")
@@ -201,5 +205,6 @@ public final class ChannelController extends AuthBase {
             return;
         }
         ctx.status(HttpStatus.OK);
+        logger.debug("Channel {} deleted", id);
     }
 }

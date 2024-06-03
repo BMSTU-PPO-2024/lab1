@@ -7,18 +7,29 @@ import com.github.romanqed.devspark.jwt.JwtProvider;
 import com.github.romanqed.devspark.jwt.JwtUser;
 import com.github.romanqed.devspark.models.Permissions;
 import com.github.romanqed.devspark.models.User;
+import io.github.amayaframework.di.Inject;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import javalinjwt.JavalinJWT;
 import kotlin.jvm.functions.Function2;
+import org.slf4j.Logger;
+import org.slf4j.helpers.NOPLogger;
 
 public class AuthBase {
     protected final JwtProvider<JwtUser> provider;
     protected final Repository<User> users;
+    protected Logger logger;
 
     protected AuthBase(JwtProvider<JwtUser> provider, Repository<User> users) {
         this.provider = provider;
         this.users = users;
+        this.logger = new NOPLogger() {
+        };
+    }
+
+    @Inject
+    public void setLogger(Logger logger) {
+        this.logger = logger;
     }
 
     protected DecodedJWT auth(Context ctx) {
@@ -26,6 +37,7 @@ public class AuthBase {
         if (decoded.isEmpty()) {
             ctx.status(HttpStatus.UNAUTHORIZED);
             ctx.json(new Response("Missing or invalid token"));
+            logger.debug("Auth failed due to invalid token");
             return null;
         }
         return decoded.get();
@@ -67,11 +79,13 @@ public class AuthBase {
         if (ret == null) {
             ctx.status(HttpStatus.UNAUTHORIZED);
             ctx.json(new Response("User not found"));
+            logger.debug("User {} not found", id);
             return null;
         }
         if (ret.isBanned()) {
             ctx.status(HttpStatus.FORBIDDEN);
             ctx.json(new Response("User banned"));
+            logger.debug("User {} banned", ret.getId());
             return null;
         }
         return ret;
@@ -85,6 +99,7 @@ public class AuthBase {
         if (!user.hasPermission(permission)) {
             ctx.status(HttpStatus.FORBIDDEN);
             ctx.json(new Response("User has no permission"));
+            logger.debug("Permission {} invalid for user {}", permission, user);
             return false;
         }
         return true;

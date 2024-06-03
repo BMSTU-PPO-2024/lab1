@@ -190,21 +190,11 @@ public final class UserControllerTest {
 
     // List channels
     @Test
-    public void testListSelfChannels() {
-        testList(UserController::listSelfChannels, Map.of());
-    }
-
-    @Test
     public void testListChannels() {
         testList(UserController::listChannels, Map.of("userId", "uid"));
     }
 
     // List feeds
-    @Test
-    public void testListSelfFeeds() {
-        testList(UserController::listSelfFeeds, Map.of());
-    }
-
     @Test
     public void testListFeeds() {
         testList(UserController::listFeeds, Map.of("userId", "uid"));

@@ -61,6 +61,7 @@ public final class TagController extends AuthBase {
         var tag = Tag.of(name);
         tags.put(tag);
         ctx.json(tag);
+        logger.debug("Tag {} created", tag.getId());
     }
 
     @Route(method = HandlerType.PATCH, route = "/{tagId}")
@@ -80,6 +81,7 @@ public final class TagController extends AuthBase {
         tag.setName(dto.getName());
         tag.setUpdated(new Date());
         tags.update(tag.getId(), tag);
+        logger.debug("Tag {} updated", tag.getId());
     }
 
     @Route(method = HandlerType.DELETE, route = "/{tagId}")
@@ -92,5 +94,6 @@ public final class TagController extends AuthBase {
             return;
         }
         ctx.status(HttpStatus.OK);
+        logger.debug("Tag {} deleted", ctx.pathParam("tagId"));
     }
 }

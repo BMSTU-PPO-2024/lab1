@@ -58,6 +58,7 @@ public final class CommentController extends AuthBase {
         comment.setText(dto.getText());
         comment.setUpdated(new Date());
         comments.update(comment.getId(), comment);
+        logger.debug("Comment {} updated", comment.getId());
     }
 
     private void deleteComment(Context ctx, String id) {
@@ -66,6 +67,7 @@ public final class CommentController extends AuthBase {
             return;
         }
         ctx.status(HttpStatus.OK);
+        logger.debug("Comment {} deleted by privileged user", id);
     }
 
     @Route(method = HandlerType.DELETE, route = "/{commentId}")
@@ -84,6 +86,7 @@ public final class CommentController extends AuthBase {
             return;
         }
         ctx.status(HttpStatus.OK);
+        logger.debug("Comment {} deleted", id);
     }
 
     private void doRate(Context ctx, Consumer4<Context, User, Comment, Repository<Comment>> consumer) {
@@ -103,10 +106,12 @@ public final class CommentController extends AuthBase {
     @Route(method = HandlerType.PUT, route = "/{commentId}/rate")
     public void addRate(Context ctx) {
         doRate(ctx, Util::rate);
+        logger.debug("Comment {} rated", ctx.pathParam("commentId"));
     }
 
     @Route(method = HandlerType.DELETE, route = "/{commentId}/rate")
     public void deleteRate(Context ctx) {
         doRate(ctx, Util::unrate);
+        logger.debug("Comment {} unrated", ctx.pathParam("commentId"));
     }
 }

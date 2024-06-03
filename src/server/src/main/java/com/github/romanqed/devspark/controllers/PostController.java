@@ -74,6 +74,7 @@ public final class PostController extends AuthBase {
         var comment = Comment.of(user.getId(), post.getId(), dto.getText());
         comments.put(comment);
         ctx.json(comment);
+        logger.debug("Comment {} published at post {}", comment.getId(), post.getId());
     }
 
     private boolean updatePost(Context ctx, PostDto dto, Post post) {
@@ -137,6 +138,7 @@ public final class PostController extends AuthBase {
         }
         post.setUpdated(new Date());
         posts.update(post.getId(), post);
+        logger.debug("Post {} updated", post.getId());
     }
 
     private void deletePost(Context ctx, String id) {
@@ -145,6 +147,7 @@ public final class PostController extends AuthBase {
             return;
         }
         ctx.status(HttpStatus.OK);
+        logger.debug("Post {} deleted by privileged user", id);
     }
 
     @Route(method = HandlerType.DELETE, route = "/{postId}")
@@ -163,6 +166,7 @@ public final class PostController extends AuthBase {
             return;
         }
         ctx.status(HttpStatus.OK);
+        logger.debug("Post {} deleted", id);
     }
 
     @Route(method = HandlerType.PUT, route = "/{postId}/rate")
@@ -176,6 +180,7 @@ public final class PostController extends AuthBase {
             return;
         }
         Util.rate(ctx, user, post, posts);
+        logger.debug("Post {} rated", post.getId());
     }
 
     @Route(method = HandlerType.DELETE, route = "/{postId}/rate")
@@ -189,5 +194,6 @@ public final class PostController extends AuthBase {
             return;
         }
         Util.unrate(ctx, user, post, posts);
+        logger.debug("Post {} unrated", post.getId());
     }
 }
