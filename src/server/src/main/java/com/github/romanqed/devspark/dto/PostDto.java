@@ -48,8 +48,5 @@ public final class PostDto implements Validated {
         if (text == null) {
             throw new ValidateException("Text is null");
         }
-        if (tagIds == null) {
-            throw new ValidateException("Tag set is null");
-        }
     }
 }

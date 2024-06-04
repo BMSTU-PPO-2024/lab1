@@ -83,6 +83,7 @@ public final class FeedController extends AuthBase {
         }
         feeds.put(feed);
         ctx.json(feed);
+        logger.debug("Feed {} created", feed.getId());
     }
 
     private Integer updateIds(Context ctx, FeedDto dto, Feed feed) {
@@ -152,6 +153,7 @@ public final class FeedController extends AuthBase {
         }
         feed.setUpdated(new Date());
         feeds.update(feed.getId(), feed);
+        logger.debug("Feed {} updated", feed.getId());
     }
 
     private void deleteFeed(Context ctx, String id) {
@@ -160,6 +162,7 @@ public final class FeedController extends AuthBase {
             return;
         }
         ctx.status(HttpStatus.OK);
+        logger.debug("Feed {} deleted by privileged user", id);
     }
 
     @Route(method = HandlerType.DELETE, route = "/{feedId}")
@@ -178,5 +181,6 @@ public final class FeedController extends AuthBase {
             return;
         }
         ctx.status(HttpStatus.OK);
+        logger.debug("Feed {} deleted", id);
     }
 }

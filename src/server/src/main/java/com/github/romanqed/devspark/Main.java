@@ -3,6 +3,7 @@ package com.github.romanqed.devspark;
 import com.github.romanqed.devspark.database.Repository;
 import com.github.romanqed.devspark.di.ScanProviderDirector;
 import com.github.romanqed.devspark.hash.Encoder;
+import com.github.romanqed.devspark.javalin.CliManager;
 import com.github.romanqed.devspark.javalin.ServerConfig;
 import com.github.romanqed.devspark.models.User;
 import com.github.romanqed.jtype.Types;
@@ -54,6 +55,11 @@ public final class Main {
             javalin.stop();
             mongo.close();
         }));
+        // Start cli
+        var manager = provider.instantiate(CliManager.class);
+        if (manager != null) {
+            manager.handle(System.in);
+        }
     }
 
     private static Javalin startJavalin(ServiceProvider provider, Logger logger) {

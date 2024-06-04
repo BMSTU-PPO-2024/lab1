@@ -106,6 +106,7 @@ public final class UserController extends AuthBase {
         }
         user.setUpdated(new Date());
         users.update(user.getId(), user);
+        logger.debug("User {} self-updated", user.getId());
     }
 
     @Route(method = HandlerType.PATCH, route = "/{userId}")
@@ -141,6 +142,7 @@ public final class UserController extends AuthBase {
         }
         user.setUpdated(new Date());
         users.update(user.getId(), user);
+        logger.debug("User {} updated", user.getId());
     }
 
     private void list(Context ctx, Repository<?> repository, String userId, boolean all, Pagination pagination) {
@@ -157,18 +159,6 @@ public final class UserController extends AuthBase {
         var name = ctx.queryParam("name");
         var found = ModelUtil.findByUserId(repository, userId, name, all, pagination);
         ctx.json(found);
-    }
-
-    private void listSelf(Context ctx, Repository<?> repository) {
-        var pagination = DtoUtil.parsePagination(ctx);
-        if (pagination == null) {
-            return;
-        }
-        var user = getCheckedUser(ctx);
-        if (user == null) {
-            return;
-        }
-        list(ctx, repository, user.getId(), true, pagination);
     }
 
     private void listUser(Context ctx, Repository<?> repository) {
@@ -189,21 +179,9 @@ public final class UserController extends AuthBase {
         list(ctx, repository, id, all, pagination);
     }
 
-    // List channels
-    @Route(method = HandlerType.GET, route = "/channels")
-    public void listSelfChannels(Context ctx) {
-        listSelf(ctx, channels);
-    }
-
     @Route(method = HandlerType.GET, route = "/{userId}/channels")
     public void listChannels(Context ctx) {
         listUser(ctx, channels);
-    }
-
-    // List feeds
-    @Route(method = HandlerType.GET, route = "/feeds")
-    public void listSelfFeeds(Context ctx) {
-        listSelf(ctx, feeds);
     }
 
     @Route(method = HandlerType.GET, route = "/{userId}/feeds")

@@ -5,6 +5,7 @@ public final class ServerConfig {
     private int port;
     private String login;
     private String password;
+    private boolean enableCli;
 
     public String getHost() {
         return host;
@@ -36,5 +37,13 @@ public final class ServerConfig {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isEnableCli() {
+        return enableCli;
+    }
+
+    public void setEnableCli(boolean enableCli) {
+        this.enableCli = enableCli;
     }
 }
