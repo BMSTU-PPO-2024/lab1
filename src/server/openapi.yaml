@@ -19,7 +19,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
           content:
             application/json:
               schema:
@@ -77,7 +77,7 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
         "404":
           description: Не найдено
         "403":
@@ -99,7 +99,24 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scores:
+                    type: string
+                  created:
+                    type: string
+                  id:
+                    type: string
+                  postId:
+                    type: string
+                  text:
+                    type: string
+                  updated:
+                    type: string
         "404":
           description: Не найдено
         "403":
@@ -118,7 +135,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
         "404":
           description: Не найдено
         "403":
@@ -147,7 +164,7 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
         "404":
           description: Не найдено
         "403":
@@ -167,7 +184,32 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visible:
+                    type: string
+                  scores:
+                    type: string
+                  created:
+                    type: string
+                  tagIds:
+                    type: array
+                    items:
+                      type: string
+                  id:
+                    type: string
+                  text:
+                    type: string
+                  title:
+                    type: string
+                  updated:
+                    type: string
+                  channelId:
+                    type: string
         "404":
           description: Не найдено
         "403":
@@ -186,7 +228,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
     patch:
       summary: Частичное обновление полей поста по id
       tags:
@@ -218,7 +260,7 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
         "400":
           description: Передан пустой объект для апдейта
   /login:
@@ -241,7 +283,7 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
         "404":
           description: Пользователь не найден
         "403":
@@ -275,7 +317,31 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    visible:
+                      type: string
+                    scores:
+                      type: string
+                    created:
+                      type: string
+                    tagIds:
+                      type: array
+                    id:
+                      type: string
+                    text:
+                      type: string
+                    title:
+                      type: string
+                    updated:
+                      type: string
+                    channelId:
+                      type: string
         "404":
           description: Не найдено
         "403":
@@ -295,7 +361,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
         "404":
           description: Не найдено
         "403":
@@ -314,7 +380,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
   /users/{userId}/feeds:
     get:
       summary: Получение лент пользователя
@@ -353,7 +419,27 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    visible:
+                      type: string
+                    created:
+                      type: string
+                    tagIds:
+                      type: array
+                    name:
+                      type: string
+                    id:
+                      type: string
+                    channelIds:
+                      type: array
+                    updated:
+                      type: string
         "404":
           description: Не найдено
         "403":
@@ -385,7 +471,25 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    scores:
+                      type: string
+                    created:
+                      type: string
+                    id:
+                      type: string
+                    postId:
+                      type: string
+                    text:
+                      type: string
+                    updated:
+                      type: string
         "404":
           description: Не найдено
         "403":
@@ -405,7 +509,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
         "404":
           description: Не найдено
         "403":
@@ -424,7 +528,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
         "404":
           description: Не найдено
         "403":
@@ -444,7 +548,30 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visible:
+                    type: string
+                  created:
+                    type: string
+                  tagIds:
+                    type: array
+                    items:
+                      type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  channelIds:
+                    type: array
+                    items:
+                      type: string
+                  updated:
+                    type: string
         "404":
           description: Не найдено
         "403":
@@ -463,7 +590,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
         "404":
           description: Не найдено
         "403":
@@ -502,7 +629,30 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visible:
+                    type: string
+                  created:
+                    type: string
+                  tagIds:
+                    type: array
+                    items:
+                      type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  channelIds:
+                    type: array
+                    items:
+                      type: string
+                  updated:
+                    type: string
         "404":
           description: Не найдено
         "403":
@@ -541,7 +691,27 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    visible:
+                      type: string
+                    created:
+                      type: string
+                    tagIds:
+                      type: array
+                    name:
+                      type: string
+                    id:
+                      type: string
+                    channelIds:
+                      type: array
+                    updated:
+                      type: string
     post:
       summary: Создать ленту
       tags:
@@ -569,7 +739,31 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visible:
+                    type: string
+                  created:
+                    type: string
+                  tagIds:
+                    type: array
+                    items:
+                      type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  channelIds:
+                    type: array
+                    items:
+                      type: string
+                  updated:
+                    type: string
+
         "400":
           description: Какие то из каналов ленты скрыты
   /channels/{channelId}/post:
@@ -604,7 +798,33 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visible:
+                    type: string
+                  scores:
+                    type: string
+                  created:
+                    type: string
+                  tagIds:
+                    type: array
+                    items:
+                      type: string
+                  id:
+                    type: string
+                  text:
+                    type: string
+                  title:
+                    type: string
+                  updated:
+                    type: string
+                  channelId:
+                    type: string
+
         "404":
           description: Не найдено
         "403":
@@ -624,7 +844,20 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  created:
+                    type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  updated:
+                    type: string
         "404":
           description: Не найдено
         "403":
@@ -643,7 +876,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
         "404":
           description: Не найдено
         "403":
@@ -672,7 +905,20 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  created:
+                    type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  updated:
+                    type: string
         "404":
           description: Не найдено
         "403":
@@ -716,7 +962,31 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    visible:
+                      type: string
+                    scores:
+                      type: string
+                    created:
+                      type: string
+                    tagIds:
+                      type: array
+                    id:
+                      type: string
+                    text:
+                      type: string
+                    title:
+                      type: string
+                    updated:
+                      type: string
+                    channelId:
+                      type: string
         "404":
           description: Не найдено
         "403":
@@ -754,7 +1024,23 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    visible:
+                      type: string
+                    created:
+                      type: string
+                    name:
+                      type: string
+                    id:
+                      type: string
+                    updated:
+                      type: string
     post:
       summary: Создать канал
       tags:
@@ -774,7 +1060,22 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visible:
+                    type: string
+                  created:
+                    type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  updated:
+                    type: string
   /posts/{postId}/comment:
     post:
       summary: Создать комментарий к посту
@@ -799,7 +1100,24 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scores:
+                    type: string
+                  created:
+                    type: string
+                  id:
+                    type: string
+                  postId:
+                    type: string
+                  text:
+                    type: string
+                  updated:
+                    type: string
         "404":
           description: Не найдено
         "403":
@@ -813,7 +1131,30 @@ paths:
       parameters: []
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  permissions:
+                    type: integer
+                  created:
+                    type: string
+                  nickname:
+                    type: string
+                  about:
+                    type: string
+                  id:
+                    type: string
+                  banned:
+                    type: boolean
+                  avatar:
+                    type: string
+                  updated:
+                    type: string
+                  email:
+                    type: string
     patch:
       summary: Частичное обновление информации о себе
       tags:
@@ -837,7 +1178,30 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  permissions:
+                    type: integer
+                  created:
+                    type: string
+                  nickname:
+                    type: string
+                  about:
+                    type: string
+                  id:
+                    type: string
+                  banned:
+                    type: boolean
+                  avatar:
+                    type: string
+                  updated:
+                    type: string
+                  email:
+                    type: string
         "400":
           description: Передан пустой объект для апдейта
   /tags:
@@ -872,7 +1236,21 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    created:
+                      type: string
+                    name:
+                      type: string
+                    id:
+                      type: string
+                    updated:
+                      type: string
     post:
       summary: Создание тега
       tags:
@@ -890,7 +1268,20 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  created:
+                    type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  updated:
+                    type: string
         "409":
           description: Тег с таким именем уже существуе
   /users/{userId}/channels:
@@ -931,7 +1322,23 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    visible:
+                      type: string
+                    created:
+                      type: string
+                    name:
+                      type: string
+                    id:
+                      type: string
+                    updated:
+                      type: string
         "404":
           description: Не найдено
         "403":
@@ -957,7 +1364,7 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
         "409":
           description: Пользователь с таким email уже существует
   /channels/{channelId}:
@@ -974,7 +1381,22 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visible:
+                    type: string
+                  created:
+                    type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  updated:
+                    type: string
         "404":
           description: Не найдено
         "403":
@@ -992,7 +1414,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
         "404":
           description: Не найдено
         "403":
@@ -1022,7 +1444,23 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visible:
+                    type: string
+                  created:
+                    type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  updated:
+                    type: string
+
         "404":
           description: Не найдено
         "403":
