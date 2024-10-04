@@ -43,6 +43,11 @@ paths:
                     type: string
                   email:
                     type: string
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     patch:
       summary: Частичное обновление полей пользователя
       tags:
@@ -73,6 +78,13 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+        "400":
+          description: Передан пустой объект для апдейта
+
   /comments/{commentId}:
     get:
       summary: Получение комментария по id
@@ -88,6 +100,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     delete:
       summary: Удаление комментария по id
       tags:
@@ -102,6 +119,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     patch:
       summary: Частичное обновление полей комментария
       tags:
@@ -126,6 +148,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /posts/{postId}:
     get:
       summary: Получение поста по id
@@ -141,6 +168,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     delete:
       summary: Удаление поста по id
       tags:
@@ -187,6 +219,8 @@ paths:
       responses:
         "200":
           description: Success
+        "400":
+          description: Передан пустой объект для апдейта
   /login:
     post:
       summary: Логин
@@ -208,6 +242,13 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Пользователь не найден
+        "403":
+          description: Пользователь забанен
+        "401":
+          description: Пользователь не авторизован
+
   /feeds/{feedId}/posts:
     get:
       summary: Получение постов в ленте
@@ -235,6 +276,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /comments/{commentId}/rate:
     post:
       summary: Лайкнуть комментарий
@@ -250,6 +296,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     delete:
       summary: Убрать лайк у комментария
       tags:
@@ -303,6 +354,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /posts/{postId}/comments:
     get:
       summary: Получение комментариев к посту
@@ -330,6 +386,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /posts/{postId}/rate:
     post:
       summary: Лайкнуть пост
@@ -345,6 +406,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     delete:
       summary: Убрать лайк с поста
       tags:
@@ -359,6 +425,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /feeds/{feedId}:
     get:
       summary: Получить ленту по id
@@ -374,6 +445,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     delete:
       summary: Удалить ленту по id
       tags:
@@ -388,6 +464,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     patch:
       summary: Обновить ленту по id
       tags:
@@ -422,6 +503,12 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+        "400":
+          description: Какие то из каналов ленты скрыты
   /feeds:
     get:
       summary: Поиск по лентам
@@ -483,6 +570,8 @@ paths:
       responses:
         "200":
           description: Success
+        "400":
+          description: Какие то из каналов ленты скрыты
   /channels/{channelId}/post:
     post:
       summary: Создать пост в канале
@@ -516,6 +605,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /tags/{tagId}:
     get:
       summary: Получить тег по id
@@ -531,6 +625,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     delete:
       summary: Удаление тега по id
       tags:
@@ -545,6 +644,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     patch:
       summary: Частичное обновление полей тега
       tags:
@@ -569,6 +673,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /channels/{channelId}/posts:
     get:
       summary: Получение постов в канале
@@ -608,6 +717,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /channels:
     get:
       summary: Поиск по каналам
@@ -686,6 +800,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /users:
     get:
       summary: Получить информацию о себе
@@ -719,6 +838,8 @@ paths:
       responses:
         "200":
           description: Success
+        "400":
+          description: Передан пустой объект для апдейта
   /tags:
     get:
       summary: Поиск по тегам
@@ -770,6 +891,8 @@ paths:
       responses:
         "200":
           description: Success
+        "409":
+          description: Тег с таким именем уже существуе
   /users/{userId}/channels:
     get:
       summary: Поиск по каналам пользователя
@@ -809,6 +932,11 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /register:
     post:
       summary: Регистрация
@@ -830,6 +958,8 @@ paths:
       responses:
         "200":
           description: Success
+        "409":
+          description: Пользователь с таким email уже существует
   /channels/{channelId}:
     get:
       summary: Получение канала по id
@@ -845,6 +975,10 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
     delete:
       summary: Удаление канала по id
       tags:
@@ -859,6 +993,10 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
     patch:
       summary: Частичное обновление полей канала
       tags:
@@ -885,3 +1023,10 @@ paths:
       responses:
         "200":
           description: Success
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+        "400":
+          description: Не указано name и visible
+
