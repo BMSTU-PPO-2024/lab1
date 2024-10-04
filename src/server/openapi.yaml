@@ -5,7 +5,7 @@ info:
   title: API для работы с записью на курс.
 
 paths:
-  /user/{userId}:
+  /users/{userId}:
     get:
       tags:
         - User
@@ -63,29 +63,17 @@ paths:
               properties:
                 password:
                   type: string
-                permissions:
-                  type: integer
-                created:
-                  type: string
                 nickname:
                   type: string
                 about:
                   type: string
-                id:
-                  type: string
-                banned:
-                  type: boolean
                 avatar:
-                  type: string
-                updated:
-                  type: string
-                email:
                   type: string
         required: true
       responses:
         "200":
           description: Success
-  /comment/{commentId}:
+  /comments/{commentId}:
     get:
       summary: Получение комментария по id
       tags:
@@ -138,7 +126,7 @@ paths:
       responses:
         "200":
           description: Success
-  /post/{postId}:
+  /posts/{postId}:
     get:
       summary: Получение поста по id
       tags:
@@ -220,7 +208,7 @@ paths:
       responses:
         "200":
           description: Success
-  /feed/{feedId}/posts:
+  /feeds/{feedId}/posts:
     get:
       summary: Получение постов в ленте
       tags:
@@ -247,7 +235,7 @@ paths:
       responses:
         "200":
           description: Success
-  /comment/{commentId}/rate:
+  /comments/{commentId}/rate:
     post:
       summary: Лайкнуть комментарий
       tags:
@@ -276,7 +264,7 @@ paths:
       responses:
         "200":
           description: Success
-  /user/{userId}/feeds:
+  /users/{userId}/feeds:
     get:
       summary: Получение лент пользователя
       tags:
@@ -315,7 +303,7 @@ paths:
       responses:
         "200":
           description: Success
-  /post/{postId}/comments:
+  /posts/{postId}/comments:
     get:
       summary: Получение комментариев к посту
       tags:
@@ -342,7 +330,7 @@ paths:
       responses:
         "200":
           description: Success
-  /post/{postId}/rate:
+  /posts/{postId}/rate:
     post:
       summary: Лайкнуть пост
       tags:
@@ -371,7 +359,7 @@ paths:
       responses:
         "200":
           description: Success
-  /feed/{feedId}:
+  /feeds/{feedId}:
     get:
       summary: Получить ленту по id
       tags:
@@ -434,7 +422,7 @@ paths:
       responses:
         "200":
           description: Success
-  /feed:
+  /feeds:
     get:
       summary: Поиск по лентам
       tags:
@@ -495,7 +483,7 @@ paths:
       responses:
         "200":
           description: Success
-  /channel/{channelId}/post:
+  /channels/{channelId}/post:
     post:
       summary: Создать пост в канале
       tags:
@@ -528,7 +516,7 @@ paths:
       responses:
         "200":
           description: Success
-  /tag/{tagId}:
+  /tags/{tagId}:
     get:
       summary: Получить тег по id
       tags:
@@ -581,7 +569,7 @@ paths:
       responses:
         "200":
           description: Success
-  /channel/{channelId}/posts:
+  /channels/{channelId}/posts:
     get:
       summary: Получение постов в канале
       tags:
@@ -620,7 +608,7 @@ paths:
       responses:
         "200":
           description: Success
-  /channel:
+  /channels:
     get:
       summary: Поиск по каналам
       tags:
@@ -673,7 +661,7 @@ paths:
       responses:
         "200":
           description: Success
-  /post/{postId}/comment:
+  /posts/{postId}/comment:
     post:
       summary: Создать комментарий к посту
       tags:
@@ -698,7 +686,7 @@ paths:
       responses:
         "200":
           description: Success
-  /user:
+  /users:
     get:
       summary: Получить информацию о себе
       tags:
@@ -721,29 +709,17 @@ paths:
               properties:
                 password:
                   type: string
-                permissions:
-                  type: integer
-                created:
-                  type: string
                 nickname:
                   type: string
                 about:
                   type: string
-                id:
-                  type: string
-                banned:
-                  type: boolean
                 avatar:
-                  type: string
-                updated:
-                  type: string
-                email:
                   type: string
         required: true
       responses:
         "200":
           description: Success
-  /tag:
+  /tags:
     get:
       summary: Поиск по тегам
       tags:
@@ -794,7 +770,7 @@ paths:
       responses:
         "200":
           description: Success
-  /user/{userId}/channels:
+  /users/{userId}/channels:
     get:
       summary: Поиск по каналам пользователя
       tags:
@@ -854,7 +830,7 @@ paths:
       responses:
         "200":
           description: Success
-  /channel/{channelId}:
+  /channels/{channelId}:
     get:
       summary: Получение канала по id
       tags:
