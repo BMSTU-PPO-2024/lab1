@@ -25,10 +25,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  permissions:
-                    type: integer
-                  created:
-                    type: string
                   nickname:
                     type: string
                   about:
@@ -38,8 +34,6 @@ paths:
                   banned:
                     type: boolean
                   avatar:
-                    type: string
-                  updated:
                     type: string
                   email:
                     type: string
