@@ -1,5 +1,6 @@
 package com.github.romanqed.devspark.controllers;
 
+import com.github.romanqed.devspark.Return;
 import com.github.romanqed.devspark.database.Pagination;
 import com.github.romanqed.devspark.database.Repository;
 import com.github.romanqed.devspark.dto.DtoUtil;
@@ -16,8 +17,9 @@ import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
 
 import java.util.Date;
+import java.util.List;
 
-@JavalinController("/user")
+@JavalinController("/users")
 public final class UserController extends AuthBase {
     private final Encoder encoder;
     private final Repository<Channel> channels;
@@ -35,6 +37,7 @@ public final class UserController extends AuthBase {
     }
 
     @Route(method = HandlerType.GET)
+    @Return(UserDto.class)
     public void getSelf(Context ctx) {
         var user = getCheckedFullUser(ctx);
         if (user == null) {
@@ -44,6 +47,7 @@ public final class UserController extends AuthBase {
     }
 
     @Route(method = HandlerType.GET, route = "/{userId}")
+    @Return(UserDto.class)
     public void get(Context ctx) {
         var id = ctx.pathParam("userId");
         var found = users.get(id);
@@ -91,6 +95,7 @@ public final class UserController extends AuthBase {
     }
 
     @Route(method = HandlerType.PATCH)
+    @Return(UserDto.class)
     public void updateSelf(Context ctx) {
         var dto = DtoUtil.parse(ctx, UserDto.class);
         if (dto == null) {
@@ -110,6 +115,7 @@ public final class UserController extends AuthBase {
     }
 
     @Route(method = HandlerType.PATCH, route = "/{userId}")
+    @Return(UserDto.class)
     public void update(Context ctx) {
         var dto = DtoUtil.parse(ctx, UserDto.class);
         if (dto == null) {
@@ -180,11 +186,13 @@ public final class UserController extends AuthBase {
     }
 
     @Route(method = HandlerType.GET, route = "/{userId}/channels")
+    @Return(value = List.class, sub = Channel.class)
     public void listChannels(Context ctx) {
         listUser(ctx, channels);
     }
 
     @Route(method = HandlerType.GET, route = "/{userId}/feeds")
+    @Return(value = List.class, sub = Feed.class)
     public void listFeeds(Context ctx) {
         listUser(ctx, feeds);
     }

@@ -1,5 +1,6 @@
 package com.github.romanqed.devspark.controllers;
 
+import com.github.romanqed.devspark.Return;
 import com.github.romanqed.devspark.database.Repository;
 import com.github.romanqed.devspark.dto.DtoUtil;
 import com.github.romanqed.devspark.dto.TagDto;
@@ -15,8 +16,9 @@ import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
 
 import java.util.Date;
+import java.util.List;
 
-@JavalinController("/tag")
+@JavalinController("/tags")
 public final class TagController extends AuthBase {
     private final Repository<Tag> tags;
 
@@ -26,6 +28,7 @@ public final class TagController extends AuthBase {
     }
 
     @Route(method = HandlerType.GET, route = "/{tagId}")
+    @Return(Tag.class)
     public void get(Context ctx) {
         var tag = tags.get(ctx.pathParam("tagId"));
         if (tag == null) {
@@ -36,6 +39,7 @@ public final class TagController extends AuthBase {
     }
 
     @Route(method = HandlerType.GET)
+    @Return(value = List.class, sub = Tag.class)
     public void find(Context ctx) {
         var pagination = DtoUtil.parsePagination(ctx);
         if (pagination == null) {
@@ -44,7 +48,8 @@ public final class TagController extends AuthBase {
         Util.findByName(ctx, tags, pagination);
     }
 
-    @Route(method = HandlerType.PUT)
+    @Route(method = HandlerType.POST)
+    @Return(Tag.class)
     public void put(Context ctx) {
         var dto = DtoUtil.validate(ctx, TagDto.class);
         if (dto == null) {
@@ -65,6 +70,7 @@ public final class TagController extends AuthBase {
     }
 
     @Route(method = HandlerType.PATCH, route = "/{tagId}")
+    @Return(Tag.class)
     public void update(Context ctx) {
         var dto = DtoUtil.validate(ctx, TagDto.class);
         if (dto == null) {

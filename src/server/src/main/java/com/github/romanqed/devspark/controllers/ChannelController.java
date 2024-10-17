@@ -1,5 +1,6 @@
 package com.github.romanqed.devspark.controllers;
 
+import com.github.romanqed.devspark.Return;
 import com.github.romanqed.devspark.database.Repository;
 import com.github.romanqed.devspark.dto.ChannelDto;
 import com.github.romanqed.devspark.dto.DtoUtil;
@@ -15,10 +16,11 @@ import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-@JavalinController("/channel")
+@JavalinController("/channels")
 public final class ChannelController extends AuthBase {
     private final Repository<Channel> channels;
     private final Repository<Post> posts;
@@ -39,6 +41,7 @@ public final class ChannelController extends AuthBase {
     }
 
     @Route(method = HandlerType.GET, route = "/{channelId}")
+    @Return(Channel.class)
     public void get(Context ctx) {
         var user = getUser(ctx);
         var channel = Util.see(ctx, user, "channelId", channels);
@@ -49,11 +52,13 @@ public final class ChannelController extends AuthBase {
     }
 
     @Route(method = HandlerType.GET)
+    @Return(value = List.class, sub = Channel.class)
     public void find(Context ctx) {
         Util.findAll(ctx, this, channels);
     }
 
     @Route(method = HandlerType.GET, route = "/{channelId}/posts")
+    @Return(value = List.class, sub = Post.class)
     public void listPosts(Context ctx) {
         var pagination = DtoUtil.parsePagination(ctx);
         if (pagination == null) {
@@ -85,7 +90,8 @@ public final class ChannelController extends AuthBase {
         ctx.json(channel.retrievePosts(posts, pagination));
     }
 
-    @Route(method = HandlerType.PUT)
+    @Route(method = HandlerType.POST)
+    @Return(Channel.class)
     public void put(Context ctx) {
         var dto = DtoUtil.validate(ctx, ChannelDto.class);
         if (dto == null) {
@@ -118,7 +124,8 @@ public final class ChannelController extends AuthBase {
         return ret;
     }
 
-    @Route(method = HandlerType.PUT, route = "/{channelId}/post")
+    @Route(method = HandlerType.POST, route = "/{channelId}/posts")
+    @Return(Post.class)
     public void publishPost(Context ctx) {
         var dto = DtoUtil.validate(ctx, PostDto.class);
         if (dto == null) {
@@ -148,6 +155,7 @@ public final class ChannelController extends AuthBase {
     }
 
     @Route(method = HandlerType.PATCH, route = "/{channelId}")
+    @Return(Channel.class)
     public void update(Context ctx) {
         var dto = DtoUtil.parse(ctx, ChannelDto.class);
         if (dto == null) {

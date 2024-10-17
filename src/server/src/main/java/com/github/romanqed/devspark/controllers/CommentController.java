@@ -1,5 +1,6 @@
 package com.github.romanqed.devspark.controllers;
 
+import com.github.romanqed.devspark.Return;
 import com.github.romanqed.devspark.database.Repository;
 import com.github.romanqed.devspark.dto.DtoUtil;
 import com.github.romanqed.devspark.dto.TextDto;
@@ -16,7 +17,7 @@ import io.javalin.http.HttpStatus;
 
 import java.util.Date;
 
-@JavalinController("/comment")
+@JavalinController("/comments")
 public final class CommentController extends AuthBase {
     private final Repository<Comment> comments;
 
@@ -26,6 +27,7 @@ public final class CommentController extends AuthBase {
     }
 
     @Route(method = HandlerType.GET, route = "/{commentId}")
+    @Return(Comment.class)
     public void get(Context ctx) {
         var comment = comments.get(ctx.pathParam("commentId"));
         if (comment == null) {
@@ -36,6 +38,7 @@ public final class CommentController extends AuthBase {
     }
 
     @Route(method = HandlerType.PATCH, route = "/{commentId}")
+    @Return(Comment.class)
     public void update(Context ctx) {
         var dto = DtoUtil.validate(ctx, TextDto.class);
         if (dto == null) {
@@ -103,13 +106,13 @@ public final class CommentController extends AuthBase {
         consumer.consume(ctx, user, comment, comments);
     }
 
-    @Route(method = HandlerType.PUT, route = "/{commentId}/rate")
+    @Route(method = HandlerType.POST, route = "/{commentId}/rates")
     public void addRate(Context ctx) {
         doRate(ctx, Util::rate);
         logger.debug("Comment {} rated", ctx.pathParam("commentId"));
     }
 
-    @Route(method = HandlerType.DELETE, route = "/{commentId}/rate")
+    @Route(method = HandlerType.DELETE, route = "/{commentId}/rates")
     public void deleteRate(Context ctx) {
         doRate(ctx, Util::unrate);
         logger.debug("Comment {} unrated", ctx.pathParam("commentId"));

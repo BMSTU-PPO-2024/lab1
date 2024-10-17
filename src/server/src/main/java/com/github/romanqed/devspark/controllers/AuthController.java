@@ -1,5 +1,6 @@
 package com.github.romanqed.devspark.controllers;
 
+import com.github.romanqed.devspark.Return;
 import com.github.romanqed.devspark.database.Repository;
 import com.github.romanqed.devspark.dto.Credentials;
 import com.github.romanqed.devspark.dto.DtoUtil;
@@ -44,6 +45,7 @@ public final class AuthController {
     }
 
     @Route(method = HandlerType.POST, route = "/register")
+    @Return(Token.class)
     public void register(Context ctx) {
         var credentials = DtoUtil.validate(ctx, Credentials.class);
         if (credentials == null) {
@@ -66,6 +68,7 @@ public final class AuthController {
     }
 
     @Route(method = HandlerType.POST, route = "/login")
+    @Return(Token.class)
     public void login(Context ctx) {
         var credentials = DtoUtil.validate(ctx, Credentials.class);
         if (credentials == null) {

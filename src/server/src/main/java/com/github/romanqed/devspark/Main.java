@@ -62,8 +62,15 @@ public final class Main {
         }
     }
 
+    private static void attachOpenApi(Javalin javalin) {
+        var config = javalin.unsafeConfig();
+        config.staticFiles.add("/swagger");
+        javalin.get("/swagger", ctx -> ctx.redirect("/index.html"));
+    }
+
     private static Javalin startJavalin(ServiceProvider provider, Logger logger) {
         var javalin = provider.instantiate(Javalin.class);
+        attachOpenApi(javalin);
         var config = provider.instantiate(ServerConfig.class);
         var host = config.getHost();
         var port = config.getPort();

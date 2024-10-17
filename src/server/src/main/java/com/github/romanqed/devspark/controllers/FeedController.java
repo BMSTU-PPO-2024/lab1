@@ -1,5 +1,6 @@
 package com.github.romanqed.devspark.controllers;
 
+import com.github.romanqed.devspark.Return;
 import com.github.romanqed.devspark.database.Repository;
 import com.github.romanqed.devspark.dto.DtoUtil;
 import com.github.romanqed.devspark.dto.FeedDto;
@@ -13,8 +14,9 @@ import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
 
 import java.util.Date;
+import java.util.List;
 
-@JavalinController("/feed")
+@JavalinController("/feeds")
 public final class FeedController extends AuthBase {
     private final Repository<Feed> feeds;
     private final Repository<Post> posts;
@@ -35,6 +37,7 @@ public final class FeedController extends AuthBase {
     }
 
     @Route(method = HandlerType.GET, route = "/{feedId}")
+    @Return(Feed.class)
     public void get(Context ctx) {
         var user = getUser(ctx);
         var feed = Util.see(ctx, user, "feedId", feeds);
@@ -45,6 +48,7 @@ public final class FeedController extends AuthBase {
     }
 
     @Route(method = HandlerType.GET, route = "/{feedId}/posts")
+    @Return(value = List.class, sub = Post.class)
     public void listPosts(Context ctx) {
         var pagination = DtoUtil.parsePagination(ctx);
         if (pagination == null) {
@@ -59,11 +63,13 @@ public final class FeedController extends AuthBase {
     }
 
     @Route(method = HandlerType.GET)
+    @Return(value = List.class, sub = Feed.class)
     public void find(Context ctx) {
         Util.findAll(ctx, this, feeds);
     }
 
-    @Route(method = HandlerType.PUT)
+    @Route(method = HandlerType.POST)
+    @Return(Feed.class)
     public void put(Context ctx) {
         var dto = DtoUtil.validate(ctx, FeedDto.class);
         if (dto == null) {
@@ -130,6 +136,7 @@ public final class FeedController extends AuthBase {
     }
 
     @Route(method = HandlerType.PATCH, route = "/{feedId}")
+    @Return(Feed.class)
     public void update(Context ctx) {
         var dto = DtoUtil.parse(ctx, FeedDto.class);
         if (dto == null) {
