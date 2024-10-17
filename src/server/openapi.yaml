@@ -19,7 +19,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
           content:
             application/json:
               schema:
@@ -37,6 +37,11 @@ paths:
                     type: string
                   email:
                     type: string
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     patch:
       summary: Частичное обновление полей пользователя
       tags:
@@ -66,7 +71,14 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+        "400":
+          description: Передан пустой объект для апдейта
+
   /comments/{commentId}:
     get:
       summary: Получение комментария по id
@@ -81,7 +93,29 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scores:
+                    type: string
+                  created:
+                    type: string
+                  id:
+                    type: string
+                  postId:
+                    type: string
+                  text:
+                    type: string
+                  updated:
+                    type: string
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     delete:
       summary: Удаление комментария по id
       tags:
@@ -95,7 +129,12 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     patch:
       summary: Частичное обновление полей комментария
       tags:
@@ -119,7 +158,12 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /posts/{postId}:
     get:
       summary: Получение поста по id
@@ -134,7 +178,37 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visible:
+                    type: string
+                  scores:
+                    type: string
+                  created:
+                    type: string
+                  tagIds:
+                    type: array
+                    items:
+                      type: string
+                  id:
+                    type: string
+                  text:
+                    type: string
+                  title:
+                    type: string
+                  updated:
+                    type: string
+                  channelId:
+                    type: string
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     delete:
       summary: Удаление поста по id
       tags:
@@ -148,7 +222,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
     patch:
       summary: Частичное обновление полей поста по id
       tags:
@@ -180,7 +254,9 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+        "400":
+          description: Передан пустой объект для апдейта
   /login:
     post:
       summary: Логин
@@ -201,7 +277,14 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+        "404":
+          description: Пользователь не найден
+        "403":
+          description: Пользователь забанен
+        "401":
+          description: Пользователь не авторизован
+
   /feeds/{feedId}/posts:
     get:
       summary: Получение постов в ленте
@@ -228,7 +311,36 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    visible:
+                      type: string
+                    scores:
+                      type: string
+                    created:
+                      type: string
+                    tagIds:
+                      type: array
+                    id:
+                      type: string
+                    text:
+                      type: string
+                    title:
+                      type: string
+                    updated:
+                      type: string
+                    channelId:
+                      type: string
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /comments/{commentId}/rate:
     post:
       summary: Лайкнуть комментарий
@@ -243,7 +355,12 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     delete:
       summary: Убрать лайк у комментария
       tags:
@@ -257,7 +374,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
   /users/{userId}/feeds:
     get:
       summary: Получение лент пользователя
@@ -296,7 +413,32 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    visible:
+                      type: string
+                    created:
+                      type: string
+                    tagIds:
+                      type: array
+                    name:
+                      type: string
+                    id:
+                      type: string
+                    channelIds:
+                      type: array
+                    updated:
+                      type: string
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /posts/{postId}/comments:
     get:
       summary: Получение комментариев к посту
@@ -323,7 +465,30 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    scores:
+                      type: string
+                    created:
+                      type: string
+                    id:
+                      type: string
+                    postId:
+                      type: string
+                    text:
+                      type: string
+                    updated:
+                      type: string
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /posts/{postId}/rate:
     post:
       summary: Лайкнуть пост
@@ -338,7 +503,12 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     delete:
       summary: Убрать лайк с поста
       tags:
@@ -352,7 +522,12 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /feeds/{feedId}:
     get:
       summary: Получить ленту по id
@@ -367,7 +542,35 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visible:
+                    type: string
+                  created:
+                    type: string
+                  tagIds:
+                    type: array
+                    items:
+                      type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  channelIds:
+                    type: array
+                    items:
+                      type: string
+                  updated:
+                    type: string
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     delete:
       summary: Удалить ленту по id
       tags:
@@ -381,7 +584,12 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     patch:
       summary: Обновить ленту по id
       tags:
@@ -415,7 +623,36 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visible:
+                    type: string
+                  created:
+                    type: string
+                  tagIds:
+                    type: array
+                    items:
+                      type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  channelIds:
+                    type: array
+                    items:
+                      type: string
+                  updated:
+                    type: string
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+        "400":
+          description: Какие то из каналов ленты скрыты
   /feeds:
     get:
       summary: Поиск по лентам
@@ -448,7 +685,27 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    visible:
+                      type: string
+                    created:
+                      type: string
+                    tagIds:
+                      type: array
+                    name:
+                      type: string
+                    id:
+                      type: string
+                    channelIds:
+                      type: array
+                    updated:
+                      type: string
     post:
       summary: Создать ленту
       tags:
@@ -476,7 +733,33 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visible:
+                    type: string
+                  created:
+                    type: string
+                  tagIds:
+                    type: array
+                    items:
+                      type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  channelIds:
+                    type: array
+                    items:
+                      type: string
+                  updated:
+                    type: string
+
+        "400":
+          description: Какие то из каналов ленты скрыты
   /channels/{channelId}/post:
     post:
       summary: Создать пост в канале
@@ -509,7 +792,38 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visible:
+                    type: string
+                  scores:
+                    type: string
+                  created:
+                    type: string
+                  tagIds:
+                    type: array
+                    items:
+                      type: string
+                  id:
+                    type: string
+                  text:
+                    type: string
+                  title:
+                    type: string
+                  updated:
+                    type: string
+                  channelId:
+                    type: string
+
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /tags/{tagId}:
     get:
       summary: Получить тег по id
@@ -524,7 +838,25 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  created:
+                    type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  updated:
+                    type: string
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     delete:
       summary: Удаление тега по id
       tags:
@@ -538,7 +870,12 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
     patch:
       summary: Частичное обновление полей тега
       tags:
@@ -562,7 +899,25 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  created:
+                    type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  updated:
+                    type: string
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /channels/{channelId}/posts:
     get:
       summary: Получение постов в канале
@@ -601,7 +956,36 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    visible:
+                      type: string
+                    scores:
+                      type: string
+                    created:
+                      type: string
+                    tagIds:
+                      type: array
+                    id:
+                      type: string
+                    text:
+                      type: string
+                    title:
+                      type: string
+                    updated:
+                      type: string
+                    channelId:
+                      type: string
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /channels:
     get:
       summary: Поиск по каналам
@@ -634,7 +1018,23 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    visible:
+                      type: string
+                    created:
+                      type: string
+                    name:
+                      type: string
+                    id:
+                      type: string
+                    updated:
+                      type: string
     post:
       summary: Создать канал
       tags:
@@ -654,7 +1054,22 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visible:
+                    type: string
+                  created:
+                    type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  updated:
+                    type: string
   /posts/{postId}/comment:
     post:
       summary: Создать комментарий к посту
@@ -679,7 +1094,29 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scores:
+                    type: string
+                  created:
+                    type: string
+                  id:
+                    type: string
+                  postId:
+                    type: string
+                  text:
+                    type: string
+                  updated:
+                    type: string
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /users:
     get:
       summary: Получить информацию о себе
@@ -688,7 +1125,30 @@ paths:
       parameters: []
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  permissions:
+                    type: integer
+                  created:
+                    type: string
+                  nickname:
+                    type: string
+                  about:
+                    type: string
+                  id:
+                    type: string
+                  banned:
+                    type: boolean
+                  avatar:
+                    type: string
+                  updated:
+                    type: string
+                  email:
+                    type: string
     patch:
       summary: Частичное обновление информации о себе
       tags:
@@ -712,7 +1172,32 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  permissions:
+                    type: integer
+                  created:
+                    type: string
+                  nickname:
+                    type: string
+                  about:
+                    type: string
+                  id:
+                    type: string
+                  banned:
+                    type: boolean
+                  avatar:
+                    type: string
+                  updated:
+                    type: string
+                  email:
+                    type: string
+        "400":
+          description: Передан пустой объект для апдейта
   /tags:
     get:
       summary: Поиск по тегам
@@ -745,7 +1230,21 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    created:
+                      type: string
+                    name:
+                      type: string
+                    id:
+                      type: string
+                    updated:
+                      type: string
     post:
       summary: Создание тега
       tags:
@@ -763,7 +1262,22 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  created:
+                    type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  updated:
+                    type: string
+        "409":
+          description: Тег с таким именем уже существуе
   /users/{userId}/channels:
     get:
       summary: Поиск по каналам пользователя
@@ -802,7 +1316,28 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    visible:
+                      type: string
+                    created:
+                      type: string
+                    name:
+                      type: string
+                    id:
+                      type: string
+                    updated:
+                      type: string
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+
   /register:
     post:
       summary: Регистрация
@@ -823,7 +1358,9 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+        "409":
+          description: Пользователь с таким email уже существует
   /channels/{channelId}:
     get:
       summary: Получение канала по id
@@ -838,7 +1375,26 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visible:
+                    type: string
+                  created:
+                    type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  updated:
+                    type: string
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
     delete:
       summary: Удаление канала по id
       tags:
@@ -852,7 +1408,11 @@ paths:
             type: string
       responses:
         "200":
-          description: Success
+          description: Успех
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
     patch:
       summary: Частичное обновление полей канала
       tags:
@@ -878,4 +1438,27 @@ paths:
         required: true
       responses:
         "200":
-          description: Success
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  visible:
+                    type: string
+                  created:
+                    type: string
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  updated:
+                    type: string
+
+        "404":
+          description: Не найдено
+        "403":
+          description: Нет доступа
+        "400":
+          description: Не указано name и visible
+
