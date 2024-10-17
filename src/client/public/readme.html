@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        img {
+            max-width: 50%;
+            max-height: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="content" class="content">
+        fesrdfer
+    </div>
+
+    <script type="module">
+        import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+        fetch('/readme.md').then(resp => resp.text()).then(text => {
+            document.getElementById('content').innerHTML = marked.parse(text);
+        });
+    </script>
+</body>
+</html>
