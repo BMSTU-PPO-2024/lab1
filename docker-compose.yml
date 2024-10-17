@@ -1,0 +1,51 @@
+version: "3"
+
+networks:
+  devspark-network:
+
+services:
+  mongodb:
+    image: mongo
+    restart: on-failure
+    networks:
+      devspark-network:
+    ports:
+      - "27017:27017"
+
+  server:
+    build: ./src/server
+    restart: on-failure
+    networks:
+      devspark-network:
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+
+  nginx:
+    build: 
+      context: ./src/nginx
+      dockerfile: nginx.dockerfile
+    networks:
+      devspark-network:
+    ports:
+      - "2288:80"
+    volumes:
+      - "./src/client/public:/app/static"
+      - "./README.md:/app/readme.md"
+      - "./src/nginx/nginx.conf:/etc/nginx/nginx.conf"
+    depends_on:
+      - server
+
+  mongo-express:
+    build:
+      context: ./src/mongo-express
+      dockerfile: mongo-express.dockerfile
+    networks:
+      devspark-network:
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongodb
+    env_file:
+      - ./src/mongo-express/mongo-express.env
