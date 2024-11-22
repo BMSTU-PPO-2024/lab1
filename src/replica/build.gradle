@@ -1,0 +1,87 @@
+import java.text.SimpleDateFormat
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+    compileJava.options.encoding('UTF-8')
+}
+
+group = 'com.github.romanqed'
+archivesBaseName = 'server'
+version = '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // TODO Remove swagger
+    implementation group: 'io.swagger.core.v3', name: 'swagger-core', version: '2.2.23'
+    // Tests
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
+    testImplementation group: 'org.slf4j', name: 'slf4j-nop', version: '2.0.13'
+    // Jeflect
+    implementation group: 'com.github.romanqed', name: 'jeflect', version: '1.1.4L'
+    // Annotation processor
+    implementation group: 'org.atteo.classindex', name: 'classindex', version: '3.13'
+    annotationProcessor group: 'org.atteo.classindex', name: 'classindex', version: '3.13'
+    // Logger API
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.13'
+    // Logger impl
+    implementation group: 'org.slf4j', name: 'slf4j-reload4j', version: '2.0.13'
+    // Javalin
+    implementation group: 'io.javalin', name: 'javalin', version: '6.1.4'
+    // Mongo driver (sync)
+    implementation group: 'org.mongodb', name: 'mongodb-driver-sync', version: '5.1.0'
+    // DI
+    implementation group: 'io.github.amayaframework', name: 'amaya-di', version: '2.0.0'
+    // Gson
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
+    // JWT implementation
+    implementation group: 'com.github.kmehrunes', name: 'javalin-jwt', version: '0.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+configurations.testImplementation {
+    exclude group: 'org.slf4j', module: 'slf4j-reload4j'
+}
+
+shadowJar {
+    manifest {
+        var date = new Date()
+        var javaVersion = System.getProperty("java.version")
+        var vmVendor = System.getProperty("java.vm.vendor")
+        var vmVersion = System.getProperty("java.vm.version")
+
+        attributes(
+                'Main-Class': 'com.github.romanqed.devspark.Main',
+                'Created-By': String.format("%s (%s %s)", javaVersion, vmVendor, vmVersion),
+                'Gradle-Version': "Gradle $gradle.gradleVersion",
+                'Build-Date': new SimpleDateFormat("yyyy-MM-dd").format(date),
+                'Build-Time': new SimpleDateFormat("HH:mm:ss.SSSZ").format(date),
+                'Built-By': 'Bakaldin Roman, Stepanenko Andrey',
+                'Bundle-Name': 'Devspark server',
+                'Bundle-Version': archiveVersion,
+                'Bundle-SymbolicName': archivesBaseName,
+                'Implementation-Title': archivesBaseName,
+                'Implementation-Vendor': 'github.com/romanqed',
+                'Implementation-Version': archiveVersion,
+                'Specification-Title': archivesBaseName,
+                'Specification-Vendor': 'github.com/romanqed',
+                'Specification-Version': archiveVersion
+        )
+    }
+    archiveBaseName.set(archivesBaseName)
+    archiveClassifier.set('')
+    archiveVersion.set('')
+    mergeServiceFiles('META-INF/annotations')
+}

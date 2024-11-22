@@ -19,8 +19,49 @@ services:
       devspark-network:
     ports:
       - "8080:8080"
+    volumes:
+      - "./src/salt.pbkdf2:/usr/src/server/salt.pbkdf2"
+      - "./src/auth.json:/usr/src/server/auth.json"
     depends_on:
       - mongodb
+      
+  node1:
+    build: ./src/replica
+    restart: on-failure
+    networks:
+      devspark-network:
+    environment:
+        AUTH_CONFIG: "auth/auth.json"
+        SERVER_CONFIG: "/nodes/node1.json"
+        SALT_FILE: "/salt/salt.pbkdf2"
+    volumes:
+      - "./src/salt.pbkdf2:/salt/salt.pbkdf2"
+      - "./src/auth.json:/auth/auth.json"
+      - "./src/node1.json:/nodes/node1.json"
+    ports:
+      - "8001:8001"
+    depends_on:
+      - mongodb
+      - server
+      
+  node2:
+    build: ./src/replica
+    restart: on-failure
+    networks:
+      devspark-network:
+    environment:
+        AUTH_CONFIG: "auth/auth.json"
+        SERVER_CONFIG: "/nodes/node2.json"
+        SALT_FILE: "/salt/salt.pbkdf2"
+    volumes:
+      - "./src/salt.pbkdf2:/salt/salt.pbkdf2"
+      - "./src/auth.json:/auth/auth.json"
+      - "./src/node2.json:/nodes/node2.json"
+    ports:
+      - "8002:8002"
+    depends_on:
+      - mongodb
+      - server
 
   nginx:
     build: 

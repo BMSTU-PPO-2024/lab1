@@ -26,13 +26,14 @@ public final class EncoderServiceConsumer implements ServiceProviderConsumer {
     }
 
     private static byte[] readSalt() throws IOException {
-        var stream = new FileInputStream(SALT_FILE);
-        var ret = new byte[SALT_LENGTH];
-        if (stream.read(ret, 0, SALT_LENGTH) != SALT_LENGTH) {
-            throw new IllegalArgumentException("Invalid salt cache");
+        try (var stream = new FileInputStream(SALT_FILE)) {
+            var ret = new byte[SALT_LENGTH];
+            if (stream.read(ret, 0, SALT_LENGTH) != SALT_LENGTH) {
+                throw new IllegalArgumentException("Invalid salt cache");
+            }
+            stream.close();
+            return ret;
         }
-        stream.close();
-        return ret;
     }
 
     @Override
@@ -43,7 +44,15 @@ public final class EncoderServiceConsumer implements ServiceProviderConsumer {
             Exceptions.suppress(() -> Files.write(SALT_FILE.toPath(), bytes, StandardOpenOption.CREATE));
             salt = bytes;
         } else {
-            salt = Exceptions.suppress(EncoderServiceConsumer::readSalt);
+            try {
+                salt = readSalt();
+            } catch (Exception e) {
+                System.err.println("Invalid salt found, regenerate...");
+                var bytes = generateSalt();
+                Exceptions.suppress(() -> Files.write(SALT_FILE.toPath(), bytes, StandardOpenOption.WRITE));
+                salt = bytes;
+                System.out.println("Salt regenerated successfully");
+            }
         }
         var encoder = new PBKDF2Encoder(salt);
         builder.addService(Encoder.class, () -> encoder);

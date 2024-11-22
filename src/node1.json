@@ -1,0 +1,6 @@
+{
+  "enableCli": false,
+  "login": "root@root",
+  "password": "root",
+  "port": 8001
+}
