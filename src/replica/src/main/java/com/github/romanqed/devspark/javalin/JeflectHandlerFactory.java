@@ -24,7 +24,7 @@ public final class JeflectHandlerFactory implements HandlerFactory {
             if (route == null) {
                 continue;
             }
-            var data = new HandlerData(prefix + route.route(), route.method());
+            var data = new HandlerData("/api/v1" + prefix + route.route(), route.method());
             var handler = process(method, object);
             if (ret.containsKey(data)) {
                 throw new IllegalStateException("Duplicate route found");
