@@ -31,7 +31,7 @@ services:
     networks:
       devspark-network:
     environment:
-        AUTH_CONFIG: "auth/auth.json"
+        AUTH_CONFIG: "/auth/auth.json"
         SERVER_CONFIG: "/nodes/node1.json"
         SALT_FILE: "/salt/salt.pbkdf2"
     volumes:
@@ -50,7 +50,7 @@ services:
     networks:
       devspark-network:
     environment:
-        AUTH_CONFIG: "auth/auth.json"
+        AUTH_CONFIG: "/auth/auth.json"
         SERVER_CONFIG: "/nodes/node2.json"
         SALT_FILE: "/salt/salt.pbkdf2"
     volumes:
