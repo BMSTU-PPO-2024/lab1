@@ -4,13 +4,23 @@ networks:
   devspark-network:
 
 services:
-  mongodb:
+  mongo1:
     image: mongo
     restart: on-failure
     networks:
       devspark-network:
     ports:
       - "27017:27017"
+    command: 'mongod --replSet rs0'
+   
+  mongo2:
+    image: mongo
+    restart: on-failure
+    networks:
+      devspark-network:
+    ports:
+      - "27018:27017"
+    command: 'mongod --replSet rs0'
 
   server:
     build: ./src/server
@@ -23,7 +33,20 @@ services:
       - "./src/salt.pbkdf2:/usr/src/server/salt.pbkdf2"
       - "./src/auth.json:/usr/src/server/auth.json"
     depends_on:
-      - mongodb
+      - mongo1
+      
+  mirror1:
+    build: ./src/mirror
+    restart: on-failure
+    networks:
+      devspark-network:
+    ports:
+      - "8070:8070"
+    volumes:
+      - "./src/salt.pbkdf2:/usr/src/mirror/salt.pbkdf2"
+      - "./src/auth.json:/usr/src/mirror/auth.json"
+    depends_on:
+      - mongo2
       
   node1:
     build: ./src/replica
@@ -77,6 +100,7 @@ services:
       - "./src/nginx/nginx.conf:/etc/nginx/nginx.conf"
     depends_on:
       - server
+      - mirror1
 
   mongo-express:
     build:

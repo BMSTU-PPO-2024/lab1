@@ -10,12 +10,19 @@ import com.github.romanqed.jtype.Types;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
 import io.github.amayaframework.di.*;
+import io.github.amayaframework.openui.ApiEntry;
+import io.github.amayaframework.swaggerui.SwaggerUIFactory;
 import io.javalin.Javalin;
+import io.javalin.http.ContentType;
+import io.javalin.http.HandlerType;
+import io.javalin.http.HttpStatus;
 import org.apache.log4j.PropertyConfigurator;
 import org.bson.BsonDocument;
 import org.bson.BsonInt64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.net.URI;
 
 public final class Main {
     private static final String LOGGER_CONFIG = "log4j.properties";
@@ -63,9 +70,34 @@ public final class Main {
     }
 
     private static void attachOpenApi(Javalin javalin) {
-        var config = javalin.unsafeConfig();
-        config.staticFiles.add("/swagger");
-        javalin.get("/api/v1", ctx -> ctx.redirect("/swagger.html"));
+        var factory = new SwaggerUIFactory();
+        var ui = factory.create(ApiEntry.of(
+                URI.create("/swagger/openapi.yaml"),
+                "Devspark API"
+        ));
+        javalin.addHttpHandler(HandlerType.GET, "/swagger/{file}", ctx -> {
+            var file = ctx.pathParam("file");
+            if (file.equals("openapi.yaml")) {
+                var is = Main.class.getResourceAsStream("openapi.yaml");
+                if (is == null) {
+                    throw new IllegalStateException("Swagger manifest not found");
+                }
+                is.transferTo(ctx.outputStream());
+                is.close();
+                return;
+            }
+            var is = ui.getInputStream(file);
+            if (is == null) {
+                ctx.status(HttpStatus.NOT_FOUND);
+                return;
+            }
+            var index = file.indexOf('.');
+            var ext = file.substring(index + 1);
+            var type = ContentType.getContentTypeByExtension(ext);
+            ctx.contentType(type);
+            is.transferTo(ctx.outputStream());
+            is.close();
+        });
     }
 
     private static Javalin startJavalin(ServiceProvider provider, Logger logger) {
