@@ -1,5 +1,13 @@
 <template>
 <v-container class="py-8">
+    <v-row class="pb-4 pt-4">
+        <v-btn 
+            text="Назад"
+            variant="plain"
+            prepend-icon="mdi-arrow-left"
+            @click="router.back()"
+        />
+    </v-row>
     <!-- Page Title -->
     <v-row>
         <v-col>
@@ -54,12 +62,12 @@
             <div
                 class="preview-container pa-8"
                 v-html="renderedMarkdown"
-            />
+            ></div>
         </v-col>
     </v-row>
   
     <!-- Tags and Actions -->
-    <v-row class="mt-4 align-center">
+    <v-row class="mt-4 align-center flex-wrap">
         <v-col cols="8">
             <v-row class="d-flex ga-4 align-center">
                 <span class="text-base-bold">Теги</span>

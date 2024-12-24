@@ -69,7 +69,7 @@ const router = useRouter();
 watchEffect(() => {
     if (authStore.isAuthorized) {
         router.push({ 
-            path: '/profile'
+            path: '/main'
         });
     }
 })

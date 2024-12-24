@@ -11,40 +11,38 @@
         {{ comment.text }}
     </div>
     <div>
-        <v-btn
-            variant="plain"
-        >
-            {{ scorePositive(comment.scores ?? {}) }}
-            <v-icon
-                class="pl-2"
-                color="green"
-            >
-                mdi-arrow-up
-            </v-icon>
-        </v-btn>
-        <v-btn
-            variant="plain"
-        >
-            {{ scoreNegative(comment.scores ?? {}) }}
-            <v-icon
-                class="pl-2"
-                color="red"
-            >
-                mdi-arrow-down
-            </v-icon>
-        </v-btn>
+        <ds-rating 
+            :scores="comment.scores"
+            @rate="rate" 
+            @unrate="unrate" 
+        />
     </div>
 </div>
 </template>
 
 <script setup lang="ts">
 import type { Comment } from '@/api/types';
-import { scoreNegative, scorePositive } from '@/util/score'
+import { useCommentStore } from '@/stores/comment-store';
+import { usePostStore } from '@/stores/post-store';
+
+const commentStore = useCommentStore();
+const postStore = usePostStore();
 
 const props = defineProps<{
     comment: Comment;
     author?: string;
 }>();
+
+const rate = () => {
+    commentStore.rateComment(props.comment.id ?? '');
+    commentStore.fetchComments(postStore.currentPost?.id ?? '');
+}
+
+const unrate = () => {
+    commentStore.unrateComment(props.comment.id ?? '')
+    commentStore.fetchComments(postStore.currentPost?.id ?? '');
+}
+
 </script>
 
 <style scoped>

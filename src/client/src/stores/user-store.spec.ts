@@ -19,6 +19,7 @@ describe('User Store', () => {
             stubActions: false,
         }));
 
+        mockApi.GET.mockResolvedValueOnce({ data: { id: 'user123' }});
         userStore = useUserStore();
     });
 

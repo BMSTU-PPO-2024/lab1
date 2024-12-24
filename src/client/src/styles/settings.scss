@@ -38,6 +38,18 @@
     --heading-h5-base: 20px;
     --heading-h5-bold: 20px;
 
+    @media screen and (max-width: 1024) {
+        --text-base: 14px;
+        --text-base-bold: 14px;
+        --text-base-medium: 14px;
+        --heading-h1-base: 26px;
+        --heading-h1-bold: 26px;
+        --heading-h3-base: 20px;
+        --heading-h3-bold: 20px;
+        --heading-h5-base: 18px;
+        --heading-h5-bold: 18px;
+    }
+
     /* Effect styles */
     --base-hover:  0px 4px 4px rgba(0, 0, 0, 0.15);
 

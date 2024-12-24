@@ -11,7 +11,7 @@
     <v-row>
         <v-col
             cols="12"   
-            class="d-flex align-center"
+            class="d-flex md-flex-wrap align-center justify-space-between"
         >
             <v-avatar
                 size="100"
@@ -35,7 +35,7 @@
                     {{ userStore.self?.about }}
                 </p>
             </div>
-            <v-spacer />
+            <!-- <v-spacer /> -->
             <v-btn
                 color="orange"
                 @click="editProfileDialogStore.openDialog()"
@@ -167,5 +167,11 @@ function openItem(idx: number) {
 <style scoped>
 .profile-page h2 {
     margin: 0;
+}
+
+.md-flex-wrap {
+    @media screen and (max-width: 1024px) {
+        flex-wrap: wrap;
+    }
 }
 </style>

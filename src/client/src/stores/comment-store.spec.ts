@@ -30,7 +30,7 @@ describe('Comment Store', () => {
 
     await commentStore.createComment(mockComment);
 
-    expect(mockApi.POST).toHaveBeenCalledWith('/posts/{postId}/comment', {
+    expect(mockApi.POST).toHaveBeenCalledWith('/posts/{postId}/comments', {
       params: { path: { postId: 'post123' } },
       body: mockComment,
     });

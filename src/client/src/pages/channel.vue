@@ -36,12 +36,13 @@
     </v-row>
   
     <!-- Сетка карточек -->
-    <v-row>
+    <v-row v-if="postStore.currentPosts?.length">
         <!-- Карточка "Создать пост" -->
         <v-col
             cols="12"
             sm="6"
             md="4"
+            v-if="owner"
         >
             <v-card
                 class="pa-4 d-flex justify-center align-center cursor-pointer"
@@ -74,6 +75,9 @@
                 />
             </v-col>
         </template>
+    </v-row>
+    <v-row v-else>
+        Постов нет
     </v-row>
 </v-container>
 </template>

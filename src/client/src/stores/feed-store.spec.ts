@@ -16,7 +16,7 @@ describe('Feed Store', () => {
     vi.mock('@/api/api', () => ({ useApi: () => ({ value: mockApi }) }));
 
     let feedStore: ReturnType<typeof useFeedStore>;
-    let userStore: ReturnType<typeof useUserStore>;
+    let userStore: MockedStore<typeof useUserStore>;
     let tagStore: MockedStore<typeof useTagStore>;
 
     beforeEach(() => {
@@ -25,6 +25,8 @@ describe('Feed Store', () => {
             createSpy: vi.fn,
             stubActions: false,
         }));
+        
+        mockApi.GET.mockResolvedValueOnce({ data: { id: 'user123' }});
 
         feedStore = mockedStore(useFeedStore);
         userStore = mockedStore(useUserStore);
@@ -51,7 +53,7 @@ describe('Feed Store', () => {
 
         await feedStore.fetchSelfFeeds();
 
-        expect(mockApi.GET).not.toHaveBeenCalled();
+        expect(mockApi.GET).toHaveBeenCalledTimes(1);
     });
 
     it('deletes a feed and refreshes self feeds on success', async () => {
@@ -92,7 +94,7 @@ describe('Feed Store', () => {
     });
 
     it('fetches current feeds with correct params', async () => {
-        const mockParams = { page: '1', batch: 10 };
+        const mockParams = { page: 1, batch: 10 };
         const mockFeeds = [{ id: '1', title: 'Main Feed' }];
         mockApi.GET.mockResolvedValueOnce({ data: mockFeeds });
 

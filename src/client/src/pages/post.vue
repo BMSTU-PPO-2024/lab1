@@ -68,34 +68,17 @@
             <div
                 class="post-content"
                 v-html="renderMarkdown(postStore.currentPost?.text ?? '')"
-            />
+            ></div>
         </v-col>
     </v-row>
   
     <!-- Лайки и дизлайки -->
     <v-row class="like-dislike-section mb-8">
-        <v-btn
-            variant="plain"
-        >
-            {{ scorePositive(postStore.currentPost?.scores ?? {}) }}
-            <v-icon
-                class="pl-2"
-                color="green"
-            >
-                mdi-arrow-up
-            </v-icon>
-        </v-btn>
-        <v-btn
-            variant="plain"
-        >
-            {{ scoreNegative(postStore.currentPost?.scores ?? {}) }}
-            <v-icon
-                class="pl-2"
-                color="red"
-            >
-                mdi-arrow-down
-            </v-icon>
-        </v-btn>
+        <ds-rating 
+            :scores="postStore.currentPost?.scores"
+            @rate="ratePost"
+            @unrate="unratePost"
+        ></ds-rating>
     </v-row>
   
     <!-- Раздел комментариев -->
@@ -120,7 +103,7 @@
   
     <!-- Список комментариев -->
     <v-row
-        v-for="(comment, index) in commentStore.currentComments"
+        v-for="(comment, index) in comments"
         :key="index"
         class="mb-4"
     >
@@ -180,6 +163,18 @@ const owner = computed(() => isOwner(postStore.currentPost ?? {}));
 const tags = computed(() => tagStore.tagsByIds(postStore.currentPost?.tagIds ?? []));
 
 const commentOwners = computed(() => userStore.getUsers(commentStore.currentComments?.map(p => p.ownerId ?? '') ?? []))
+
+const comments = computed(() => commentStore.currentComments);
+
+const ratePost = async () => {
+    await postStore.ratePost(postStore.currentPost?.id ?? '');
+    postStore.fetchPost(postStore.currentPost?.id ?? '');
+}
+
+const unratePost = async () => {
+    await postStore.unratePost(postStore.currentPost?.id ?? '');
+    postStore.fetchPost(postStore.currentPost?.id ?? '');
+}
 
 // **Введение**
 

@@ -25,28 +25,7 @@
             class="mt-auto"
         >
             <div>
-                <v-btn
-                    variant="plain"
-                >
-                    {{ likes }}
-                    <v-icon
-                        class="pl-2"
-                        color="green"
-                    >
-                        mdi-arrow-up
-                    </v-icon>
-                </v-btn>
-                <v-btn
-                    variant="plain"
-                >
-                    {{ dislikes }}
-                    <v-icon
-                        class="pl-2"
-                        color="red"
-                    >
-                        mdi-arrow-down
-                    </v-icon>
-                </v-btn>
+               <ds-rating :scores="post.scores" disabled />
             </div>
         </v-row>
     </div>

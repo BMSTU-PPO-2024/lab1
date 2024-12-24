@@ -3,7 +3,7 @@ import { useChannelStore } from '@/stores/channel-store';
 import { useUserStore } from '@/stores/user-store';
 import { vi, describe, it, beforeEach, expect } from 'vitest';
 import { createTestingPinia } from '@pinia/testing'
-import { mockedStore } from './mocked-store';
+import { mockedStore, type MockedStore } from './mocked-store';
 
 
 describe('Channel Store', () => {
@@ -15,7 +15,7 @@ describe('Channel Store', () => {
     vi.mock('@/api/api', () => ({ useApi: () => ({ value: mockApi }) }));
 
     let channelStore: ReturnType<typeof useChannelStore>;
-    let userStore: ReturnType<typeof useUserStore>;
+    let userStore: MockedStore<typeof useUserStore>;
 
     beforeEach(() => {
         vi.clearAllMocks();
@@ -24,6 +24,7 @@ describe('Channel Store', () => {
             stubActions: false,
         }));
 
+        mockApi.GET.mockResolvedValueOnce({ data: { id: 'user123' }});
         channelStore = mockedStore(useChannelStore);
         userStore = mockedStore(useUserStore);
     });
@@ -45,7 +46,7 @@ describe('Channel Store', () => {
     it('does not fetch self channels if no user', async () => {
         userStore.self = undefined;
         await channelStore.fetchSelfChannels();
-        expect(mockApi.GET).not.toHaveBeenCalled();
+        expect(mockApi.GET).toHaveBeenCalledTimes(1);
     });
 
     it('deletes a channel and refreshes self channels on success', async () => {
@@ -79,7 +80,7 @@ describe('Channel Store', () => {
     });
 
     it('fetches current channels with correct params', async () => {
-        const mockParams = { page: '1', batch: 10 };
+        const mockParams = { page: 1, batch: 10 };
         const mockChannels = [{ id: '1', name: 'Main Channel' }];
         mockApi.GET.mockResolvedValueOnce({ data: mockChannels });
 

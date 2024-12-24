@@ -4,7 +4,7 @@
         <h3>Найти в DevSpark</h3>
     </v-row>
     <v-row class="d-flex justify-center">
-        <v-col cols="6">
+        <v-col sm="8" lg="6">
             <v-btn-toggle
                 v-model="mainStore.selectedTab"
                 mandatory
@@ -80,18 +80,19 @@ const items = computed<Channel[] | Feed[] | undefined>(() => mainStore.selectedT
                                 : feedStore.currentFeeds);
 
 const openItem = (idx: number) => {
+    console.log('open item', mainStore.selectedTab, feedStore.currentFeeds?.[idx], channelStore.currentChannels?.[idx])
     if (mainStore.selectedTab === 'channels') {
         router.push({
             name: 'channels/:id',
             params: {
-                id: feedStore.currentFeeds?.[idx].id ?? '' 
+                id: channelStore.currentChannels?.[idx].id ?? '' 
             }
         })
     } else {
         router.push({
-            name: 'channels/:id',
+            name: 'feeds/:id',
             params: {
-                id: channelStore.currentChannels?.[idx].id ?? '' 
+                id: feedStore.currentFeeds?.[idx].id ?? '' 
             }
         })
     }
