@@ -4,7 +4,10 @@
         <h3>Найти в DevSpark</h3>
     </v-row>
     <v-row class="d-flex justify-center">
-        <v-col sm="8" lg="6">
+        <v-col
+            sm="8"
+            lg="6"
+        >
             <v-btn-toggle
                 v-model="mainStore.selectedTab"
                 mandatory
@@ -20,7 +23,7 @@
             <v-text-field 
                 v-model="mainStore.searchQuery"
                 label="Поиск"
-            ></v-text-field>
+            />
         </v-col>
     </v-row>
 
@@ -36,13 +39,13 @@
                 v-if="mainStore.selectedTab === 'channels'" 
                 :name="item.name"
                 @open="openItem(index)"
-            ></ds-channel-preview>
+            />
 
             <ds-feed-preview 
                 v-else 
                 :name="item.name"
                 @open="openItem(index)"
-            ></ds-feed-preview>
+            />
         </v-col>
     </v-row>
 </v-container>

@@ -62,7 +62,7 @@
             <div
                 class="preview-container pa-8"
                 v-html="renderedMarkdown"
-            ></div>
+            />
         </v-col>
     </v-row>
   

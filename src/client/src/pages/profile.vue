@@ -99,13 +99,13 @@
                 v-if="profileStore.selectedTab === 'channels'" 
                 :name="item.name"
                 @open="openItem(index)"
-            ></ds-channel-preview>
+            />
 
             <ds-feed-preview 
                 v-else 
                 :name="item.name"
                 @open="openItem(index)"
-            ></ds-feed-preview>
+            />
         </v-col>
     </v-row>
 </v-container>

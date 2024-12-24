@@ -30,6 +30,21 @@ export const usePostStore = defineStore('post', () => {
         channel: {}
     });
 
+    watchEffect(() => {
+        if (newPostText.value) {
+            localStorage.setItem('newPostText', newPostText.value);
+        }
+        if (newPostTitle.value) {
+            localStorage.setItem('newPostTitle', newPostTitle.value);
+        }
+        if (newPostTags.value) {
+            localStorage.setItem('newPostTags', JSON.stringify(newPostTags.value));
+        }
+        if (newPostChannel.value) {
+            localStorage.setItem('newPostChannel', JSON.stringify(newPostChannel.value));
+        }
+    })
+
     async function fetchChannelPosts(channelId: string, batch?: number, page?: number ) {
         const { data, error } = await api.value.GET('/channels/{channelId}/posts', {
             params: {
@@ -148,6 +163,26 @@ export const usePostStore = defineStore('post', () => {
         await updatePost(editingPost.value, editingPost.value.tags)
     }
 
+    function startCreating() {
+        const text = localStorage.getItem('newPostText');
+        const title = localStorage.getItem('newPostTitle');
+        const tags = localStorage.getItem('newPostTags');
+        const channel = localStorage.getItem('newPostChannel');
+        console.log('start creating ', tags)
+        if (text) {
+            newPostText.value = text;
+        }
+        if (title) {
+            newPostTitle.value = title;
+        }
+        if (tags) {
+            newPostTags.value = JSON.parse(tags);
+        }
+        if (channel) {
+            newPostChannel.value = JSON.parse(channel);
+        }
+    }
+
 
     return {
         self,
@@ -170,5 +205,6 @@ export const usePostStore = defineStore('post', () => {
         unratePost,
         saveEditing,
         startEditing,
+        startCreating,
     };
 });

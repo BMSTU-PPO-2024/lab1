@@ -21,7 +21,8 @@ import EditPost from '@/pages/edit-post.vue';
 import Feed from '@/pages/feed.vue';
 import Channel from '@/pages/channel.vue';
 import Main from '@/pages/main.vue';
-// import { authGuard } from './auth-guard';
+import NotFound from '@/pages/not-found.vue';
+import { authGuard } from './auth-guard';
 
 // console.log('routes', JSON.stringify(routes, null, 4));
 // const layouts = setupLayouts(routes);
@@ -84,7 +85,7 @@ const myRoutes: RouteRecordRaw[] = [
             {
                 path: '/:pathName(.*)',
                 name: 'fallback',
-                component: Uuu,
+                component: NotFound,
             },
         ],
         meta: {

@@ -25,7 +25,10 @@
             class="mt-auto"
         >
             <div>
-               <ds-rating :scores="post.scores" disabled />
+                <ds-rating
+                    :scores="post.scores"
+                    disabled
+                />
             </div>
         </v-row>
     </div>

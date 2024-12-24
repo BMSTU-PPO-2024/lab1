@@ -68,7 +68,7 @@
             <div
                 class="post-content"
                 v-html="renderMarkdown(postStore.currentPost?.text ?? '')"
-            ></div>
+            />
         </v-col>
     </v-row>
   
@@ -78,7 +78,7 @@
             :scores="postStore.currentPost?.scores"
             @rate="ratePost"
             @unrate="unratePost"
-        ></ds-rating>
+        />
     </v-row>
   
     <!-- Раздел комментариев -->
@@ -219,9 +219,14 @@ const unratePost = async () => {
 // 2. Соедините устройства:
 //    - Кабель **copper straight-through** для подключения коммутатора к ПК.
 //    - Кабель **copper straight-through** для подключения коммутатора к маршрутизатору.
+const renderer = new marked.Renderer();
+renderer.image = function({href, title, text}) {
+  const url = href.startsWith('http') ? href : `images/${href}`; // for external links
+  return `<img class="preview-image" src="${url}" alt="${text}" title="${title}" />`;
+};
 
 function renderMarkdown(content: string) {
-    return marked(content);
+    return marked(content, { renderer });
 }
 
 function sendComment() {
@@ -254,6 +259,11 @@ function openEditModal() {
     max-width: 1000px;
     margin: 0 auto;
 }
+
+.post-content >>> .preview-image {
+    max-width: 100%;
+}
+
 
 .like-dislike-section span {
     font-size: 14px;

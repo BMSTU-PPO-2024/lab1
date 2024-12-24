@@ -1,5 +1,5 @@
 <template>
- <v-btn
+<v-btn
     variant="plain"
     :class="{
         'liked': isLiked(scores ?? {})

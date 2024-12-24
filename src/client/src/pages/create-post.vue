@@ -62,7 +62,7 @@
             <div
                 class="preview-container pa-8"
                 v-html="renderedMarkdown"
-            ></div>
+            />
         </v-col>
     </v-row>
   
@@ -131,12 +131,15 @@ const postStore = usePostStore();
 const channelStore = useChannelStore();
 const userStore = useUserStore();
 
-channelStore.fetchSelfChannels();
+const newTag = ref('');
+const renderer = new marked.Renderer();
+
+postStore.startCreating();
+
 watch(() => userStore.self, () => {
     channelStore.fetchSelfChannels();
-});
+}, { immediate: true });
 
-const renderer = new marked.Renderer();
 renderer.image = function({href, title, text}) {
   const url = href.startsWith('http') ? href : `images/${href}`; // for external links
   return `<img class="preview-image" src="${url}" alt="${text}" title="${title}" />`;
@@ -145,7 +148,6 @@ renderer.image = function({href, title, text}) {
 // Markdown content
 const renderedMarkdown = computed(() => marked(postStore.newPostText, { renderer }));
 
-const newTag = ref('');
 const addTag = () => {
     if (newTag.value.trim() && !postStore.newPostTags.includes(newTag.value)) {
         postStore.newPostTags.push(newTag.value);
