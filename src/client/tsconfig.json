@@ -1,8 +1,8 @@
 {
   "files": [],
-
   "compilerOptions": {
-    "noEmit": true
+    "module": "ESNext", // or "NodeNext"
+    "moduleResolution": "Bundler" // or "NodeNext"
   },
   "references": [
     {

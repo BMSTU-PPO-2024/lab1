@@ -1,23 +1,20 @@
-import "@/assets/main.css"
-import { createApp } from "vue";
-import App from "@/App.vue";
-import router from "@/router/router";
-import {createPinia} from "pinia";
-import uiComponents from "@/components/ui";
-// import stores from "@/stores/stores";
+/**
+ * main.ts
+ *
+ * Bootstraps Vuetify and other plugins then mounts the App`
+ */
 
+// Plugins
+import { registerPlugins } from '@/plugins';
+
+// Components
+import App from './App.vue';
+
+// Composables
+import { createApp } from 'vue';
 
 const app = createApp(App);
-const pinia = createPinia();
 
-uiComponents.forEach((comp) => {
-    app.component(comp.name as string, comp);
-});
+registerPlugins(app);
 
-app
-    // .use(stores)
-    .use(pinia)
-    .use(router)
-    .mount("#app");
-
-
+app.mount('#app');

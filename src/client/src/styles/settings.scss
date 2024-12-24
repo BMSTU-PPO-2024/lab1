@@ -1,0 +1,188 @@
+/**
+ * src/styles/settings.scss
+ *
+ * Configures SASS variables and Vuetify overwrites
+ */
+
+// https://vuetifyjs.com/features/sass-variables/`
+@forward 'vuetify/settings' with (
+  $layers: true,
+  $application-background: rgb(var(--color-bgLight)),
+);
+// @font-face {
+//     font-family: 'Roboto';
+//     src: url('/fonts/Roboto-Regular.woff2') format('woff2');
+//     font-weight: 400;
+//     font-display: swap;
+// }
+
+// @font-face {
+//     font-family: 'Roboto Slab';
+//     src: url('/fonts/RobotoSlab-Bold.woff2') format('woff2');
+//     font-weight: 700;
+//     font-display: swap;
+// }
+
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+
+:root {
+    /* Text-size styles */
+    --text-base: 16px;
+    --text-base-bold: 16px;
+    --text-base-medium: 16px;
+    --heading-h1-base: 32px;
+    --heading-h1-bold: 32px;
+    --heading-h3-base: 24px;
+    --heading-h3-bold: 24px;
+    --heading-h5-base: 20px;
+    --heading-h5-bold: 20px;
+
+    /* Effect styles */
+    --base-hover:  0px 4px 4px rgba(0, 0, 0, 0.15);
+
+    --color-primary: #ff6a13;
+    --color-secondary: #e35d13;
+    --color-fontPrimary: #333333;
+    --color-fontSecondary: #757575;
+    --color-bgLight: #f4f4f4;
+    --color-bgDark: #2d2d2d;
+    --color-bgAccent: #ffe4d9;
+    --color-btuttonPrimary: #ff6a13;
+    --color-buttonSecondary: #ff9f47;
+    --color-success: #4caf50;
+    --color-error: #f44336;
+    --color-link: #007bff;
+    --color-border: #2d2d2d;
+    --color-fontPimaryLight: #f4f4f4;
+}
+
+.text-white {
+    color: var(--color-fontPimaryLight);
+}
+
+body {
+    background-color: var(--color-bgLight);
+    @extend .text-base;
+}
+
+
+/* Заголовки с шрифтом Roboto Slab */
+.heading-h1-base {
+    font-family: 'Roboto Slab', serif;
+    font-size: var(--heading-h1-base);
+    font-weight: normal;
+}
+
+.heading-h1-bold {
+    font-family: 'Roboto Slab', serif;
+    font-size: var(--heading-h1-bold);
+    font-weight: bold;
+}
+
+.heading-h3-base {
+    font-family: 'Roboto Slab', serif;
+    font-size: var(--heading-h3-base);
+    font-weight: normal;
+}
+
+.heading-h3-bold {
+    font-family: 'Roboto Slab', serif;
+    font-size: var(--heading-h3-bold);
+    font-weight: bold;
+}
+
+.heading-h5-base {
+    font-family: 'Roboto Slab', serif;
+    font-size: var(--heading-h5-base);
+    font-weight: normal;
+}
+
+.heading-h5-bold {
+    font-family: 'Roboto Slab', serif;
+    font-size: var(--heading-h5-bold);
+    font-weight: bold;
+}
+
+/* Остальной текст с шрифтом Roboto */
+.text-base {
+    font-family: 'Roboto', sans-serif;
+    font-size: var(--text-base);
+    font-weight: normal;
+}
+
+.text-base-bold {
+    font-family: 'Roboto', sans-serif;
+    font-size: var(--text-base-bold);
+    font-weight: bold;
+}
+
+.text-base-medium {
+    font-family: 'Roboto', sans-serif;
+    font-size: var(--text-base-medium);
+    font-weight: 500;
+}
+
+/* Применение селекторов через @extend */
+h1 {
+    @extend .heading-h1-base;
+}
+
+h1.bold {
+    @extend .heading-h1-bold;
+}
+
+h2, h3 {
+    @extend .heading-h3-base;
+}
+
+h3.bold {
+    @extend .heading-h3-bold;
+}
+
+h4, h5 {
+    @extend .heading-h5-base;
+}
+
+h5.bold {
+    @extend .heading-h5-bold;
+}
+
+p {
+    @extend .text-base;
+}
+
+p.bold {
+    @extend .text-base-bold;
+}
+
+p.medium {
+    @extend .text-base-medium;
+}
+
+
+
+.base-hover {
+    transition: 0.2 ease;
+    &:hover {
+        box-shadow: var(--base-hover);
+    }
+}
+
+.bg-accent {
+    background-color: var(--color-bgAccent);
+}
+
+.button-primary {
+    .v-btn__content {
+        color: var(--color-fontPimaryLight);
+    }
+    background-color: var(--color-btuttonPrimary);
+}
+
+.button-error {
+    .v-btn__content {
+        color: var(--color-fontPimaryLight);
+    }
+    background-color: var(--color-error);
+}
